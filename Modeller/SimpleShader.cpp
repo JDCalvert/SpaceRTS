@@ -2,8 +2,9 @@
 #include "Renderer.h"
 #include "Surface.h"
 
-SimpleShader::SimpleShader(Renderer* renderer): Shader(renderer)
+SimpleShader::SimpleShader(Renderer* renderer) : Shader()
 {
+    this->renderer = renderer;
 }
 
 void SimpleShader::initialise()
@@ -45,14 +46,14 @@ void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelMatrix)
     int length = surface->length;
 
     //Load the data into graphics memory
-    renderer->bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
-    renderer->bindArrayBufferData(vertexTextureCoordinateBufferId, textureCoordinatesSize, textureCoordinatesPointer);
+    bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
+    bindArrayBufferData(vertexTextureCoordinateBufferId, textureCoordinatesSize, textureCoordinatesPointer);
 
-    renderer->bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
+    bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
 
     //Link the data to the shader variables
-    renderer->enableVertexAttrib(vertexPositionId, vertexPositionBufferId, 3);
-    renderer->enableVertexAttrib(vertexTextureCoordinateId, vertexTextureCoordinateBufferId, 2);
+    enableVertexAttrib(vertexPositionId, vertexPositionBufferId, 3);
+    enableVertexAttrib(vertexTextureCoordinateId, vertexTextureCoordinateBufferId, 2);
 
     //Textures
     GLuint diffuseMap = surface->diffuseMap;

@@ -5,12 +5,9 @@
 
 #include "ResourceLoader.h"
 
-class Renderer;
-
 class Shader
 {
 public:
-    Shader(Renderer* renderer);
 
     virtual void initialise() = 0;
     void initialiseForScreenSize();
@@ -20,7 +17,10 @@ public:
 
 protected:
     GLuint programId;
-    Renderer* renderer;
+
+    void bindArrayBufferData(GLuint bufferId, int size, void* dataPointer);
+    void bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer);
+    void enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize);
 
 private:
     static void compileAndCheckShader(const char* path, std::string &code, GLuint shaderId);

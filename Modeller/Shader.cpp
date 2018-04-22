@@ -2,17 +2,31 @@
 #include "Renderer.h"
 #include "ResourceLoader.h"
 
-Shader::Shader(Renderer* renderer)
-{
-	this->renderer = renderer;
-}
-
 void Shader::initialiseForScreenSize()
 {
 }
 
 void Shader::initialiseFrame()
 {
+}
+
+void Shader::bindArrayBufferData(GLuint bufferId, int size, void* dataPointer)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+    glBufferData(GL_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
+}
+
+void Shader::bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer)
+{
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
+}
+
+void Shader::enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize)
+{
+    glEnableVertexAttribArray(attribId);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+    glVertexAttribPointer(attribId, attribSize, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 /**

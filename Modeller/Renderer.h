@@ -59,12 +59,12 @@ public:
 
     void initialiseFrame();
 
+    void addShader(Shader* shader);
+
     void renderFrame();
 
     void calculateViewProjectionMatrices();
-    void bindArrayBufferData(GLuint bufferId, int size, void* dataPointer);
-    void bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer);
-    void enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize);
+    
     void windowResized(int width, int height);
 
     int getWidthAntialiasing();

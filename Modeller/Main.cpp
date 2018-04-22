@@ -68,7 +68,7 @@ int main()
     renderer = new Renderer(window, controller);
 
     SimpleShader* simpleShader = new SimpleShader(renderer);
-    renderer->shaders.push_back(simpleShader);
+    renderer->addShader(simpleShader);
 
     renderer->initialise();
 

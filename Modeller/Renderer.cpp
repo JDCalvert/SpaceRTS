@@ -137,6 +137,11 @@ void Renderer::initialiseFrame()
 	}
 }
 
+void Renderer::addShader(Shader* shader)
+{
+    shaders.push_back(shader);
+}
+
 void Renderer::renderFrame()
 {
 	//Set the active framebuffer to be the actual screen and set our viewport to be the whole screen
@@ -178,25 +183,6 @@ void Renderer::calculateViewProjectionMatrices()
 
 	projectionMatrix = glm::perspective(fieldOfView, (float)width/height, minDrawDistance, maxDrawDistance);
 	viewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraForward, cameraUp);
-}
-
-void Renderer::bindArrayBufferData(GLuint bufferId, int size, void* dataPointer)
-{
-	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-	glBufferData(GL_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
-}
-
-void Renderer::bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer)
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
-}
-
-void Renderer::enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize)
-{
-	glEnableVertexAttribArray(attribId);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-	glVertexAttribPointer(attribId, attribSize, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 glm::mat4 Renderer::getViewProjectionMatrix()
