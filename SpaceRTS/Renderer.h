@@ -2,7 +2,7 @@
 #define RENDERER
 
 #include <GL\glew.h>
-#include <glfw3.h>
+#include <glfw\glfw3.h>
 #include <vector>
 #include <glm\glm.hpp>
 

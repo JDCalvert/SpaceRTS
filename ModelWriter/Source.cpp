@@ -37,7 +37,7 @@ struct Surface
 std::string addTriangle(Surface& surface, int parentBoneIndex);
 std::string addCube(Surface& surface, int parentBoneIndex);
 std::string addSphere(Surface& surface, int parentBoneIndex, int detail);
-std::string addCylinder(Surface& surface, int parentBoneIndex, double radius, double length, int detail);
+//std::string addCylinder(Surface& surface, int parentBoneIndex, double radius, double length, int detail);
 std::string addCapitalShip(Surface& surface, int parentBoneIndex);
 
 void writeToBinaryFile(Surface& surface, std::string fileName);
@@ -285,7 +285,7 @@ std::string addCapitalShip(Surface& surface, int parentBoneIndex)
 std::string addDualTurret(Surface& surface, int parentBoneIndex)
 {
     //First, add a cylinder for the turrent to sit on
-    addCylinder(surface, parentBoneIndex, 0.05f, 0.01f, 30);
+    //addCylinder(surface, parentBoneIndex, 0.05f, 0.01f, 30);
 
     //Add a bone for the body, sitting at the top and centre of the cylinder
     Bone bodyBone = Bone{glm::translate(glm::vec3(0.0f, 0.01f, 1.0f)), parentBoneIndex};

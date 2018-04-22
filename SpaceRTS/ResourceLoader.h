@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include <GL\glew.h>
-#include <glfw3.h>
+#include <glfw\glfw3.h>
 #include <glm\glm.hpp>
 
 #define BFG_RS_NONE  0x0

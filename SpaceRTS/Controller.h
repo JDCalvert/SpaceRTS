@@ -1,8 +1,8 @@
 #ifndef CONTROLLER
 #define CONTROLLER
 
-#include <GL\glew.h>
-#include <glfw3.h>
+#include <GL/glew.h>
+#include <glfw/glfw3.h>
 #include <glm/glm.hpp>
 
 class Controller
