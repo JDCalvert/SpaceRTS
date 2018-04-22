@@ -2,11 +2,11 @@
 
 in vec2 textureCoordinate;
 
-out vec3 color;
+out vec4 color;
 
 uniform sampler2D diffuseTexture;
 
 void main()
 {
-	color = texture(diffuseTexture, textureCoordinate).rgb;
+	color = texture(diffuseTexture, textureCoordinate);
 }
