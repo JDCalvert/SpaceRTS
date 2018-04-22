@@ -1,5 +1,4 @@
 #include "Shader.h"
-#include "Renderer.h"
 #include "ResourceLoader.h"
 
 void Shader::initialiseForScreenSize()

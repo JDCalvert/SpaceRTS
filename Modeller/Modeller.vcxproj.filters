@@ -36,9 +36,6 @@
     <ClCompile Include="Surface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -55,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
