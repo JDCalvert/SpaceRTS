@@ -10,6 +10,7 @@
 
 class Controller;
 class Shader;
+class ScreenShader;
 
 /**
 * Renderer
@@ -28,6 +29,8 @@ public:
     //Window and matrices
     GLFWwindow* window;
     Controller* controller;
+    ScreenShader* screenShader;
+
     int width, height;
     int antiAliasingFactor;
     float fieldOfView;
@@ -41,20 +44,10 @@ public:
     GLuint frameBufferId;
     GLuint depthRenderbufferId;
     GLuint renderedTexture;
-    GLuint screenVertexBufferId;
-    std::vector<glm::vec3> screenVertexBufferData;
 
-    //Whole screen shader program
-    GLuint screenShaderProgramId;
-    GLuint screenShaderVertexId;
-    GLuint screenShaderTextureId;
-
-    GLuint screenVertexArrayId;
-
-    Renderer(GLFWwindow* window, Controller* controller);
+    Renderer(GLFWwindow* window, Controller* controller, ScreenShader* screenShader);
 
     void initialise();
-    void initialiseScreenShaderProgram();
     void initialiseFramebuffer();
 
     void initialiseFrame();

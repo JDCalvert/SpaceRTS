@@ -15,8 +15,11 @@ using namespace glm;
 #include "Controller.h"
 #include "ResourceLoader.h"
 #include "Renderer.h"
+
 #include "Shader.h"
 #include "SimpleShader.h"
+#include "ScreenShader.h"
+
 #include "Surface.h"
 
 Renderer* renderer;
@@ -64,8 +67,9 @@ int main()
     glfwSetWindowSizeCallback(window, windowResized);
 
     Controller* controller = new Controller();
+    ScreenShader* screenShader = new ScreenShader();
 
-    renderer = new Renderer(window, controller);
+    renderer = new Renderer(window, controller, screenShader);
 
     SimpleShader* simpleShader = new SimpleShader(renderer);
     renderer->addShader(simpleShader);
