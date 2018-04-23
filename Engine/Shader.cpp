@@ -21,7 +21,7 @@ void Shader::bindElementArrayBufferData(GLuint bufferId, int size, void* dataPoi
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
 }
 
-void Shader::enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize)
+void Shader::enableVertexAttribute(GLuint attribId, GLuint bufferId, int attribSize)
 {
     glEnableVertexAttribArray(attribId);
     glBindBuffer(GL_ARRAY_BUFFER, bufferId);

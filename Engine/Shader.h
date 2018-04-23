@@ -20,7 +20,7 @@ protected:
 
     void bindArrayBufferData(GLuint bufferId, int size, void* dataPointer);
     void bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer);
-    void enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize);
+    void enableVertexAttribute(GLuint attribId, GLuint bufferId, int attribSize);
 
 private:
     static void compileAndCheckShader(const char* path, std::string &code, GLuint shaderId);

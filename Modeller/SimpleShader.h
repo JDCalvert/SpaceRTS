@@ -19,6 +19,9 @@ private:
 
     Renderer* renderer;
 
+    //Our vertex array
+    GLuint vertexArrayId;
+
     //Attribute array IDs
     GLuint vertexPositionId;
     GLuint vertexTextureCoordinateId;
