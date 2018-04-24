@@ -4,19 +4,25 @@
 #include "Shader.h"
 
 class Surface;
+class Renderer;
 
 class SimpleShader: public Shader
 {
 public:
 
     SimpleShader(Renderer* renderer);
-
+    
     void initialise();
     void renderSurface(Surface* surface, glm::mat4 modelMatrix);
 
 private:
 
-    //Attribute array IDs
+    Renderer* renderer;
+
+    //Our vertex array
+    GLuint vertexArrayId;
+
+    //Array attribute IDs
     GLuint vertexPositionId;
     GLuint vertexTextureCoordinateId;
 

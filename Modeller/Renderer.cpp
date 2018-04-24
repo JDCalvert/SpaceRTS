@@ -2,14 +2,16 @@
 #include "ResourceLoader.h"
 #include "Controller.h"
 #include "Shader.h"
+#include "ScreenShader.h"
 
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
-Renderer::Renderer(GLFWwindow* window, Controller* controller)
+Renderer::Renderer(GLFWwindow* window, Controller* controller, ScreenShader* screenShader)
 {
 	this->window = window;
 	this->controller = controller;
+    this->screenShader = screenShader;
 }
 
 void Renderer::initialise()
@@ -20,8 +22,9 @@ void Renderer::initialise()
 	fieldOfView = 45.0f;
 	antiAliasingFactor = 2;
 
+    screenShader->initialise();
+
 	//Initialise the shaders
-	initialiseScreenShaderProgram();
 	initialiseFramebuffer();
 
 	for (unsigned int i=0; i<shaders.size(); i++)
@@ -39,34 +42,6 @@ void Renderer::initialise()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glEnable(GL_DEPTH_TEST);
-}
-
-void Renderer::initialiseScreenShaderProgram()
-{
-	ShaderInfo shaders[] =
-	{
-		{GL_VERTEX_SHADER, "ScreenShader.vert"},
-		{GL_FRAGMENT_SHADER, "ScreenShader.frag"}
-	};
-	screenShaderProgramId = Shader::loadShaders(shaders, 2);
-
-	screenShaderVertexId	= glGetAttribLocation(screenShaderProgramId, "vertexPosition");
-	screenShaderTextureId	= glGetUniformLocation(screenShaderProgramId, "renderedTexture");
-
-    glGenVertexArrays(1, &screenVertexArrayId);
-    glBindVertexArray(screenVertexArrayId);
-
-	static const GLfloat screenCoords[] =
-	{
-		-1.0f, 1.0f, //Top left
-		-1.0f,-1.0f, //Bottom left
-		 1.0f, 1.0f, //Top right
-		 1.0f,-1.0f  //Bottom right
-	};
-
-	glGenBuffers(1, &screenVertexBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, screenVertexBufferId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(screenCoords), &screenCoords, GL_STATIC_DRAW);
 }
 
 void Renderer::initialiseFramebuffer()
@@ -122,8 +97,8 @@ void Renderer::initialiseFrame()
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 	glViewport(0, 0, getWidthAntialiasing(), getHeightAntialiasing());
 
-	//Clear the colour and depth buffers
-	glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
+	//Clear the colour and depth buffers for this framebuffer
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Get the up to date view and projection matrices from the controller
@@ -137,37 +112,22 @@ void Renderer::initialiseFrame()
 	}
 }
 
+void Renderer::addShader(Shader* shader)
+{
+    shaders.push_back(shader);
+}
+
 void Renderer::renderFrame()
 {
 	//Set the active framebuffer to be the actual screen and set our viewport to be the whole screen
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, width, height);
 
-	//Clear the colour and depth buffers
-	glClearColor(0.0f, 0.1f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	GLboolean blendEnabled = getAndSetGlCapability(GL_BLEND, true);
 
-	GLboolean blendEnabled = glIsEnabled(GL_BLEND);
-	glDisable(GL_BLEND);
+    screenShader->render(renderedTexture);
 
-	//Use the screen shader program
-	glUseProgram(screenShaderProgramId);
-	
-	//Set the texture to be rendered to the screen
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, renderedTexture);
-	glUniform1i(screenShaderTextureId, 0);
-
-	//Use the buffer containing the whole-screen coordinates for the vertex positions
-	glEnableVertexAttribArray(screenShaderVertexId);
-	glBindBuffer(GL_ARRAY_BUFFER, screenVertexBufferId);
-	glVertexAttribPointer(screenShaderVertexId, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-	glDisableVertexAttribArray(screenShaderVertexId);
-
-	if (blendEnabled) glEnable(GL_BLEND);
+    setGlCapability(GL_BLEND, blendEnabled);
 }
 
 void Renderer::calculateViewProjectionMatrices()
@@ -178,25 +138,6 @@ void Renderer::calculateViewProjectionMatrices()
 
 	projectionMatrix = glm::perspective(fieldOfView, (float)width/height, minDrawDistance, maxDrawDistance);
 	viewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraForward, cameraUp);
-}
-
-void Renderer::bindArrayBufferData(GLuint bufferId, int size, void* dataPointer)
-{
-	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-	glBufferData(GL_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
-}
-
-void Renderer::bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer)
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, dataPointer, GL_STATIC_DRAW);
-}
-
-void Renderer::enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize)
-{
-	glEnableVertexAttribArray(attribId);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-	glVertexAttribPointer(attribId, attribSize, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
 glm::mat4 Renderer::getViewProjectionMatrix()

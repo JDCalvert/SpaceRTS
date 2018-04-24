@@ -2,8 +2,9 @@
 #include "Renderer.h"
 #include "Surface.h"
 
-SimpleShader::SimpleShader(Renderer* renderer): Shader(renderer)
+SimpleShader::SimpleShader(Renderer* renderer) : Shader()
 {
+    this->renderer = renderer;
 }
 
 void SimpleShader::initialise()
@@ -15,6 +16,9 @@ void SimpleShader::initialise()
         {GL_FRAGMENT_SHADER, "SimpleShader.frag"}
     };
     programId = Shader::loadShaders(shaders, 2);
+
+    glGenVertexArrays(1, &vertexArrayId);
+    glBindVertexArray(vertexArrayId);
 
     //Get the identifiers for the shader variables
     vertexPositionId = glGetAttribLocation(programId, "vertexPosition");
@@ -28,11 +32,17 @@ void SimpleShader::initialise()
     glGenBuffers(1, &vertexPositionBufferId);
     glGenBuffers(1, &vertexTextureCoordinateBufferId);
     glGenBuffers(1, &indicesBufferId);
+
+    //Enable the vertexPosition and textureCoordinate attributes, binding out buffers to them
+    enableVertexAttribute(vertexPositionId, vertexPositionBufferId, 3);
+    enableVertexAttribute(vertexTextureCoordinateId, vertexTextureCoordinateBufferId, 2);
 }
 
 void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelMatrix)
 {
     glUseProgram(programId);
+
+    glBindVertexArray(vertexArrayId);
 
     int verticesSize = surface->verticesSize;
     int textureCoordinatesSize = surface->textureCoordinatesSize;
@@ -45,14 +55,10 @@ void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelMatrix)
     int length = surface->length;
 
     //Load the data into graphics memory
-    renderer->bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
-    renderer->bindArrayBufferData(vertexTextureCoordinateBufferId, textureCoordinatesSize, textureCoordinatesPointer);
+    bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
+    bindArrayBufferData(vertexTextureCoordinateBufferId, textureCoordinatesSize, textureCoordinatesPointer);
 
-    renderer->bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
-
-    //Link the data to the shader variables
-    renderer->enableVertexAttrib(vertexPositionId, vertexPositionBufferId, 3);
-    renderer->enableVertexAttrib(vertexTextureCoordinateId, vertexTextureCoordinateBufferId, 2);
+    bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
 
     //Textures
     GLuint diffuseMap = surface->diffuseMap;
@@ -61,14 +67,9 @@ void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelMatrix)
     glBindTexture(GL_TEXTURE_2D, diffuseMap);
     glUniform1i(diffuseMapId, 0);
 
-    //Matrices
-    glm::mat4 modelViewMatrix = renderer->viewMatrix * modelMatrix;
-    glm::mat4 modelViewProjectionMatrix = renderer->projectionMatrix * modelViewMatrix;
-
+    glm::mat4 modelViewProjectionMatrix = renderer->getViewProjectionMatrix() * modelMatrix;
     glUniformMatrix4fv(modelViewProjectionMatrixId, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 
+    //Actually draw the triangles
     glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, (void*)0);
-
-    glDisableVertexAttribArray(vertexPositionId);
-    glDisableVertexAttribArray(vertexTextureCoordinateId);
 }

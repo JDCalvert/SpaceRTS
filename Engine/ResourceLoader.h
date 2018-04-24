@@ -25,13 +25,6 @@
 #define WIDTH_DATA_OFFSET	 20
 #define MAP_DATA_OFFSET		276
 
-struct ShaderInfo
-{
-    GLenum type;
-    const char* fileName;
-    GLuint shaderId;
-};
-
 struct Font
 {
     int cellWidth, cellHeight, rowWidth;
@@ -173,7 +166,7 @@ public:
         return output;
     }
 
-    static void loadObjComplete(const char* path, std::vector<glm::vec3> &vertices, std::vector<glm::vec2> &textureCoordinates, std::vector<glm::vec3> &normals,
+    static void loadObj(const char* path, std::vector<glm::vec3> &vertices, std::vector<glm::vec2> &textureCoordinates, std::vector<glm::vec3> &normals,
         std::vector<glm::vec3> &tangents, std::vector<glm::vec3> &bitangents, std::vector<glm::vec4> &boneIndices,
         std::vector<unsigned int> &indices, std::vector<glm::mat4> &bones, std::vector<int> &parents)
     {

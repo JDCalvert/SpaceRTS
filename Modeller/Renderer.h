@@ -10,12 +10,13 @@
 
 class Controller;
 class Shader;
+class ScreenShader;
 
 /**
 * Renderer
-* All shader calls should go through the renderer. It maintains a frame buffer, which may be larger
-* than the screen itself, which is drawn to by all other shaders. Once everything has been drawn, it
-* draws the frame buffer to the screen.
+* Maintains a framebuffer which can be drawn to by other shaders. Call initialiseFrame to reset (and enable)
+* the framebuffer, then render calls will use this renderer.
+* Once everything has been drawn, call renderFrame to draw to the default framebuffer.
 */
 class Renderer
 {
@@ -28,6 +29,8 @@ public:
     //Window and matrices
     GLFWwindow* window;
     Controller* controller;
+    ScreenShader* screenShader;
+
     int width, height;
     int antiAliasingFactor;
     float fieldOfView;
@@ -41,30 +44,20 @@ public:
     GLuint frameBufferId;
     GLuint depthRenderbufferId;
     GLuint renderedTexture;
-    GLuint screenVertexBufferId;
-    std::vector<glm::vec3> screenVertexBufferData;
 
-    //Whole screen shader program
-    GLuint screenShaderProgramId;
-    GLuint screenShaderVertexId;
-    GLuint screenShaderTextureId;
-
-    GLuint screenVertexArrayId;
-
-    Renderer(GLFWwindow* window, Controller* controller);
+    Renderer(GLFWwindow* window, Controller* controller, ScreenShader* screenShader);
 
     void initialise();
-    void initialiseScreenShaderProgram();
     void initialiseFramebuffer();
 
     void initialiseFrame();
 
+    void addShader(Shader* shader);
+
     void renderFrame();
 
     void calculateViewProjectionMatrices();
-    void bindArrayBufferData(GLuint bufferId, int size, void* dataPointer);
-    void bindElementArrayBufferData(GLuint bufferId, int size, void* dataPointer);
-    void enableVertexAttrib(GLuint attribId, GLuint bufferId, int attribSize);
+    
     void windowResized(int width, int height);
 
     int getWidthAntialiasing();
