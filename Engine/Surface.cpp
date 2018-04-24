@@ -46,7 +46,7 @@ void Surface::loadFromFile(const char* objFilePath)
 {
 	std::vector<glm::mat4> boneRelatives;
 	std::vector<int> boneParents;
-	ResourceLoader::loadObjComplete(objFilePath, vertices, textureCoordinates, normals, tangents, bitangents, boneIndicesAndWeights, indices, boneRelatives, boneParents);
+	ResourceLoader::loadObj(objFilePath, vertices, textureCoordinates, normals, tangents, bitangents, boneIndicesAndWeights, indices, boneRelatives, boneParents);
 
 	for (unsigned int i = 0; i < boneRelatives.size(); i++)
 	{
@@ -79,34 +79,13 @@ void Surface::calculateSizesAndLength()
 	bonesSize = boneIndicesAndWeights.size() * sizeof(glm::vec4);
 	indicesSize = length * sizeof(unsigned int);
 
-	if (vertices.size() > 0)
-	{
-		verticesPointer = &vertices[0];
-	}
-	if (textureCoordinates.size() > 0)
-	{
-		textureCoordinatesPointer = &textureCoordinates[0];
-	}
-	if (normals.size() > 0)
-	{
-		normalsPointer = &normals[0];
-	}
-	if (tangents.size() > 0)
-	{
-		tangentsPointer = &tangents[0];
-	}
-	if (bitangents.size() > 0)
-	{
-		bitangentsPointer = &bitangents[0];
-	}
-	if (indices.size() > 0)
-	{
-		indicesPointer = &indices[0];
-	}
-	if (boneIndicesAndWeights.size() > 0)
-	{
-		bonesPointer = &boneIndicesAndWeights[0];
-	}
+	if (vertices.size() > 0) verticesPointer = &vertices[0];
+	if (textureCoordinates.size() > 0) textureCoordinatesPointer = &textureCoordinates[0];
+	if (normals.size() > 0) normalsPointer = &normals[0];
+	if (tangents.size() > 0) tangentsPointer = &tangents[0];
+	if (bitangents.size() > 0) bitangentsPointer = &bitangents[0];
+	if (indices.size() > 0) indicesPointer = &indices[0];
+	if (boneIndicesAndWeights.size() > 0) bonesPointer = &boneIndicesAndWeights[0];
 }
 
 void Surface::prepareBones()

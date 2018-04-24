@@ -12,7 +12,7 @@ public:
 
 private:
 
-    //Out vertex array
+    //Our vertex array
     GLuint vertexArrayId;
 
     //Handle for the vertex position attribute

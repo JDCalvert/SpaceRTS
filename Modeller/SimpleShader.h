@@ -22,7 +22,7 @@ private:
     //Our vertex array
     GLuint vertexArrayId;
 
-    //Attribute array IDs
+    //Array attribute IDs
     GLuint vertexPositionId;
     GLuint vertexTextureCoordinateId;
 

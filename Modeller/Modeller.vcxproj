@@ -128,14 +128,12 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ScreenShader.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
-    <ClCompile Include="Surface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ScreenShader.h" />
     <ClInclude Include="SimpleShader.h" />
-    <ClInclude Include="Surface.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ScreenShader.frag" />

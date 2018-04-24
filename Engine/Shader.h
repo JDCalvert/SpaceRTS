@@ -5,6 +5,13 @@
 
 #include "ResourceLoader.h"
 
+struct ShaderInfo
+{
+    GLenum type;
+    const char* fileName;
+    GLuint shaderId;
+};
+
 class Shader
 {
 public:

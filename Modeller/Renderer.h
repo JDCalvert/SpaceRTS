@@ -14,9 +14,9 @@ class ScreenShader;
 
 /**
 * Renderer
-* All shader calls should go through the renderer. It maintains a frame buffer, which may be larger
-* than the screen itself, which is drawn to by all other shaders. Once everything has been drawn, it
-* draws the frame buffer to the screen.
+* Maintains a framebuffer which can be drawn to by other shaders. Call initialiseFrame to reset (and enable)
+* the framebuffer, then render calls will use this renderer.
+* Once everything has been drawn, call renderFrame to draw to the default framebuffer.
 */
 class Renderer
 {

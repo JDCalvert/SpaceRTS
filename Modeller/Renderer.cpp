@@ -97,8 +97,8 @@ void Renderer::initialiseFrame()
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 	glViewport(0, 0, getWidthAntialiasing(), getHeightAntialiasing());
 
-	//Clear the colour and depth buffers
-	glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
+	//Clear the colour and depth buffers for this framebuffer
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Get the up to date view and projection matrices from the controller
@@ -123,11 +123,7 @@ void Renderer::renderFrame()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, width, height);
 
-	//Clear the colour and depth buffers
-	glClearColor(0.0f, 0.1f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	GLboolean blendEnabled = getAndSetGlCapability(GL_BLEND, false);
+	GLboolean blendEnabled = getAndSetGlCapability(GL_BLEND, true);
 
     screenShader->render(renderedTexture);
 
