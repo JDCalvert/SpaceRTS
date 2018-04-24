@@ -48,12 +48,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ScreenShader.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="ScreenShader.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>
