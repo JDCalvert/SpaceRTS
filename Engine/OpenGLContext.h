@@ -1,16 +1,30 @@
 #ifndef OPEN_GL_CONTEXT_H
 #define OPEN_GL_CONTEXT_H
 
-#include <map>
+#include <unordered_map>
+#include <vector>
 
 #include <gl\glew.h>
+#include <GLFW\glfw3.h>
+
+class Renderer;
 
 class OpenGLContext
 {
 private:
-    std::map<GLenum, bool> glCapabilities;
+    std::unordered_map<GLenum, GLboolean> glCapabilities;
+    void actuallySetEnabled(GLenum glCapability, GLboolean enabled);
 
-    void setEnabled(GLenum glCapability, bool enable);
+    std::vector<Renderer*> renderers;
+
+    GLsizei width, height;
+
+public:
+    void setEnabled(GLenum glCapability, GLboolean enabled);
+    void addRenderer(Renderer* renderer);
+    void resize(int width, int height);
+
+    
 };
 
 #endif

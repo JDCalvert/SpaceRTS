@@ -12,6 +12,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 using namespace glm;
 
+#include "OpenGLContext.h"
 #include "Controller.h"
 #include "ResourceLoader.h"
 #include "Renderer.h"
@@ -22,11 +23,11 @@ using namespace glm;
 
 #include "Surface.h"
 
-Renderer* renderer;
+OpenGLContext* glContext;
 
-void windowResized(GLFWwindow* window, int width, int height)
+void resize(GLFWwindow* window, int width, int height)
 {
-    renderer->resize(width, height);
+    glContext->resize(width, height);
 }
 
 int main()
@@ -63,16 +64,21 @@ int main()
     }
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-    glfwSetWindowSizeCallback(window, windowResized);
+
+    glContext = new OpenGLContext();
+
+    glfwSetWindowSizeCallback(window, resize);
 
     glfwGetWindowSize(window, &width, &height);
 
     Controller* controller = new Controller();
     ScreenShader* screenShader = new ScreenShader();
 
-    renderer = new Renderer();
+    Renderer* renderer = new Renderer();
     renderer->initialise();
-    renderer->resize(width * antiAliasingFactor, height * antiAliasingFactor);
+
+    glContext->addRenderer(renderer);
+    glContext->resize(width, height);
 
     SimpleShader* simpleShader = new SimpleShader();
     simpleShader->initialise();

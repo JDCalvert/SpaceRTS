@@ -38,9 +38,14 @@ void Renderer::initialiseScreenShader()
 
 void Renderer::resize(int width, int height)
 {
-    this->width = width;
-    this->height = height;
+    this->width = width * 2;
+    this->height = height * 2;
+    
+    recreateFramebuffer();
+}
 
+void Renderer::recreateFramebuffer()
+{
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
     //Recreate the texture with the new width and height

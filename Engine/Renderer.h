@@ -15,6 +15,7 @@ public:
     void renderFrame();
 
     void resize(int width, int height);
+    void recreateFramebuffer();
 
 protected:
     
