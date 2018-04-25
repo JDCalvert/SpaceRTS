@@ -21,6 +21,8 @@ public:
     void initialiseFrame();
 
     static GLuint loadShaders(ShaderInfo shaders[], int numShaders);
+    static GLboolean getAndSetGlCapability(GLenum cap, GLboolean enable);
+    static void setGlCapability(GLenum cap, GLboolean enable);
 
 protected:
     GLuint programId;
