@@ -11,20 +11,26 @@ class Renderer;
 
 class OpenGLContext
 {
-private:
+private:    
     std::unordered_map<GLenum, GLboolean> glCapabilities;
-    void actuallySetEnabled(GLenum glCapability, GLboolean enabled);
-
     std::vector<Renderer*> renderers;
 
+    GLFWwindow* window;
     GLsizei width, height;
 
+    void actuallySetEnabled(GLenum glCapability, GLboolean enabled);
+
 public:
+    static OpenGLContext* initialiseNewContext();
+    static void windowResized(GLFWwindow* window, int width, int height);
+
     void setEnabled(GLenum glCapability, GLboolean enabled);
     void addRenderer(Renderer* renderer);
     void resize(int width, int height);
 
-    
+    GLFWwindow* getWindow();
+    GLsizei getWidth();
+    GLsizei getHeight();
 };
 
 #endif
