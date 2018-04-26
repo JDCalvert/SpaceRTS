@@ -3,6 +3,9 @@
 
 #include "Shader.h"
 
+/**
+    Basic screen shader that simply renders the given texture to the whole screen
+*/
 class ScreenShader : public Shader
 {
 public:

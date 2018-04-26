@@ -1,11 +1,5 @@
 #include "SimpleShader.h"
-#include "Renderer.h"
 #include "Surface.h"
-
-SimpleShader::SimpleShader(Renderer* renderer) : Shader()
-{
-    this->renderer = renderer;
-}
 
 void SimpleShader::initialise()
 {
@@ -38,7 +32,7 @@ void SimpleShader::initialise()
     enableVertexAttribute(vertexTextureCoordinateId, vertexTextureCoordinateBufferId, 2);
 }
 
-void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelMatrix)
+void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelViewProjectionMatrix)
 {
     glUseProgram(programId);
 
@@ -67,9 +61,12 @@ void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelMatrix)
     glBindTexture(GL_TEXTURE_2D, diffuseMap);
     glUniform1i(diffuseMapId, 0);
 
-    glm::mat4 modelViewProjectionMatrix = renderer->getViewProjectionMatrix() * modelMatrix;
     glUniformMatrix4fv(modelViewProjectionMatrixId, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+
+    GLboolean depthEnabled = getAndSetGlCapability(GL_DEPTH_TEST, true);
 
     //Actually draw the triangles
     glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, (void*)0);
+
+    setGlCapability(GL_DEPTH_TEST, depthEnabled);
 }

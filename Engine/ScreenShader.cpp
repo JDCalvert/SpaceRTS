@@ -5,8 +5,8 @@ void ScreenShader::initialise()
     //Create the program
     ShaderInfo shaders[] =
     {
-        {GL_VERTEX_SHADER, "ScreenShader.vert"},
-        {GL_FRAGMENT_SHADER, "ScreenShader.frag"}
+        {GL_VERTEX_SHADER, "../Resources/Shaders/ScreenShader.vert"},
+        {GL_FRAGMENT_SHADER, "../Resources/Shaders/ScreenShader.frag"}
     };
     programId = loadShaders(shaders, 2);
 

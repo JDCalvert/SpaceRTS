@@ -20,11 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="OpenGLContext.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceLoader.h" />
+    <ClInclude Include="ScreenShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Surface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OpenGLContext.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ScreenShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Surface.cpp" />
   </ItemGroup>

@@ -125,19 +125,13 @@
   <ItemGroup>
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="ScreenShader.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="ScreenShader.h" />
     <ClInclude Include="SimpleShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ScreenShader.frag" />
-    <None Include="ScreenShader.vert" />
     <None Include="SimpleShader.frag" />
     <None Include="SimpleShader.vert" />
   </ItemGroup>
