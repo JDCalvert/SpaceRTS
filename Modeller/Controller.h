@@ -25,7 +25,6 @@ private:
 
     double time;
 
-    bool keyPressed(GLFWwindow* window, int key);
     bool mouseButtonPressed(GLFWwindow* window, int key);
 
 public:
@@ -35,6 +34,8 @@ public:
 
     void mouseButtonCallback(int button, int action, int mods);
     void scrollCallback(double xOffset, double yOffset);
+
+    bool keyPressed(GLFWwindow* window, int key);
 
     void update(GLFWwindow* window);
     void cleanUpFrame();

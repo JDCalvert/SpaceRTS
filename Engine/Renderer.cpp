@@ -1,6 +1,14 @@
 #include "Renderer.h"
 #include "ScreenShader.h"
 
+Renderer* Renderer::createRenderer()
+{
+    Renderer* renderer = new Renderer();
+    renderer->initialise();
+
+    return renderer;
+}
+
 void Renderer::initialise()
 {
     initialiseFrameBuffer();

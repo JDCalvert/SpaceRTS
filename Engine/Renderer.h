@@ -10,6 +10,8 @@ class Renderer
 {
 public:
 
+    static Renderer* createRenderer();
+
     void initialise();
     void initialiseFrame();
     void renderFrame();

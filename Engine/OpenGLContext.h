@@ -12,6 +12,8 @@ class Renderer;
 class OpenGLContext
 {
 private:    
+    static std::unordered_map<GLFWwindow*, OpenGLContext*> contextsByWindow;
+
     std::unordered_map<GLenum, GLboolean> glCapabilities;
     std::vector<Renderer*> renderers;
 
@@ -25,8 +27,12 @@ public:
     static void windowResized(GLFWwindow* window, int width, int height);
 
     void setEnabled(GLenum glCapability, GLboolean enabled);
+
     void addRenderer(Renderer* renderer);
     void resize(int width, int height);
+
+    void bindDefaultFrameBuffer();
+    void clearScreen();
 
     GLFWwindow* getWindow();
     GLsizei getWidth();

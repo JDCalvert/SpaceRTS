@@ -1,7 +1,9 @@
 #include "OpenGLContext.h"
 #include "Renderer.h"
 
-static std::unordered_map<GLFWwindow*, OpenGLContext*> contextsByWindow;
+//Keep a map of contexts by their window, so we can resize the correct
+//context when the window changes size.
+std::unordered_map<GLFWwindow*, OpenGLContext*> OpenGLContext::contextsByWindow;
 
 void OpenGLContext::windowResized(GLFWwindow* window, int width, int height)
 {
@@ -20,12 +22,10 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
         return nullptr;
     }
 
-    //Configuration
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); //Version
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //No legacy stuff
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    //Create a window with an OpenGL context
     GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", NULL, NULL);
     if (window == NULL)
     {
@@ -48,7 +48,22 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
 
     contextsByWindow[window] = context;
 
+    //Set up the 
+    glfwSetWindowSizeCallback(window, windowResized);
+
     return context;
+}
+
+void OpenGLContext::bindDefaultFrameBuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, width, height);
+}
+
+void OpenGLContext::clearScreen()
+{
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void OpenGLContext::setEnabled(GLenum glCapability, GLboolean enabled)
