@@ -63,10 +63,6 @@ int main()
     while (!controller->keyPressed(window, GLFW_KEY_ESCAPE)
         && glfwWindowShouldClose(window) == 0)
     {
-        //Clear the screen to black
-        glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         //Update the camera position
         controller->update(window);
 

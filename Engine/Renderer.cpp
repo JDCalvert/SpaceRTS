@@ -46,8 +46,8 @@ void Renderer::initialiseScreenShader()
 
 void Renderer::resize(int width, int height)
 {
-    this->width = width;
-    this->height = height;
+    this->width = width * 2;
+    this->height = height * 2;
     
     recreateFramebuffer();
 }
