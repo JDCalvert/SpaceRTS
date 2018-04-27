@@ -21,6 +21,7 @@ using namespace glm;
 #include "ResourceLoader.h"
 
 #include "SimpleShader.h"
+#include "LineShader.h"
 #include "Surface.h"
 
 int main()
@@ -41,13 +42,16 @@ int main()
     SimpleShader* simpleShader = new SimpleShader();
     simpleShader->initialise();
 
+    LineShader* lineShader = new LineShader();
+    lineShader->initialise();
+
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.objcomplete");
     surface->diffuseMap = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
     
     //Projection matrix
     float minDrawDistance = 0.1f;
-    float maxDrawDistance = 500.0f;
+    float maxDrawDistance = 100.0f;
     float fieldOfView = 45.0f;
     int width = glContext->getWidth();
     int height = glContext->getHeight();
@@ -80,7 +84,8 @@ int main()
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
-        simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        //simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        lineShader->renderSurface(surface, modelViewProjectionMatrix);
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();
@@ -91,8 +96,7 @@ int main()
 
         controller->cleanUpFrame();
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        glContext->flip();
     }
 
     glfwTerminate();

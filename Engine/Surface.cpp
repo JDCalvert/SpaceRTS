@@ -131,3 +131,21 @@ void Surface::recalculateModelBoneMatrices()
 		boneMatricesPointer[i] = bone.absolute * bones[i].inverseBind;
 	}
 }
+
+void Surface::setVertices(std::vector<glm::vec3>* vertices)
+{
+    this->vertices = *vertices;
+}
+void Surface::setTextureCoordinates(std::vector<glm::vec2>* textureCoordinates)
+{
+    this->textureCoordinates = *textureCoordinates;
+}
+void Surface::setIndices(std::vector<unsigned int>* indices)
+{
+    this->indices = *indices;
+}
+
+std::vector<unsigned int>& Surface::getIndices()
+{
+    return indices;
+}

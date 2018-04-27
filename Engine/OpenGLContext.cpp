@@ -66,6 +66,12 @@ void OpenGLContext::clearScreen()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void OpenGLContext::flip()
+{
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+
 void OpenGLContext::setEnabled(GLenum glCapability, GLboolean enabled)
 {
     auto it = glCapabilities.find(glCapability);

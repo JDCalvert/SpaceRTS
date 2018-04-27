@@ -33,6 +33,7 @@ public:
 
     void bindDefaultFrameBuffer();
     void clearScreen();
+    void flip();
 
     GLFWwindow* getWindow();
     GLsizei getWidth();

@@ -103,10 +103,10 @@ void Controller::calculateCameraPosition(GLFWwindow* window)
 		ensureAnglesWithinRange();
 	}
 
-    int count;
+    /*int count;
     const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
     horizontalAngle += deltaTime * axes[2];
-    verticalAngle += deltaTime * axes[3];
+    verticalAngle += deltaTime * axes[3];*/
 
 	//The direction the camera is facing
 	float forwardX = sin(horizontalAngle) * cos(verticalAngle);
@@ -130,11 +130,17 @@ void Controller::calculateCameraPosition(GLFWwindow* window)
 	if (keyPressed(window, GLFW_KEY_S)) cameraPosition -= horizontalForward * deltaTime * speed;
 	if (keyPressed(window, GLFW_KEY_D)) cameraPosition += cameraRight * deltaTime * speed;
 	if (keyPressed(window, GLFW_KEY_A)) cameraPosition -= cameraRight * deltaTime * speed;
+    if (keyPressed(window, GLFW_KEY_T)) cameraPosition += cameraUp * deltaTime * speed;
+    if (keyPressed(window, GLFW_KEY_G)) cameraPosition -= cameraUp * deltaTime * speed;
 	if (keyPressed(window, GLFW_KEY_Q)) horizontalAngle -= PI / 4 * deltaTime;
 	if (keyPressed(window, GLFW_KEY_E)) horizontalAngle += PI / 4 * deltaTime;
+    if (keyPressed(window, GLFW_KEY_R)) verticalAngle += PI / 4 * deltaTime;
+    if (keyPressed(window, GLFW_KEY_F)) verticalAngle -= PI / 4 * deltaTime;
+    
+    
 
-    cameraPosition += axes[1] * deltaTime * speed * horizontalForward;
-    cameraPosition += axes[0] * deltaTime * speed * cameraRight;
+    /*cameraPosition += axes[1] * deltaTime * speed * horizontalForward;*/
+    /*cameraPosition += axes[0] * deltaTime * speed * cameraRight;*/
 
 	previousMouseX = xpos;
 	previousMouseY = ypos;
