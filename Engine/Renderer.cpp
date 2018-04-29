@@ -1,6 +1,14 @@
 #include "Renderer.h"
 #include "ScreenShader.h"
 
+Renderer* Renderer::createRenderer()
+{
+    Renderer* renderer = new Renderer();
+    renderer->initialise();
+
+    return renderer;
+}
+
 void Renderer::initialise()
 {
     initialiseFrameBuffer();
@@ -16,7 +24,7 @@ void Renderer::initialiseFrameBuffer()
     glGenTextures(1, &frameTexture);
     glBindTexture(GL_TEXTURE_2D, frameTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     //Generate a render buffer to store depth
     glGenRenderbuffers(1, &depthRenderbufferId);

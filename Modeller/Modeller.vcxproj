@@ -123,15 +123,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="LineShader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="LineShader.h" />
     <ClInclude Include="SimpleShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LineShader.frag" />
+    <None Include="LineShader.vert" />
     <None Include="SimpleShader.frag" />
     <None Include="SimpleShader.vert" />
   </ItemGroup>

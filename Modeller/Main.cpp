@@ -13,75 +13,37 @@
 using namespace glm;
 
 #include "OpenGLContext.h"
-#include "Controller.h"
-#include "ResourceLoader.h"
 #include "Renderer.h"
 
-#include "Shader.h"
+#include "Camera.h"
+#include "Controller.h"
+
+#include "ResourceLoader.h"
+
 #include "SimpleShader.h"
-#include "ScreenShader.h"
-
+#include "LineShader.h"
 #include "Surface.h"
-
-OpenGLContext* glContext;
-
-void resize(GLFWwindow* window, int width, int height)
-{
-    glContext->resize(width, height);
-}
 
 int main()
 {
-    if (!glfwInit())
-    {
-        fprintf(stderr, "Failed to initialise GLFW");
-        return -1;
-    }
+    //Create an OpenGLContext. This will create a window for us with an OpenGL context
+    OpenGLContext* glContext = OpenGLContext::initialiseNewContext();
+    GLFWwindow* window = glContext->getWindow();
 
-    //Configuration
-    glfwWindowHint(GLFW_SAMPLES, 4); //Anti-aliasing
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); //Version
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //No legacy stuff
-
-    int width = 800;
-    int height = 600;
-    int antiAliasingFactor = 2;
-
-    //Create a window with an OpenGL context
-    GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL", NULL, NULL);
-    if (window == NULL)
-    {
-        fprintf(stderr, "Failed to open GLFW window.");
-    }
-
-    glfwMakeContextCurrent(window);
-    glewExperimental = true;
-    if (glewInit() != GLEW_OK)
-    {
-        fprintf(stderr, "Failed to initialise GLEW");
-        return -1;
-    }
+    //Use the basic renderer to draw to the screen and register it with our context
+    Renderer* renderer = Renderer::createRenderer();
+    glContext->addRenderer(renderer);
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-    glContext = new OpenGLContext();
-
-    glfwSetWindowSizeCallback(window, resize);
-
-    glfwGetWindowSize(window, &width, &height);
-
-    Controller* controller = new Controller();
-    ScreenShader* screenShader = new ScreenShader();
-
-    Renderer* renderer = new Renderer();
-    renderer->initialise();
-
-    glContext->addRenderer(renderer);
-    glContext->resize(width, height);
+    Camera* camera = new Camera();
+    Controller* controller = new Controller();    
 
     SimpleShader* simpleShader = new SimpleShader();
     simpleShader->initialise();
+
+    LineShader* lineShader = new LineShader();
+    lineShader->initialise();
 
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.objcomplete");
@@ -89,20 +51,18 @@ int main()
     
     //Projection matrix
     float minDrawDistance = 0.1f;
-    float maxDrawDistance = 500.0f;
+    float maxDrawDistance = 100.0f;
     float fieldOfView = 45.0f;
+    int width = glContext->getWidth();
+    int height = glContext->getHeight();
     glm::mat4 projectionMatrix = glm::perspective(fieldOfView, (float)width / height, minDrawDistance, maxDrawDistance);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     
-    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS
+    while (!controller->keyPressed(window, GLFW_KEY_ESCAPE)
         && glfwWindowShouldClose(window) == 0)
     {
-        //Clear the screen to black
-        glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         //Update the camera position
         controller->update(window);
 
@@ -113,29 +73,26 @@ int main()
         glm::vec3 cameraForward = controller->getCameraForward();
         glm::vec3 cameraUp = controller->getCameraUp();
 
+        width = glContext->getWidth();
+        height = glContext->getHeight();
         glm::mat4 projectionMatrix = glm::perspective(fieldOfView, (float)width / height, minDrawDistance, maxDrawDistance);
         glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraForward, cameraUp);
-
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
         simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        lineShader->renderSurface(surface, modelViewProjectionMatrix);
 
-        //Now we've drawn everything to the renderer, draw the renderer
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, width, height);
-
-        //Clear the colour and depth buffers
-        glClearColor(0.0f, 0.1f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //Now we've drawn everything to the renderer, draw to the window
+        glContext->bindDefaultFrameBuffer();
+        glContext->clearScreen();
 
         //We're done drawing things
         renderer->renderFrame();
 
         controller->cleanUpFrame();
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        glContext->flip();
     }
 
     glfwTerminate();

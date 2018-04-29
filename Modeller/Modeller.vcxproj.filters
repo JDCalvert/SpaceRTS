@@ -30,6 +30,12 @@
     <ClCompile Include="Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -38,12 +44,24 @@
     <ClInclude Include="Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LineShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleShader.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="SimpleShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LineShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LineShader.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
