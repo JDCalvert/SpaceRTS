@@ -80,7 +80,7 @@ int main()
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
-        //simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        simpleShader->renderSurface(surface, modelViewProjectionMatrix);
         lineShader->renderSurface(surface, modelViewProjectionMatrix);
 
         //Now we've drawn everything to the renderer, draw to the window
