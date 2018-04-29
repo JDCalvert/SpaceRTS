@@ -20,11 +20,16 @@ private:
     GLFWwindow* window;
     GLsizei width, height;
 
-    void actuallySetEnabled(GLenum glCapability, GLboolean enabled);
+    double time, deltaTime;
 
 public:
     static OpenGLContext* initialiseNewContext();
     static void windowResized(GLFWwindow* window, int width, int height);
+
+    void initialiseFrame();
+
+    bool mouseButtonPressed(int key);
+    bool keyPressed(int key);
 
     void setEnabled(GLenum glCapability, GLboolean enabled);
 

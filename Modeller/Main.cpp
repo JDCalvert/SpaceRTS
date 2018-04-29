@@ -37,7 +37,7 @@ int main()
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     Camera* camera = new Camera();
-    Controller* controller = new Controller();    
+    Controller* controller = new Controller(camera);    
 
     SimpleShader* simpleShader = new SimpleShader();
     simpleShader->initialise();
@@ -60,9 +60,11 @@ int main()
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     
-    while (!controller->keyPressed(window, GLFW_KEY_ESCAPE)
+    while (!glContext->keyPressed(GLFW_KEY_ESCAPE)
         && glfwWindowShouldClose(window) == 0)
     {
+        glContext->initialiseFrame();
+
         //Update the camera position
         controller->update(window);
 

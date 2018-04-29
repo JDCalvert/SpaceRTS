@@ -2,98 +2,20 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-static const double PI = 4 * atan(1.0);
+#include "Camera.h"
+#include "OpenGLContext.h"
 
-Controller::Controller()
+Controller::Controller(Camera* camera, OpenGLContext* glContext)
 {
-	cameraPosition = glm::vec3(3.0f, 3.0f, 3.0f);
-
-	horizontalAngle = -3 * PI / 4;
-	verticalAngle = -PI / 4;
-	fieldOfView = 45.0f;
-
-	speed = 3.0f;
-	mouseSpeed = 0.05f;
-	turnSpeed = 2.0f;
-
-	time = glfwGetTime();
-
-	leftMouseButtonPressed = false;
-	leftMouseButtonDown = false;
-
-	middleMouseButtonPressed = false;
-	middleMouseButtonDown = false;
-
-	rightMouseButtonPressed = false;
-	rightMouseButtonDown = false;
+    this->camera = camera;
+    this->glContext = glContext;
 }
 
-bool Controller::keyPressed(GLFWwindow* window, int key)
+void Controller::calculateCameraPosition()
 {
-	return glfwGetKey(window, key) == GLFW_PRESS;
-}
-
-bool Controller::mouseButtonPressed(GLFWwindow* window, int key)
-{
-	return glfwGetMouseButton(window, key) == GLFW_PRESS;
-}
-
-void Controller::mouseButtonCallback(int button, int action, int mods)
-{
-	if (button == GLFW_MOUSE_BUTTON_LEFT)
-	{
-		if (action == GLFW_PRESS)
-		{
-			leftMouseButtonPressed = true;
-			leftMouseButtonDown = true;
-		}
-		else
-		{
-			leftMouseButtonDown = false;
-		}
-	}
-	else if (button == GLFW_MOUSE_BUTTON_RIGHT)
-	{
-		if (action == GLFW_PRESS)
-		{
-			rightMouseButtonPressed = true;
-			rightMouseButtonDown = true;
-		}
-		else
-		{
-			rightMouseButtonDown = false;
-		}
-	}
-}
-
-void Controller::scrollCallback(double xOffset, double yOffset)
-{
-	cameraPosition += glm::vec3(0.0, -yOffset * 0.1, 0.0);
-}
-
-void Controller::update(GLFWwindow* window)
-{
-	calculateCameraPosition(window);
-}
-
-void Controller::cleanUpFrame()
-{
-	leftMouseButtonPressed = false;
-	middleMouseButtonPressed = false;
-	rightMouseButtonPressed = false;
-}
-
-void Controller::calculateCameraPosition(GLFWwindow* window)
-{
-	double previousTime = time;
-	time = glfwGetTime();
-	deltaTime = time - previousTime;
-
+    glm::ivec2 mousePos = 
 	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
-
-	int width, height;
-	glfwGetWindowSize(window, &width, &height);
+	glContext->getCursorPosition(&xpos, &ypos);
 
 	if (mouseButtonPressed(window, GLFW_MOUSE_BUTTON_MIDDLE))
 	{

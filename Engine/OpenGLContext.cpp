@@ -11,6 +11,11 @@ void OpenGLContext::windowResized(GLFWwindow* window, int width, int height)
     context->resize(width, height);
 }
 
+OpenGLContext::OpenGLContext()
+{
+    time = glfwGetTime();
+}
+
 OpenGLContext* OpenGLContext::initialiseNewContext()
 {
     int width = 800;
@@ -54,6 +59,13 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     return context;
 }
 
+void OpenGLContext::initialiseFrame()
+{
+    double previousTime = time;
+    time = glfwGetTime();
+    deltaTime = time - previousTime;
+}
+
 void OpenGLContext::bindDefaultFrameBuffer()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -75,20 +87,11 @@ void OpenGLContext::flip()
 void OpenGLContext::setEnabled(GLenum glCapability, GLboolean enabled)
 {
     auto it = glCapabilities.find(glCapability);
-    if (it == glCapabilities.end())
+    if (it == glCapabilities.end() || it->second != enabled)
     {
-        glCapabilities.insert(std::pair<GLenum, GLboolean>(glCapability, enabled));
-        actuallySetEnabled(glCapability, enabled);
+        enabled ? glEnable(glCapability) : glDisable(glCapability);
+        glCapabilities[glCapability] = enabled;
     }
-    else if (it->second != enabled)
-    {
-        actuallySetEnabled(glCapability, enabled);
-    }
-}
-
-void OpenGLContext::actuallySetEnabled(GLenum glCapability, GLboolean enabled)
-{
-    enabled ? glEnable(glCapability) : glDisable(glCapability);
 }
 
 void OpenGLContext::addRenderer(Renderer* renderer)
@@ -107,6 +110,16 @@ void OpenGLContext::resize(int width, int height)
         Renderer* renderer = *i;
         renderer->resize(width, height);
     }
+}
+
+bool OpenGLContext::mouseButtonPressed(int key)
+{
+    return glfwGetMouseButton(window, key) == GLFW_PRESS;
+}
+
+bool OpenGLContext::keyPressed(int key)
+{
+    return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
 GLFWwindow* OpenGLContext::getWindow()

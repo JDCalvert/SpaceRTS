@@ -5,51 +5,33 @@
 #include <glfw/glfw3.h>
 #include <glm/glm.hpp>
 
+class Camera;
+class OpenGLContext;
+
 class Controller
 {
 private:
-    glm::vec3 cameraPosition;
-    glm::vec3 cameraForward;
-    glm::vec3 cameraUp;
-    glm::vec3 cameraRight;
 
-    float horizontalAngle;
-    float verticalAngle;
-    float fieldOfView;
+    Camera* camera;
+    OpenGLContext* glContext;
 
-    float speed;
     float mouseSpeed;
-    float turnSpeed;
-
     float previousMouseX, previousMouseY;
 
     double time;
 
-    bool mouseButtonPressed(GLFWwindow* window, int key);
-
 public:
-    Controller();
+    Controller(Camera* camera, OpenGLContext* glContext);
 
     float deltaTime;
 
     void mouseButtonCallback(int button, int action, int mods);
     void scrollCallback(double xOffset, double yOffset);
 
-    bool keyPressed(GLFWwindow* window, int key);
-
     void update(GLFWwindow* window);
     void cleanUpFrame();
     void calculateCameraPosition(GLFWwindow* window);
     void ensureAnglesWithinRange();
-
-    bool leftMouseButtonPressed;
-    bool leftMouseButtonDown;
-
-    bool middleMouseButtonPressed;
-    bool middleMouseButtonDown;
-
-    bool rightMouseButtonPressed;
-    bool rightMouseButtonDown;
 
     glm::vec2 getMousePosition();
 
