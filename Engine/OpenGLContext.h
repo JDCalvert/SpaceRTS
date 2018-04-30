@@ -6,6 +6,7 @@
 
 #include <gl\glew.h>
 #include <GLFW\glfw3.h>
+#include <glm\glm.hpp>
 
 class Renderer;
 
@@ -20,11 +21,20 @@ private:
     GLFWwindow* window;
     GLsizei width, height;
 
-    void actuallySetEnabled(GLenum glCapability, GLboolean enabled);
+    glm::dvec2 mousePosition, deltaMousePosition;
+
+    double time, deltaTime;
 
 public:
+    OpenGLContext();
+
     static OpenGLContext* initialiseNewContext();
     static void windowResized(GLFWwindow* window, int width, int height);
+
+    void initialiseFrame();
+
+    bool mouseButtonPressed(int key);
+    bool keyPressed(int key);
 
     void setEnabled(GLenum glCapability, GLboolean enabled);
 
@@ -35,9 +45,12 @@ public:
     void clearScreen();
     void flip();
 
+    double getDeltaTime();
     GLFWwindow* getWindow();
+    float getAspectRatio();
     GLsizei getWidth();
     GLsizei getHeight();
+    glm::dvec2 getDeltaMousePosition();
 };
 
 #endif
