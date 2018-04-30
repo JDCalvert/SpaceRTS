@@ -9,6 +9,7 @@
 class ScreenShader : public Shader
 {
 public:
+    ScreenShader(OpenGLContext* glContext);
 
     void initialise();
     void render(GLuint texture);

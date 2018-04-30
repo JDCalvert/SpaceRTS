@@ -1,6 +1,10 @@
 #include "SimpleShader.h"
 #include "Surface.h"
 
+SimpleShader::SimpleShader(OpenGLContext* glContext) : Shader(glContext)
+{
+}
+
 void SimpleShader::initialise()
 {
     //Load up the shaders and link them into a program
@@ -9,7 +13,7 @@ void SimpleShader::initialise()
         {GL_VERTEX_SHADER, "SimpleShader.vert"},
         {GL_FRAGMENT_SHADER, "SimpleShader.frag"}
     };
-    programId = Shader::loadShaders(shaders, 2);
+    programId = loadShaders(shaders, 2);
 
     glGenVertexArrays(1, &vertexArrayId);
     glBindVertexArray(vertexArrayId);

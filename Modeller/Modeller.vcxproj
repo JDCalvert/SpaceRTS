@@ -128,18 +128,26 @@
     <ClCompile Include="LineShader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
+    <ClCompile Include="UIPanel.cpp" />
+    <ClCompile Include="UIRenderer.cpp" />
+    <ClCompile Include="UIShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="LineShader.h" />
     <ClInclude Include="SimpleShader.h" />
+    <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UIRenderer.h" />
+    <ClInclude Include="UIShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LineShader.frag" />
     <None Include="LineShader.vert" />
     <None Include="SimpleShader.frag" />
     <None Include="SimpleShader.vert" />
+    <None Include="UIShader.frag" />
+    <None Include="UIShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

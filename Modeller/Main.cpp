@@ -31,7 +31,7 @@ int main()
     GLFWwindow* window = glContext->getWindow();
 
     //Use the basic renderer to draw to the screen and register it with our context
-    Renderer* renderer = Renderer::createRenderer();
+    Renderer* renderer = Renderer::createRenderer(glContext);
     glContext->addRenderer(renderer);
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
@@ -39,10 +39,10 @@ int main()
     Camera* camera = new Camera(glContext);
     Controller* controller = new Controller(camera, glContext);    
 
-    SimpleShader* simpleShader = new SimpleShader();
+    SimpleShader* simpleShader = new SimpleShader(glContext);
     simpleShader->initialise();
 
-    LineShader* lineShader = new LineShader();
+    LineShader* lineShader = new LineShader(glContext);
     lineShader->initialise();
 
     Surface* surface = new Surface();

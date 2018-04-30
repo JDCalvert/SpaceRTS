@@ -5,12 +5,14 @@
 #include <glfw/glfw3.h>
 
 class ScreenShader;
+class OpenGLContext;
 
 class Renderer
 {
 public:
+    static Renderer* createRenderer(OpenGLContext* glContext);
 
-    static Renderer* createRenderer();
+    Renderer(OpenGLContext* glContext);
 
     void initialise();
     void initialiseFrame();
@@ -21,6 +23,7 @@ public:
 
 protected:
     
+    OpenGLContext* glContext;
     ScreenShader* screenShader;
 
     GLuint frameBufferId;
@@ -29,6 +32,8 @@ protected:
 
     int width;
     int height;
+
+    int getSuperSampleFactor();
 
     void initialiseFrameBuffer();
     void initialiseScreenShader();

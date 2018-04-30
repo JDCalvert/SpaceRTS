@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{a80e9cb0-9f12-4adf-b560-dfa698e9582b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UserInterface">
+      <UniqueIdentifier>{925f77b8-5267-4daf-8dcd-f2c34af30ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UserInterface">
+      <UniqueIdentifier>{2f5bc4ec-6214-42d5-902f-be389cc86968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -36,6 +42,15 @@
     <ClCompile Include="LineShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="UIRenderer.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UIShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -50,6 +65,15 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIRenderer.h">
+      <Filter>Header Files\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Header Files\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UIShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleShader.frag">
@@ -62,6 +86,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="LineShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="UIShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="UIShader.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

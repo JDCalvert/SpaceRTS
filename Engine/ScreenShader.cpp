@@ -1,5 +1,9 @@
 #include "ScreenShader.h"
 
+ScreenShader::ScreenShader(OpenGLContext* glContext) : Shader(glContext)
+{
+}
+
 void ScreenShader::initialise()
 {
     //Create the program

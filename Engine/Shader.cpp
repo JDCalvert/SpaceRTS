@@ -1,5 +1,11 @@
 #include "Shader.h"
 #include "ResourceLoader.h"
+#include "OpenGLContext.h"
+
+Shader::Shader(OpenGLContext* glContext)
+{
+    this->glContext = glContext;
+}
 
 void Shader::initialiseForScreenSize()
 {

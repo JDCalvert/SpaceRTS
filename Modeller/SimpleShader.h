@@ -8,7 +8,8 @@ class Surface;
 class SimpleShader: public Shader
 {
 public:
-    
+    SimpleShader(OpenGLContext* glContext);
+
     void initialise();
     void renderSurface(Surface* surface, glm::mat4 modelViewProjectionMatrix);
 

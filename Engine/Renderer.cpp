@@ -1,12 +1,18 @@
 #include "Renderer.h"
 #include "ScreenShader.h"
+#include "OpenGLContext.h"
 
-Renderer* Renderer::createRenderer()
+Renderer* Renderer::createRenderer(OpenGLContext* glContext)
 {
-    Renderer* renderer = new Renderer();
+    Renderer* renderer = new Renderer(glContext);
     renderer->initialise();
 
     return renderer;
+}
+
+Renderer::Renderer(OpenGLContext* glContext)
+{
+    this->glContext = glContext;
 }
 
 void Renderer::initialise()
@@ -40,14 +46,19 @@ void Renderer::initialiseFrameBuffer()
 
 void Renderer::initialiseScreenShader()
 {
-    screenShader = new ScreenShader();
+    screenShader = new ScreenShader(glContext);
     screenShader->initialise();
+}
+
+int Renderer::getSuperSampleFactor()
+{
+    return 2;
 }
 
 void Renderer::resize(int width, int height)
 {
-    this->width = width * 2;
-    this->height = height * 2;
+    this->width = width * getSuperSampleFactor();
+    this->height = height * getSuperSampleFactor();
     
     recreateFramebuffer();
 }
