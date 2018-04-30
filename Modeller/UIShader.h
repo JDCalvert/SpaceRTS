@@ -8,8 +8,6 @@ class UIPanel;
 class UIShader : public Shader
 {
 public:
-    UIShader(OpenGLContext* glContext);
-
     void initialise();
 
     void renderUiPanel(UIPanel* panel);

@@ -8,7 +8,7 @@ class OpenGLContext;
 class Camera
 {
 public:
-    Camera(OpenGLContext* glContext);
+    Camera();
 
     glm::mat4 getProjectionMatrix();
     glm::mat4 getViewMatrix();
@@ -29,8 +29,6 @@ public:
     void lookDown();
 
 private:
-    OpenGLContext* glContext;
-
     glm::vec3 position;
     glm::vec3 forward;
     glm::vec3 up;
@@ -47,8 +45,10 @@ private:
 
     float speed;
     float turnSpeed;
+    float mouseSensitivity;
 
     void move(glm::vec3 direction);
+    void look(float& angle, float rate);
     void ensureAngleWithinRange();
 };
 

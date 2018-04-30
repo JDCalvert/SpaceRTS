@@ -10,7 +10,6 @@
 
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
-using namespace glm;
 
 #include "OpenGLContext.h"
 #include "Renderer.h"
@@ -24,6 +23,8 @@ using namespace glm;
 #include "LineShader.h"
 #include "Surface.h"
 
+#include "UIPanel.h"
+
 int main()
 {
     //Create an OpenGLContext. This will create a window for us with an OpenGL context
@@ -31,23 +32,25 @@ int main()
     GLFWwindow* window = glContext->getWindow();
 
     //Use the basic renderer to draw to the screen and register it with our context
-    Renderer* renderer = Renderer::createRenderer(glContext);
+    Renderer* renderer = Renderer::createRenderer();
     glContext->addRenderer(renderer);
 
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    Camera* camera = new Camera();
+    Controller* controller = new Controller(camera);    
 
-    Camera* camera = new Camera(glContext);
-    Controller* controller = new Controller(camera, glContext);    
-
-    SimpleShader* simpleShader = new SimpleShader(glContext);
+    SimpleShader* simpleShader = new SimpleShader();
     simpleShader->initialise();
 
-    LineShader* lineShader = new LineShader(glContext);
+    LineShader* lineShader = new LineShader();
     lineShader->initialise();
 
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.objcomplete");
     surface->diffuseMap = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
+
+    UIPanel* uiPanel = new UIPanel();
+    uiPanel->position = glm::vec2(0.0f, 0.0f);
+    uiPanel->size = glm::vec2(0.5f, 0.5f);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);

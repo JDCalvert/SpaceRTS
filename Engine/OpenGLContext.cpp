@@ -4,6 +4,7 @@
 //Keep a map of contexts by their window, so we can resize the correct
 //context when the window changes size.
 std::unordered_map<GLFWwindow*, OpenGLContext*> OpenGLContext::contextsByWindow;
+OpenGLContext* OpenGLContext::currentGlContext;
 
 void OpenGLContext::windowResized(GLFWwindow* window, int width, int height)
 {
@@ -11,9 +12,9 @@ void OpenGLContext::windowResized(GLFWwindow* window, int width, int height)
     context->resize(width, height);
 }
 
-OpenGLContext::OpenGLContext()
+OpenGLContext* OpenGLContext::currentContext()
 {
-    time = glfwGetTime();
+    return currentGlContext;
 }
 
 OpenGLContext* OpenGLContext::initialiseNewContext()
@@ -39,6 +40,7 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     }
 
     glfwMakeContextCurrent(window);
+
     glewExperimental = true;
     if (glewInit() != GLEW_OK)
     {
@@ -46,17 +48,30 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
         return nullptr;
     }
 
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetWindowSizeCallback(window, windowResized);
+
     OpenGLContext* context = new OpenGLContext();
     context->window = window;
     context->width = width;
     context->height = height;
 
+    setCurrentContext(context);
+
     contextsByWindow[window] = context;
 
-    //Set up the 
-    glfwSetWindowSizeCallback(window, windowResized);
-
     return context;
+}
+
+void OpenGLContext::setCurrentContext(OpenGLContext* glContext)
+{
+    currentGlContext = glContext;
+    glfwMakeContextCurrent(glContext->window);
+}
+
+OpenGLContext::OpenGLContext()
+{
+    time = glfwGetTime();
 }
 
 void OpenGLContext::initialiseFrame()

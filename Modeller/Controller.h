@@ -21,7 +21,7 @@ private:
     double time;
 
 public:
-    Controller(Camera* camera, OpenGLContext* glContext);
+    Controller(Camera* camera);
 
     void update();
 

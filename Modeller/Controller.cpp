@@ -5,14 +5,15 @@
 #include "Camera.h"
 #include "OpenGLContext.h"
 
-Controller::Controller(Camera* camera, OpenGLContext* glContext)
+Controller::Controller(Camera* camera)
 {
     this->camera = camera;
-    this->glContext = glContext;
 }
 
 void Controller::update()
 {
+    OpenGLContext* glContext = OpenGLContext::currentContext();
+
     if (glContext->mouseButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE))
 	{
         glm::dvec2 deltaMousePosition = glContext->getDeltaMousePosition();

@@ -3,6 +3,8 @@
 
 #include <Renderer.h>
 
+class OpenGLContext;
+
 class UIRenderer : public Renderer
 {
 public:

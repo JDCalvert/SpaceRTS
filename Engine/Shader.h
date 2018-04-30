@@ -17,8 +17,6 @@ struct ShaderInfo
 class Shader
 {
 public:
-    Shader(OpenGLContext* glContext);
-
     virtual void initialise() = 0;
     void initialiseForScreenSize();
     void initialiseFrame();
@@ -28,8 +26,6 @@ public:
     static void setGlCapability(GLenum cap, GLboolean enable);
 
 protected:
-    OpenGLContext* glContext;
-
     GLuint programId;
 
     void bindArrayBufferData(GLuint bufferId, int size, void* dataPointer);

@@ -2,17 +2,12 @@
 #include "ScreenShader.h"
 #include "OpenGLContext.h"
 
-Renderer* Renderer::createRenderer(OpenGLContext* glContext)
+Renderer* Renderer::createRenderer()
 {
-    Renderer* renderer = new Renderer(glContext);
+    Renderer* renderer = new Renderer();
     renderer->initialise();
 
     return renderer;
-}
-
-Renderer::Renderer(OpenGLContext* glContext)
-{
-    this->glContext = glContext;
 }
 
 void Renderer::initialise()
@@ -46,7 +41,7 @@ void Renderer::initialiseFrameBuffer()
 
 void Renderer::initialiseScreenShader()
 {
-    screenShader = new ScreenShader(glContext);
+    screenShader = new ScreenShader();
     screenShader->initialise();
 }
 

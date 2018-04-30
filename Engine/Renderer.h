@@ -10,9 +10,7 @@ class OpenGLContext;
 class Renderer
 {
 public:
-    static Renderer* createRenderer(OpenGLContext* glContext);
-
-    Renderer(OpenGLContext* glContext);
+    static Renderer* createRenderer();
 
     void initialise();
     void initialiseFrame();
@@ -22,8 +20,6 @@ public:
     void recreateFramebuffer();
 
 protected:
-    
-    OpenGLContext* glContext;
     ScreenShader* screenShader;
 
     GLuint frameBufferId;

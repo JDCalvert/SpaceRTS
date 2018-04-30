@@ -7,10 +7,8 @@
 
 static const float PI = 4 * atan(1.0);
 
-Camera::Camera(OpenGLContext* glContext)
+Camera::Camera()
 {
-    this->glContext = glContext;
-
     position = glm::vec3(3.0f, 3.0f, 3.0f);
 
     horizontalAngle = -3 * PI/4;
@@ -22,11 +20,12 @@ Camera::Camera(OpenGLContext* glContext)
 
     speed = 3.0f;
     turnSpeed = 2.0f;
+    mouseSensitivity = 0.1f;
 }
 
 glm::mat4 Camera::getProjectionMatrix()
 {
-    return glm::perspective(fieldOfView, glContext->getAspectRatio(), minDrawDistance, maxDrawDistance);
+    return glm::perspective(fieldOfView, OpenGLContext::currentContext()->getAspectRatio(), minDrawDistance, maxDrawDistance);
 }
 
 glm::mat4 Camera::getViewMatrix()
@@ -57,13 +56,13 @@ void Camera::recalculateDirections()
 
 void Camera::rotate(glm::dvec2 deltaMousePosition)
 {
-    horizontalAngle += deltaMousePosition.x * turnSpeed * glContext->getDeltaTime();
-    verticalAngle += deltaMousePosition.y * turnSpeed * glContext->getDeltaTime();
-}   
+    look(horizontalAngle, deltaMousePosition.x * mouseSensitivity);
+    look(verticalAngle, -deltaMousePosition.y * mouseSensitivity);
+}
 
 void Camera::move(glm::vec3 direction)
 {
-    position += direction * speed * (float)glContext->getDeltaTime();
+    position += direction * speed * (float)OpenGLContext::currentContext()->getDeltaTime();
 }
 
 void Camera::moveForward()
@@ -96,24 +95,29 @@ void Camera::moveDown()
     move(-up);
 }
 
+void Camera::look(float& angle, float rate)
+{
+    angle += PI / 4 * rate * turnSpeed * OpenGLContext::currentContext()->getDeltaTime();
+}
+
 void Camera::lookLeft()
 {
-    horizontalAngle -= PI / 4 * turnSpeed * glContext->getDeltaTime();
+    look(horizontalAngle, -1.0f);
 }
 
 void Camera::lookRight()
 {
-    horizontalAngle += PI / 4 * turnSpeed * glContext->getDeltaTime();
+    look(horizontalAngle, 1.0f);
 }
 
 void Camera::lookUp()
 {
-    verticalAngle += PI / 4 * turnSpeed * glContext->getDeltaTime();
+    look(verticalAngle, 1.0f);
 }
 
 void Camera::lookDown()
 {
-    verticalAngle -= PI / 4 * turnSpeed * glContext->getDeltaTime();
+    look(verticalAngle, -1.0f);
 }
 
 void Camera::ensureAngleWithinRange()

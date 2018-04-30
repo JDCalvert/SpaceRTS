@@ -3,10 +3,6 @@
 
 #include "OpenGLContext.h"
 
-UIShader::UIShader(OpenGLContext* glContext) : Shader(glContext)
-{
-}
-
 void UIShader::initialise()
 {
     ShaderInfo shaders[] =
@@ -34,7 +30,7 @@ void UIShader::renderUiPanel(UIPanel* panel)
     std::vector<glm::vec2> vertices = 
     {
         glm::vec2(panel->position.x, panel->position.y),
-        glm::vec2(panel->position.x, panel->position.y + panel->size.x),
+        glm::vec2(panel->position.x, panel->position.y + panel->size.y),
         glm::vec2(panel->position.x + panel->size.x, panel->position.y),
         glm::vec2(panel->position.x + panel->size.x, panel->position.y + panel->size.y)
     };
@@ -45,8 +41,8 @@ void UIShader::renderUiPanel(UIPanel* panel)
 
     bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
 
-    glContext->setEnabled(GL_DEPTH_TEST, GL_FALSE);
-    glContext->setEnabled(GL_BLEND, GL_TRUE);
+    OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_FALSE);
+    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, length);
 }

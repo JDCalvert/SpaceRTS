@@ -1,10 +1,6 @@
 #include "SimpleShader.h"
 #include "Surface.h"
 
-SimpleShader::SimpleShader(OpenGLContext* glContext) : Shader(glContext)
-{
-}
-
 void SimpleShader::initialise()
 {
     //Load up the shaders and link them into a program
