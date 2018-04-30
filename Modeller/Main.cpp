@@ -36,8 +36,8 @@ int main()
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-    Camera* camera = new Camera();
-    Controller* controller = new Controller(camera);    
+    Camera* camera = new Camera(glContext);
+    Controller* controller = new Controller(camera, glContext);    
 
     SimpleShader* simpleShader = new SimpleShader();
     simpleShader->initialise();
@@ -48,14 +48,6 @@ int main()
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.objcomplete");
     surface->diffuseMap = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
-    
-    //Projection matrix
-    float minDrawDistance = 0.1f;
-    float maxDrawDistance = 100.0f;
-    float fieldOfView = 45.0f;
-    int width = glContext->getWidth();
-    int height = glContext->getHeight();
-    glm::mat4 projectionMatrix = glm::perspective(fieldOfView, (float)width / height, minDrawDistance, maxDrawDistance);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -66,19 +58,13 @@ int main()
         glContext->initialiseFrame();
 
         //Update the camera position
-        controller->update(window);
+        controller->update();
 
         //Reset the frame so we're ready to draw
         renderer->initialiseFrame();
 
-        glm::vec3 cameraPosition = controller->getCameraPosition();
-        glm::vec3 cameraForward = controller->getCameraForward();
-        glm::vec3 cameraUp = controller->getCameraUp();
-
-        width = glContext->getWidth();
-        height = glContext->getHeight();
-        glm::mat4 projectionMatrix = glm::perspective(fieldOfView, (float)width / height, minDrawDistance, maxDrawDistance);
-        glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraForward, cameraUp);
+        glm::mat4 projectionMatrix = camera->getProjectionMatrix();
+        glm::mat4 viewMatrix = camera->getViewMatrix();
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
@@ -91,8 +77,6 @@ int main()
 
         //We're done drawing things
         renderer->renderFrame();
-
-        controller->cleanUpFrame();
 
         glContext->flip();
     }

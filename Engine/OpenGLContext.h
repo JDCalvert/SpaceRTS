@@ -6,6 +6,7 @@
 
 #include <gl\glew.h>
 #include <GLFW\glfw3.h>
+#include <glm\glm.hpp>
 
 class Renderer;
 
@@ -20,9 +21,13 @@ private:
     GLFWwindow* window;
     GLsizei width, height;
 
+    glm::dvec2 mousePosition, deltaMousePosition;
+
     double time, deltaTime;
 
 public:
+    OpenGLContext();
+
     static OpenGLContext* initialiseNewContext();
     static void windowResized(GLFWwindow* window, int width, int height);
 
@@ -40,9 +45,12 @@ public:
     void clearScreen();
     void flip();
 
+    double getDeltaTime();
     GLFWwindow* getWindow();
+    float getAspectRatio();
     GLsizei getWidth();
     GLsizei getHeight();
+    glm::dvec2 getDeltaMousePosition();
 };
 
 #endif

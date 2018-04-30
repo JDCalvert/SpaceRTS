@@ -66,6 +66,5 @@ void LineShader::renderSurface(Surface* surface, glm::mat4 modelViewProjectionMa
     int size = lineIndices.size() * sizeof(unsigned int);
     bindElementArrayBufferData(indexBufferId, size, &lineIndices[0]);
 
-    glLineWidth(2);
     glDrawElements(GL_LINES, lineIndices.size(), GL_UNSIGNED_INT, (void*)0);
 }

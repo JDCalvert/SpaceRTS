@@ -64,6 +64,10 @@ void OpenGLContext::initialiseFrame()
     double previousTime = time;
     time = glfwGetTime();
     deltaTime = time - previousTime;
+
+    glm::dvec2 previousMousePosition = mousePosition;
+    glfwGetCursorPos(window, &mousePosition.x, &mousePosition.y);
+    deltaMousePosition = mousePosition - previousMousePosition;
 }
 
 void OpenGLContext::bindDefaultFrameBuffer()
@@ -127,6 +131,11 @@ GLFWwindow* OpenGLContext::getWindow()
     return window;
 }
 
+double OpenGLContext::getDeltaTime()
+{
+    return deltaTime;
+}
+
 GLsizei OpenGLContext::getWidth()
 {
     return width;
@@ -135,4 +144,14 @@ GLsizei OpenGLContext::getWidth()
 GLsizei OpenGLContext::getHeight()
 {
     return height;
+}
+
+float OpenGLContext::getAspectRatio()
+{
+    return (float)width / height;
+}
+
+glm::dvec2 OpenGLContext::getDeltaMousePosition()
+{
+    return deltaMousePosition;
 }
