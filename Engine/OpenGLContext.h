@@ -3,10 +3,13 @@
 
 #include <unordered_map>
 #include <vector>
+#include <queue>
 
 #include <gl\glew.h>
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
+
+#include "MouseEvent.h"
 
 class Renderer;
 
@@ -23,6 +26,7 @@ private:
     GLsizei width, height;
 
     glm::dvec2 mousePosition, deltaMousePosition;
+    std::queue<MouseEvent*> mouseEvents;
 
     double time, deltaTime;
 
@@ -32,17 +36,22 @@ public:
     static OpenGLContext* initialiseNewContext();
     static OpenGLContext* currentContext();
     static void setCurrentContext(OpenGLContext* glContext);
+    
+    //Callbacks for GLFW events
     static void windowResized(GLFWwindow* window, int width, int height);
+    static void mouseButtonEvent(GLFWwindow* window, int button, int action, int mods);
 
     void initialiseFrame();
 
-    bool mouseButtonPressed(int key);
+    bool mouseButtonDown(int key);
     bool keyPressed(int key);
 
     void setEnabled(GLenum glCapability, GLboolean enabled);
 
     void addRenderer(Renderer* renderer);
+    
     void resize(int width, int height);
+    void mouseButtonEvent(int button, int action, int mods);
 
     void bindDefaultFrameBuffer();
     void clearScreen();
@@ -53,6 +62,10 @@ public:
     float getAspectRatio();
     GLsizei getWidth();
     GLsizei getHeight();
+
+    MouseEvent* nextMouseEvent();
+
+    glm::dvec2 getMousePositionScreenSpace();
     glm::dvec2 getDeltaMousePosition();
 };
 

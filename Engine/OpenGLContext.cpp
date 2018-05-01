@@ -12,6 +12,12 @@ void OpenGLContext::windowResized(GLFWwindow* window, int width, int height)
     context->resize(width, height);
 }
 
+void OpenGLContext::mouseButtonEvent(GLFWwindow* window, int button, int action, int mods)
+{
+    OpenGLContext* context = contextsByWindow[window];
+    context->mouseButtonEvent(button, action, mods);
+}
+
 OpenGLContext* OpenGLContext::currentContext()
 {
     return currentGlContext;
@@ -49,7 +55,9 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     }
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    
     glfwSetWindowSizeCallback(window, windowResized);
+    glfwSetMouseButtonCallback(window, mouseButtonEvent);
 
     OpenGLContext* context = new OpenGLContext();
     context->window = window;
@@ -131,7 +139,28 @@ void OpenGLContext::resize(int width, int height)
     }
 }
 
-bool OpenGLContext::mouseButtonPressed(int key)
+void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
+{
+    double xpos, ypos;
+    glfwGetCursorPos(window, &xpos, &ypos);
+    glm::vec2 cursorPosition(xpos, ypos);
+    cursorPosition /= height;
+
+    MouseEvent* mouseEvent = new MouseEvent {cursorPosition, button, action};
+    mouseEvents.push(mouseEvent);
+}
+
+MouseEvent* OpenGLContext::nextMouseEvent()
+{
+    if (mouseEvents.size() == 0) return nullptr;
+
+    MouseEvent* mouseEvent = mouseEvents.front();
+    mouseEvents.pop();
+
+    return mouseEvent;
+}
+
+bool OpenGLContext::mouseButtonDown(int key)
 {
     return glfwGetMouseButton(window, key) == GLFW_PRESS;
 }
@@ -164,6 +193,11 @@ GLsizei OpenGLContext::getHeight()
 float OpenGLContext::getAspectRatio()
 {
     return (float)width / height;
+}
+
+glm::dvec2 OpenGLContext::getMousePositionScreenSpace()
+{
+    return mousePosition * (1.0 / height);
 }
 
 glm::dvec2 OpenGLContext::getDeltaMousePosition()

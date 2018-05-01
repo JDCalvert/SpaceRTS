@@ -14,7 +14,7 @@ void Controller::update()
 {
     OpenGLContext* glContext = OpenGLContext::currentContext();
 
-    if (glContext->mouseButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE))
+    if (glContext->mouseButtonDown(GLFW_MOUSE_BUTTON_MIDDLE))
 	{
         glm::dvec2 deltaMousePosition = glContext->getDeltaMousePosition();
         camera->rotate(deltaMousePosition);

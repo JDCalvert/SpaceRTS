@@ -4,13 +4,22 @@
 #include <glfw\glfw3.h>
 #include <glm\glm.hpp>
 
-class UIPanel
+#include <vector>
+
+#include "MouseEvent.h"
+
+#include "UIComponent.h"
+
+class UIPanel : public UIComponent
 {
 public:
-    glm::vec2 position;
-    glm::vec2 size;
+    void addComponent(UIComponent* component);
 
-    GLuint texture;
+protected:
+    bool processMouseEvent(MouseEvent* mouseEvent);
+
+private:
+    std::vector<UIComponent*> components;
 };
 
 #endif

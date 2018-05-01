@@ -1,5 +1,5 @@
 #include "UIShader.h"
-#include "UIPanel.h"
+#include "UIComponent.h"
 
 #include "OpenGLContext.h"
 
@@ -17,12 +17,14 @@ void UIShader::initialise()
 
     vertexPositionId = glGetAttribLocation(programId, "vertexPosition");
 
+    aspectRatioId = glGetUniformLocation(programId, "aspectRatio");
+
     glGenBuffers(1, &vertexPositionBufferId);
 
     enableVertexAttribute(vertexPositionId, vertexPositionBufferId, 2);
 }
 
-void UIShader::renderUiPanel(UIPanel* panel)
+void UIShader::renderUiComponent(UIComponent* panel)
 {
     glUseProgram(programId);
     glBindVertexArray(vertexArrayId);
@@ -40,6 +42,9 @@ void UIShader::renderUiPanel(UIPanel* panel)
     glm::vec2* verticesPointer = &vertices[0];
 
     bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
+
+    float aspectRatio = OpenGLContext::currentContext()->getAspectRatio();
+    glUniform1f(aspectRatioId, aspectRatio);
 
     OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_FALSE);
     OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);

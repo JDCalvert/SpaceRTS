@@ -3,14 +3,14 @@
 
 #include <Shader.h>
 
-class UIPanel;
+class UIComponent;
 
 class UIShader : public Shader
 {
 public:
     void initialise();
 
-    void renderUiPanel(UIPanel* panel);
+    void renderUiComponent(UIComponent* panel);
 
 private:
     //Vertex array
@@ -18,6 +18,9 @@ private:
 
     //Array attributes
     GLuint vertexPositionId;
+
+    //Uniforms
+    GLuint aspectRatioId;
 
     //Buffers
     GLuint vertexPositionBufferId;

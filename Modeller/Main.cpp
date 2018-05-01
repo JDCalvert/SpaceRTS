@@ -14,6 +14,7 @@
 #include "OpenGLContext.h"
 #include "Renderer.h"
 
+#include "UIRenderer.h"
 #include "Camera.h"
 #include "Controller.h"
 
@@ -21,9 +22,12 @@
 
 #include "SimpleShader.h"
 #include "LineShader.h"
+#include "UIShader.h"
+
 #include "Surface.h"
 
 #include "UIPanel.h"
+#include "UIButton.h"
 
 int main()
 {
@@ -35,6 +39,9 @@ int main()
     Renderer* renderer = Renderer::createRenderer();
     glContext->addRenderer(renderer);
 
+    UIRenderer* uiRenderer = UIRenderer::createRenderer();
+    glContext->addRenderer(uiRenderer);
+
     Camera* camera = new Camera();
     Controller* controller = new Controller(camera);    
 
@@ -44,13 +51,22 @@ int main()
     LineShader* lineShader = new LineShader();
     lineShader->initialise();
 
+    UIShader* uiShader = new UIShader();
+    uiShader->initialise();
+
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.objcomplete");
     surface->diffuseMap = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
 
     UIPanel* uiPanel = new UIPanel();
-    uiPanel->position = glm::vec2(0.0f, 0.0f);
-    uiPanel->size = glm::vec2(0.5f, 0.5f);
+    uiPanel->position = glm::vec2(0.01f, 0.01f);
+    uiPanel->size = glm::vec2(0.12f, 0.12f);
+
+    UIButton* lineButton = new UIButton();
+    lineButton->position = glm::vec2(0.01f, 0.01f);
+    lineButton->size = glm::vec2(0.1f, 0.1f);
+
+    uiPanel->
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -74,12 +90,32 @@ int main()
         simpleShader->renderSurface(surface, modelViewProjectionMatrix);
         lineShader->renderSurface(surface, modelViewProjectionMatrix);
 
+        //Draw the UI
+        uiRenderer->initialiseFrame();
+        uiShader->renderUiComponent(uiPanel);
+        uiShader->renderUiComponent(lineButton);
+
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();
         glContext->clearScreen();
 
-        //We're done drawing things
+        //Draw the renderers onto the context
         renderer->renderFrame();
+        uiRenderer->renderFrame();
+
+        MouseEvent* mouseEvent = OpenGLContext::currentContext()->nextMouseEvent();
+        if (mouseEvent != nullptr)
+        {
+            if (mouseEvent->action == GLFW_PRESS)
+            {
+                printf("There was a click\n");
+                if (uiPanel->checkAndProcessMouseEvent(mouseEvent))
+                {
+                    printf("Mouse pressed!\n");
+                }
+            }
+            delete mouseEvent;
+        }
 
         glContext->flip();
     }
