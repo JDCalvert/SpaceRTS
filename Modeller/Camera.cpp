@@ -52,6 +52,7 @@ void Camera::recalculateDirections()
 
     //The direction the camera is facing on the horizontal axis. Used to move the camera
     horizontalForward = glm::vec3(sin(horizontalAngle), cos(horizontalAngle), 0.0f);
+    verticalUp = glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 void Camera::rotate(glm::dvec2 deltaMousePosition)
@@ -87,17 +88,18 @@ void Camera::moveLeft()
 
 void Camera::moveUp()
 {
-    move(up);
+    move(verticalUp);
 }
 
 void Camera::moveDown()
 {
-    move(-up);
+    move(-verticalUp);
 }
 
 void Camera::look(float& angle, float rate)
 {
     angle += PI / 4 * rate * turnSpeed * OpenGLContext::currentContext()->getDeltaTime();
+    ensureAngleWithinRange();
 }
 
 void Camera::lookLeft()

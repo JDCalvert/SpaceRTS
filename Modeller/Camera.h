@@ -35,6 +35,7 @@ private:
     glm::vec3 right;
 
     glm::vec3 horizontalForward;
+    glm::vec3 verticalUp;
 
     float horizontalAngle;
     float verticalAngle;

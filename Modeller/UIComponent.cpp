@@ -35,3 +35,28 @@ void UIComponent::addComponent(UIComponent* component)
 {
     components.push_back(component);
 }
+
+std::vector<glm::vec2> UIComponent::getVertices()
+{
+    return std::vector<glm::vec2>
+    {
+        position,
+        position + glm::vec2(size.x, 0.0f),
+        position + glm::vec2(0.0f, size.y),
+        position + size
+        
+    };
+}
+
+std::vector<unsigned int> UIComponent::getIndices()
+{
+    return std::vector<unsigned int>
+    {
+        0, 1, 2, 3
+    };
+}
+
+GLenum UIComponent::getRenderMode()
+{
+    return GL_TRIANGLE_STRIP;
+}

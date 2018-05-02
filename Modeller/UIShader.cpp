@@ -27,12 +27,17 @@ void UIShader::initialise()
 
 void UIShader::renderUiComponent(UIComponent* component)
 {
+    renderUiComponent(component, glm::vec2(0.0f, 0.0f));
+}
+
+void UIShader::renderUiComponent(UIComponent* component, glm::vec2 basePosition)
+{
     glUseProgram(programId);
     glBindVertexArray(vertexArrayId);
 
     std::vector<glm::vec2> vertices;
     std::vector<unsigned int> indices;
-    buildVertices(component, glm::vec2(0.0f, 0.0f), vertices, indices);
+    buildVertices(component, basePosition, vertices, indices);
 
     int verticesSize = vertices.size() * sizeof(glm::vec2);
     glm::vec2* verticesPointer = &vertices[0];
@@ -50,28 +55,33 @@ void UIShader::renderUiComponent(UIComponent* component)
     OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_FALSE);
     OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
 
-    glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, 0);
+    GLenum renderMode = component->getRenderMode();
+    glDrawElements(renderMode, length, GL_UNSIGNED_INT, 0);
+
+    //Now draw the 
+    for (auto i = component->components.begin(); i != component->components.end(); i++)
+    {
+        UIComponent* childComponent = *i;
+        renderUiComponent(childComponent, basePosition + component->position);
+    }
 }
 
 void UIShader::buildVertices(UIComponent* component, glm::vec2 basePosition, std::vector<glm::vec2> &vertices, std::vector<unsigned int> &indices)
 {
-    unsigned int baseIndex = vertices.size();
+    std::vector<glm::vec2> componentVertices = component->getVertices();
+    std::vector<unsigned int> componentIndices = component->getIndices();
 
-    vertices.push_back(basePosition + component->position);
-    vertices.push_back(basePosition + component->position + glm::vec2(component->size.x, 0.0f));
-    vertices.push_back(basePosition + component->position + glm::vec2(0.0f, component->size.y));
-    vertices.push_back(basePosition + component->position + component->size);
-
-    indices.push_back(baseIndex);
-    indices.push_back(baseIndex + 1);
-    indices.push_back(baseIndex + 3);
-    indices.push_back(baseIndex);
-    indices.push_back(baseIndex + 3);
-    indices.push_back(baseIndex + 2);
-
-    for (auto i = component->components.begin(); i != component->components.end(); i++)
+    for (auto i = componentVertices.begin(); i != componentVertices.end(); i++)
     {
-        UIComponent* childComponent = *i;
-        buildVertices(childComponent, basePosition + component->position, vertices, indices);
+        glm::vec2 vertex = *i;
+        vertices.push_back(basePosition + vertex);
     }
+
+    unsigned int baseIndex = indices.size();
+
+    for (auto i = componentIndices.begin(); i != componentIndices.end(); i++)
+    {
+        unsigned int index = *i;
+        indices.push_back(baseIndex + index);
+    }        
 }
