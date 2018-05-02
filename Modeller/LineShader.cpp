@@ -2,6 +2,7 @@
 
 #include <set>
 
+#include <OpenGLContext.h>
 #include <Surface.h>
 
 void LineShader::initialise()
@@ -65,6 +66,9 @@ void LineShader::renderSurface(Surface* surface, glm::mat4 modelViewProjectionMa
 
     int size = lineIndices.size() * sizeof(unsigned int);
     bindElementArrayBufferData(indexBufferId, size, &lineIndices[0]);
+
+    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
+    OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_FALSE);
 
     glDrawElements(GL_LINES, lineIndices.size(), GL_UNSIGNED_INT, (void*)0);
 }

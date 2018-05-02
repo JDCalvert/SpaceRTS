@@ -132,19 +132,10 @@ void Surface::recalculateModelBoneMatrices()
 	}
 }
 
-void Surface::setVertices(std::vector<glm::vec3>* vertices)
+std::vector<glm::vec3>& Surface::getVertices()
 {
-    this->vertices = *vertices;
+    return vertices;
 }
-void Surface::setTextureCoordinates(std::vector<glm::vec2>* textureCoordinates)
-{
-    this->textureCoordinates = *textureCoordinates;
-}
-void Surface::setIndices(std::vector<unsigned int>* indices)
-{
-    this->indices = *indices;
-}
-
 std::vector<unsigned int>& Surface::getIndices()
 {
     return indices;

@@ -1,4 +1,5 @@
 #include "SimpleShader.h"
+#include "OpenGLContext.h"
 #include "Surface.h"
 
 void SimpleShader::initialise()
@@ -63,10 +64,9 @@ void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelViewProjection
 
     glUniformMatrix4fv(modelViewProjectionMatrixId, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 
-    GLboolean depthEnabled = getAndSetGlCapability(GL_DEPTH_TEST, true);
+    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
+    OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_TRUE);
 
     //Actually draw the triangles
     glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, (void*)0);
-
-    setGlCapability(GL_DEPTH_TEST, depthEnabled);
 }

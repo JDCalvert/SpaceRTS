@@ -106,22 +106,3 @@ void Shader::linkAndCheckProgram(GLuint programId)
         printf("%s\n", &programErrorMessage[0]);
     }
 }
-
-GLboolean Shader::getAndSetGlCapability(GLenum cap, GLboolean enable)
-{
-    GLboolean isEnabled = glIsEnabled(cap);
-    setGlCapability(cap, enable);
-    return isEnabled;
-}
-
-void Shader::setGlCapability(GLenum cap, GLboolean enable)
-{
-    if (enable)
-    {
-        glEnable(cap);
-    }
-    else
-    {
-        glDisable(cap);
-    }
-}

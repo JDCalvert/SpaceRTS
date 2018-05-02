@@ -56,11 +56,8 @@ public:
 
     void calculateSizesAndLength();
 
-    void setVertices(std::vector<glm::vec3>* vertices);
-    void setTextureCoordinates(std::vector<glm::vec2>* textureCoordinates);
-    void setIndices(std::vector<unsigned int>* indices);
-
     std::vector<unsigned int>& getIndices();
+    std::vector<glm::vec3>& getVertices();
 
     void recalculateModelBoneMatrices();
 

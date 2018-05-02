@@ -1,12 +1,11 @@
-#ifndef LINE_SHADER_H
-#define LINE_SHADER_H
+#ifndef POINT_SHADER_H
+#define POINT_SHADER_H
 
-#include <glm\glm.hpp>
 #include <Shader.h>
 
 class Surface;
 
-class LineShader : public Shader
+class PointShader : public Shader
 {
 public:
     void initialise();
@@ -19,7 +18,6 @@ private:
     GLuint modelViewProjectionMatrixId;
 
     GLuint vertexPositionBufferId;
-    GLuint indexBufferId;
 };
 
 #endif

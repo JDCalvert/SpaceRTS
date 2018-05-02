@@ -11,6 +11,7 @@ public:
     void initialise();
 
     void renderUiComponent(UIComponent* panel);
+    void buildVertices(UIComponent* component, glm::vec2 basePosition, std::vector<glm::vec2> &vertices, std::vector<unsigned int> &indices);
 
 private:
     //Vertex array
@@ -24,6 +25,7 @@ private:
 
     //Buffers
     GLuint vertexPositionBufferId;
+    GLuint indicesBufferId;
 };
 
 #endif

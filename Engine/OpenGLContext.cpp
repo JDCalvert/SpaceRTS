@@ -66,6 +66,8 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
 
     setCurrentContext(context);
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     contextsByWindow[window] = context;
 
     return context;

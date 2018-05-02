@@ -127,9 +127,11 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="LineShader.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PointShader.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIComponent.cpp" />
+    <ClCompile Include="UILabel.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIRenderer.cpp" />
     <ClCompile Include="UIShader.cpp" />
@@ -138,9 +140,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="LineShader.h" />
+    <ClInclude Include="PointShader.h" />
     <ClInclude Include="SimpleShader.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UILabel.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIRenderer.h" />
     <ClInclude Include="UIShader.h" />
@@ -148,6 +152,8 @@
   <ItemGroup>
     <None Include="LineShader.frag" />
     <None Include="LineShader.vert" />
+    <None Include="PointShader.frag" />
+    <None Include="PointShader.vert" />
     <None Include="SimpleShader.frag" />
     <None Include="SimpleShader.vert" />
     <None Include="UIShader.frag" />

@@ -22,6 +22,7 @@
 
 #include "SimpleShader.h"
 #include "LineShader.h"
+#include "PointShader.h"
 #include "UIShader.h"
 
 #include "Surface.h"
@@ -51,6 +52,9 @@ int main()
     LineShader* lineShader = new LineShader();
     lineShader->initialise();
 
+    PointShader* pointShader = new PointShader();
+    pointShader->initialise();
+
     UIShader* uiShader = new UIShader();
     uiShader->initialise();
 
@@ -60,13 +64,25 @@ int main()
 
     UIPanel* uiPanel = new UIPanel();
     uiPanel->position = glm::vec2(0.01f, 0.01f);
-    uiPanel->size = glm::vec2(0.12f, 0.12f);
+    uiPanel->size = glm::vec2(0.34f, 0.12f);
+
+    UIButton* surfaceButton = new UIButton();
+    surfaceButton->position = glm::vec2(0.01f, 0.01f);
+    surfaceButton->size = glm::vec2(0.1f, 0.1f);
+
+    uiPanel->addComponent(surfaceButton);
 
     UIButton* lineButton = new UIButton();
-    lineButton->position = glm::vec2(0.01f, 0.01f);
+    lineButton->position = glm::vec2(0.12f, 0.01f);
     lineButton->size = glm::vec2(0.1f, 0.1f);
 
-    uiPanel->
+    uiPanel->addComponent(lineButton);
+
+    UIButton* pointButton = new UIButton();
+    pointButton->position = glm::vec2(0.23f, 0.01f);
+    pointButton->size = glm::vec2(0.1f, 0.1f);
+
+    uiPanel->addComponent(pointButton);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -87,13 +103,13 @@ int main()
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
-        simpleShader->renderSurface(surface, modelViewProjectionMatrix);
-        lineShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (surfaceButton->toggle) simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (lineButton->toggle) lineShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (pointButton->toggle) pointShader->renderSurface(surface, modelViewProjectionMatrix);
 
         //Draw the UI
         uiRenderer->initialiseFrame();
         uiShader->renderUiComponent(uiPanel);
-        uiShader->renderUiComponent(lineButton);
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();
@@ -108,11 +124,7 @@ int main()
         {
             if (mouseEvent->action == GLFW_PRESS)
             {
-                printf("There was a click\n");
-                if (uiPanel->checkAndProcessMouseEvent(mouseEvent))
-                {
-                    printf("Mouse pressed!\n");
-                }
+                uiPanel->checkAndProcessMouseEvent(mouseEvent);
             }
             delete mouseEvent;
         }

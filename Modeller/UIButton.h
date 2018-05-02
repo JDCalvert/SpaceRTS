@@ -9,7 +9,7 @@ public:
     bool toggle;
 
 protected:
-    bool processMouseEvent(MouseEvent* mouseEvent);
+    void processMouseEvent(MouseEvent* mouseEvent);
 };
 
 #endif
