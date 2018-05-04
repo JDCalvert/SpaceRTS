@@ -63,25 +63,18 @@ int main()
     surface->diffuseMap = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
 
     UIPanel* uiPanel = new UIPanel();
-    uiPanel->position = glm::vec2(0.01f, 0.01f);
-    uiPanel->size = glm::vec2(0.34f, 0.12f);
+    uiPanel->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.34f, 0.12f));
 
     UIButton* surfaceButton = new UIButton();
-    surfaceButton->position = glm::vec2(0.01f, 0.01f);
-    surfaceButton->size = glm::vec2(0.1f, 0.1f);
-
+    surfaceButton->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.1f, 0.1f));
     uiPanel->addComponent(surfaceButton);
 
     UIButton* lineButton = new UIButton();
-    lineButton->position = glm::vec2(0.12f, 0.01f);
-    lineButton->size = glm::vec2(0.1f, 0.1f);
-
+    lineButton->setPositionAndSize(glm::vec2(0.12f, 0.01f), glm::vec2(0.1f, 0.1f));
     uiPanel->addComponent(lineButton);
 
     UIButton* pointButton = new UIButton();
-    pointButton->position = glm::vec2(0.23f, 0.01f);
-    pointButton->size = glm::vec2(0.1f, 0.1f);
-
+    pointButton->setPositionAndSize(glm::vec2(0.23f, 0.01f), glm::vec2(0.1f, 0.1f));
     uiPanel->addComponent(pointButton);
 
     //Model matrix

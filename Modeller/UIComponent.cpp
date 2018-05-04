@@ -36,27 +36,37 @@ void UIComponent::addComponent(UIComponent* component)
     components.push_back(component);
 }
 
-std::vector<glm::vec2> UIComponent::getVertices()
+void UIComponent::setPositionAndSize(glm::vec2 position, glm::vec2 size)
 {
-    return std::vector<glm::vec2>
-    {
-        position,
-        position + glm::vec2(size.x, 0.0f),
-        position + glm::vec2(0.0f, size.y),
-        position + size
-        
-    };
+    this->position = position;
+    this->size = size;
+
+    constructSurface();
 }
 
-std::vector<unsigned int> UIComponent::getIndices()
+void UIComponent::constructSurface()
 {
-    return std::vector<unsigned int>
+    if (!surface) surface = new Surface();
+
+    surface->getVertices() = 
     {
-        0, 1, 2, 3
+        glm::vec3(position, 0.0f),
+        glm::vec3(position + glm::vec2(size.x, 0.0f), 0.0f),
+        glm::vec3(position + glm::vec2(0.0f, size.y), 0.0f),
+        glm::vec3(position + size, 0.0f)
     };
+
+    surface->getIndices() = {0, 1, 2, 3};
+
+    surface->calculateSizesAndLength();
 }
 
 GLenum UIComponent::getRenderMode()
 {
     return GL_TRIANGLE_STRIP;
+}
+
+glm::vec2 UIComponent::getPosition()
+{
+    return position;
 }

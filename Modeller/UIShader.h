@@ -13,8 +13,6 @@ public:
     void renderUiComponent(UIComponent* component);
     void renderUiComponent(UIComponent* component, glm::vec2 basePosition);
 
-    void buildVertices(UIComponent* component, glm::vec2 basePosition, std::vector<glm::vec2> &vertices, std::vector<unsigned int> &indices);
-
 private:
     //Vertex array
     GLuint vertexArrayId;
@@ -24,6 +22,7 @@ private:
 
     //Uniforms
     GLuint aspectRatioId;
+    GLuint basePositionId;
 
     //Buffers
     GLuint vertexPositionBufferId;
