@@ -59,30 +59,51 @@ int main()
     UIShader* uiShader = new UIShader();
     uiShader->initialise();
 
+    GLuint metalTexture = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
+
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.objcomplete");
-    surface->diffuseMap = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
+    surface->diffuseMap = metalTexture;
 
     UIPanel* uiPanel = new UIPanel();
     uiPanel->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.34f, 0.12f));
+    uiPanel->surface->diffuseMap = metalTexture;
 
     UIButton* surfaceButton = new UIButton();
     surfaceButton->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.1f, 0.1f));
+    surfaceButton->surface->diffuseMap = metalTexture;
     uiPanel->addComponent(surfaceButton);
-
+    
     UIButton* lineButton = new UIButton();
     lineButton->setPositionAndSize(glm::vec2(0.12f, 0.01f), glm::vec2(0.1f, 0.1f));
+    lineButton->surface->diffuseMap = metalTexture;
     uiPanel->addComponent(lineButton);
 
     UIButton* pointButton = new UIButton();
     pointButton->setPositionAndSize(glm::vec2(0.23f, 0.01f), glm::vec2(0.1f, 0.1f));
+    pointButton->surface->diffuseMap = metalTexture;
     uiPanel->addComponent(pointButton);
 
     Font* font = ResourceLoader::loadBFF("Graphics/font.bff");
     font->textureId = ResourceLoader::loadDDS("Graphics/font.dds");
 
+    UIPanel* vertexPanel = new UIPanel();
+    vertexPanel
+
+    std::vector<glm::vec3>& vertices = surface->getVertices();
+    std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
+    for (unsigned int i=0; i<vertices.size(); i++)
+    {
+        glm::vec3 vertexPosition = vertices[i];
+        glm::vec2 textureCoordinate = textureCoordinates[i];
+
+        
+    }
+
+
     UILabel* label = new UILabel();
-    label->setText("Hello", 0.1f, *font);
+    label->setPosition(glm::vec2(0.5f, 0.5f));
+    label->setText("Hello", 0.5f, *font);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);

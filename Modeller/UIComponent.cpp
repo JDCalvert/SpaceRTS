@@ -36,6 +36,11 @@ void UIComponent::addComponent(UIComponent* component)
     components.push_back(component);
 }
 
+void UIComponent::setPosition(glm::vec2 position)
+{
+    this->position = position;
+}
+
 void UIComponent::setPositionAndSize(glm::vec2 position, glm::vec2 size)
 {
     this->position = position;
@@ -50,10 +55,18 @@ void UIComponent::constructSurface()
 
     surface->getVertices() = 
     {
-        glm::vec3(position, 0.0f),
-        glm::vec3(position + glm::vec2(size.x, 0.0f), 0.0f),
-        glm::vec3(position + glm::vec2(0.0f, size.y), 0.0f),
-        glm::vec3(position + size, 0.0f)
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(glm::vec2(0.0f, size.y), 0.0f),
+        glm::vec3(glm::vec2(size.x, 0.0f), 0.0f),
+        glm::vec3(size, 0.0f)
+    };
+
+    surface->getTextureCoordinates() =
+    {
+        glm::vec2(0.0f, 0.0f),
+        glm::vec2(0.0f, 1.0f),
+        glm::vec2(1.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f)
     };
 
     surface->getIndices() = {0, 1, 2, 3};

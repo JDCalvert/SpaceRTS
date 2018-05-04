@@ -1,8 +1,12 @@
 #version 430 core
 
+in vec2 textureCoordinate;
+
+uniform sampler2D textureMap;
+
 out vec4 colour;
 
 void main()
 {
-    colour = vec4(1.0, 1.0, 1.0, 0.9);
+    colour = texture(textureMap, textureCoordinate);
 }

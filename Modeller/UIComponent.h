@@ -18,6 +18,7 @@ public:
     glm::vec2 getPosition();
 
     void addComponent(UIComponent* component);
+    void setPosition(glm::vec2 position);
     void setPositionAndSize(glm::vec2 position, glm::vec2 size);
 
     virtual bool checkAndProcessMouseEvent(MouseEvent* mouseEvent) final;

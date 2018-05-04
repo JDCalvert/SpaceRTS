@@ -17,14 +17,18 @@ void UIShader::initialise()
     glBindVertexArray(vertexArrayId);
 
     vertexPositionId = glGetAttribLocation(programId, "vertexPosition");
+    vertexTextureCoordinateId = glGetAttribLocation(programId, "vertexTextureCoordinate");
 
     aspectRatioId = glGetUniformLocation(programId, "aspectRatio");
     basePositionId = glGetUniformLocation(programId, "basePosition");
+    textureMapId = glGetUniformLocation(programId, "textureMap");
 
     glGenBuffers(1, &vertexPositionBufferId);
+    glGenBuffers(1, &vertexTextureCoordinateBufferId);
     glGenBuffers(1, &indicesBufferId);
 
     enableVertexAttribute(vertexPositionId, vertexPositionBufferId, 3);
+    enableVertexAttribute(vertexTextureCoordinateId, vertexTextureCoordinateBufferId, 2);
 }
 
 void UIShader::renderUiComponent(UIComponent* component)
@@ -43,17 +47,26 @@ void UIShader::renderUiComponent(UIComponent* component)
 
 void UIShader::renderUiComponent(UIComponent* component, glm::vec2 basePosition)
 {
-    glUniform2f(basePositionId, basePosition.x, basePosition.y);
-
     Surface* surface = component->surface;
+
+    glm::vec2 absolutePosition = component->getPosition() + basePosition;
+    glUniform2f(basePositionId, absolutePosition.x, absolutePosition.y);
 
     int verticesSize = surface->verticesSize;
     glm::vec3* verticesPointer = surface->verticesPointer;
     bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
 
+    int textureCoordinatesSize = surface->textureCoordinatesSize;
+    glm::vec2* textureCoordinatesPointer = surface->textureCoordinatesPointer;
+    bindArrayBufferData(vertexTextureCoordinateBufferId, textureCoordinatesSize, textureCoordinatesPointer);
+
     int indicesSize = surface->indicesSize;
     unsigned int* indicesPointer = surface->indicesPointer;
     bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, surface->diffuseMap);
+    glUniform1i(textureMapId, 0);
 
     unsigned int length = surface->length;
     GLenum renderMode = component->getRenderMode();

@@ -50,6 +50,8 @@ void UILabel::setText(std::string text, float size, Font font)
         xpos += characterWidth * size;
     }
 
+    surface->diffuseMap = font.textureId;
+
     surface->calculateSizesAndLength();
 }
 

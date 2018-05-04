@@ -17,13 +17,16 @@ private:
 
     //Array attributes
     GLuint vertexPositionId;
+    GLuint vertexTextureCoordinateId;
 
     //Uniforms
     GLuint aspectRatioId;
     GLuint basePositionId;
+    GLuint textureMapId;
 
     //Buffers
     GLuint vertexPositionBufferId;
+    GLuint vertexTextureCoordinateBufferId;
     GLuint indicesBufferId;
 
     void renderUiComponent(UIComponent* component, glm::vec2 basePosition);
