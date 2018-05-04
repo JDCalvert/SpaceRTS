@@ -9,9 +9,7 @@ class UIShader : public Shader
 {
 public:
     void initialise();
-
     void renderUiComponent(UIComponent* component);
-    void renderUiComponent(UIComponent* component, glm::vec2 basePosition);
 
 private:
     //Vertex array
@@ -27,6 +25,8 @@ private:
     //Buffers
     GLuint vertexPositionBufferId;
     GLuint indicesBufferId;
+
+    void renderUiComponent(UIComponent* component, glm::vec2 basePosition);
 };
 
 #endif

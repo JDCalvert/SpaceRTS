@@ -325,17 +325,17 @@ public:
         delete image;
         delete data;
 
-        Font font;
-        font.cellWidth = cellWidth;
-        font.cellHeight = cellHeight;
-        font.rowWidth = rowWidth;
-        memcpy(font.charWidths, charWidths, sizeof(charWidths));
-        font.base = base;
-        font.textureId = textureId;
-        font.cellWidthNormalised = cellWidthNormalised;
-        font.cellHeightNormalised = cellHeightNormalised;
+        Font* font = new Font();
+        font->cellWidth = cellWidth;
+        font->cellHeight = cellHeight;
+        font->rowWidth = rowWidth;
+        memcpy(font->charWidths, charWidths, sizeof(charWidths));
+        font->base = base;
+        font->textureId = textureId;
+        font->cellWidthNormalised = cellWidthNormalised;
+        font->cellHeightNormalised = cellHeightNormalised;
 
-        return &font;
+        return font;
     }
 };
 

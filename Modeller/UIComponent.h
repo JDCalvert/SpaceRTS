@@ -21,7 +21,7 @@ public:
     void setPositionAndSize(glm::vec2 position, glm::vec2 size);
 
     virtual bool checkAndProcessMouseEvent(MouseEvent* mouseEvent) final;
-    GLenum getRenderMode();
+    virtual GLenum getRenderMode();
 
 protected:
     virtual void processMouseEvent(MouseEvent* mouseEvent) = 0;

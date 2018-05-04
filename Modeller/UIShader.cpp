@@ -19,7 +19,7 @@ void UIShader::initialise()
     vertexPositionId = glGetAttribLocation(programId, "vertexPosition");
 
     aspectRatioId = glGetUniformLocation(programId, "aspectRatio");
-    //basePositionId = glGetUniformLocation(programId, "basePosition");
+    basePositionId = glGetUniformLocation(programId, "basePosition");
 
     glGenBuffers(1, &vertexPositionBufferId);
     glGenBuffers(1, &indicesBufferId);
@@ -29,37 +29,37 @@ void UIShader::initialise()
 
 void UIShader::renderUiComponent(UIComponent* component)
 {
+    glUseProgram(programId);
+    glBindVertexArray(vertexArrayId);
+
+    OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_FALSE);
+    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
+
+    float aspectRatio = OpenGLContext::currentContext()->getAspectRatio();
+    glUniform1f(aspectRatioId, aspectRatio);    
+
     renderUiComponent(component, glm::vec2(0.0f, 0.0f));
 }
 
 void UIShader::renderUiComponent(UIComponent* component, glm::vec2 basePosition)
 {
-    glUseProgram(programId);
-    glBindVertexArray(vertexArrayId);
+    glUniform2f(basePositionId, basePosition.x, basePosition.y);
 
     Surface* surface = component->surface;
 
     int verticesSize = surface->verticesSize;
-    int indicesSize = surface->indicesSize;
-
     glm::vec3* verticesPointer = surface->verticesPointer;
+    bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
+
+    int indicesSize = surface->indicesSize;
     unsigned int* indicesPointer = surface->indicesPointer;
-
-    unsigned int length = surface->length;
-
     bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
 
-    float aspectRatio = OpenGLContext::currentContext()->getAspectRatio();
-    glUniform1f(aspectRatioId, aspectRatio);
-    //glUniform2fv(basePositionId, 1, &basePosition[0]);
-
-    OpenGLContext::currentContext()->setEnabled(GL_DEPTH_TEST, GL_FALSE);
-    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
-
+    unsigned int length = surface->length;
     GLenum renderMode = component->getRenderMode();
-    glDrawElements(GL_TRIANGLE_STRIP, length, GL_UNSIGNED_INT, 0);
+    glDrawElements(renderMode, length, GL_UNSIGNED_INT, 0);
 
-    //Now draw the 
+    //Now draw the child components
     for (auto i = component->components.begin(); i != component->components.end(); i++)
     {
         UIComponent* childComponent = *i;

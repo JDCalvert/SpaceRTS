@@ -28,39 +28,7 @@ struct BindBone: Bone
 
 class Surface
 {
-private:
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec2> textureCoordinates;
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec3> tangents;
-    std::vector<glm::vec3> bitangents;
-    std::vector<glm::vec4> boneIndicesAndWeights;
-    std::vector<unsigned int> indices;
-
-    std::vector<glm::mat4> boneMatrices;
-
-    glm::vec4 ambientColour;
-    glm::vec4 diffuseColour;
-
-    //void calculateSizesAndLength();
-    void prepareBones();
-
 public:
-    Surface();
-    void loadFromFile(const char* objFilePath);
-    void loadFromFile(const char* objFilePath, float scale);
-    void setUpColourPointers();
-    void setTextures(GLuint diffuseMap, GLuint normalmap, GLuint specularMap);
-    void setAmbientColour(glm::vec4 ambientColour);
-    void setDiffuseColour(glm::vec4 diffuseColour);
-
-    void calculateSizesAndLength();
-
-    std::vector<unsigned int>& getIndices();
-    std::vector<glm::vec3>& getVertices();
-
-    void recalculateModelBoneMatrices();
-
     std::vector<BindBone> bones;
 
     int verticesSize = 0;
@@ -93,6 +61,43 @@ public:
     GLuint diffuseMap;
     GLuint normalMap;
     GLuint specularMap;
+
+    Surface();
+
+    //Load from file
+    void loadFromFile(const char* objFilePath);
+    void loadFromFile(const char* objFilePath, float scale);
+    
+    //Set specific things about the texture
+    void setTextures(GLuint diffuseMap, GLuint normalmap, GLuint specularMap);
+    void setAmbientColour(glm::vec4 ambientColour);
+    void setDiffuseColour(glm::vec4 diffuseColour);
+
+    //Calculate things before the texture can be used
+    void setUpColourPointers();
+    void calculateSizesAndLength();
+    void recalculateModelBoneMatrices();
+
+    //The actual parts of the surface
+    std::vector<glm::vec3>& getVertices();
+    std::vector<glm::vec2>& getTextureCoordinates();
+    std::vector<unsigned int>& getIndices();
+
+private:
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> textureCoordinates;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec3> tangents;
+    std::vector<glm::vec3> bitangents;
+    std::vector<glm::vec4> boneIndicesAndWeights;
+    std::vector<unsigned int> indices;
+
+    std::vector<glm::mat4> boneMatrices;
+
+    glm::vec4 ambientColour;
+    glm::vec4 diffuseColour;
+
+    void prepareBones();
 };
 
 #endif

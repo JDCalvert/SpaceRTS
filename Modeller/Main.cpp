@@ -29,6 +29,7 @@
 
 #include "UIPanel.h"
 #include "UIButton.h"
+#include "UILabel.h"
 
 int main()
 {
@@ -77,6 +78,12 @@ int main()
     pointButton->setPositionAndSize(glm::vec2(0.23f, 0.01f), glm::vec2(0.1f, 0.1f));
     uiPanel->addComponent(pointButton);
 
+    Font* font = ResourceLoader::loadBFF("Graphics/font.bff");
+    font->textureId = ResourceLoader::loadDDS("Graphics/font.dds");
+
+    UILabel* label = new UILabel();
+    label->setText("Hello", 0.1f, *font);
+
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     
@@ -103,6 +110,7 @@ int main()
         //Draw the UI
         uiRenderer->initialiseFrame();
         uiShader->renderUiComponent(uiPanel);
+        uiShader->renderUiComponent(label);
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();
