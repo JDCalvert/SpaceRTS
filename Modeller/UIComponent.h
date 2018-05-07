@@ -15,10 +15,14 @@ public:
 
     Surface* surface;
 
-    glm::vec2 getPosition();
-
     void addComponent(UIComponent* component);
+
+    glm::vec2 getPosition();
     void setPosition(glm::vec2 position);
+    
+    glm::vec2 getSize();
+    void setSize(glm::vec2 size);
+
     void setPositionAndSize(glm::vec2 position, glm::vec2 size);
 
     virtual bool checkAndProcessMouseEvent(MouseEvent* mouseEvent) final;

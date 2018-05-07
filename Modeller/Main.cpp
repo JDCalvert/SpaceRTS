@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iomanip>
 
 #include <gl\glew.h>
 #include <GLFW\glfw3.h>
@@ -62,7 +63,7 @@ int main()
     GLuint metalTexture = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
 
     Surface* surface = new Surface();
-    surface->loadFromFile("Models/cube.objcomplete");
+    surface->loadFromFile("Models/cube.obj");
     surface->diffuseMap = metalTexture;
 
     UIPanel* uiPanel = new UIPanel();
@@ -88,22 +89,42 @@ int main()
     font->textureId = ResourceLoader::loadDDS("Graphics/font.dds");
 
     UIPanel* vertexPanel = new UIPanel();
-    vertexPanel
 
     std::vector<glm::vec3>& vertices = surface->getVertices();
     std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
+    float yPos = 0.01f;
+    float maxXpos = 0.0f;
+    float textSize = 0.025f;
     for (unsigned int i=0; i<vertices.size(); i++)
     {
         glm::vec3 vertexPosition = vertices[i];
         glm::vec2 textureCoordinate = textureCoordinates[i];
 
+        UILabel* xPosLabel = new UILabel();
+        xPosLabel->setPosition(glm::vec2(0.01f, yPos));
+        xPosLabel->setText("x", textSize, *font);
+        vertexPanel->addComponent(xPosLabel);
+
+        float xPos = xPosLabel->getPosition().x + xPosLabel->getSize().x + 0.01f;
+
+        std::stringstream ss;
+        ss << std::setw(8) << std::setfill(' ') << std::fixed << std::setprecision(3) << vertexPosition.x;
+        ss << ",";
+        ss << std::setw(8) << std::setfill(' ') << std::fixed << std::setprecision(3) << vertexPosition.y;
+        ss << ",";
+        ss << std::setw(8) << std::setfill(' ') << std::fixed << std::setprecision(3) << vertexPosition.z;
+        std::string vertexX = ss.str();
         
+        UILabel* xPosValueLabel = new UILabel();
+        xPosValueLabel->setPosition(glm::vec2(xPos, yPos));
+        xPosValueLabel->setText(vertexX, textSize, *font);
+        vertexPanel->addComponent(xPosValueLabel);
+
+        xPos += xPosValueLabel->getSize().x;
+
+        yPos += textSize;
+        maxXpos = std::max(maxXpos, xPos);
     }
-
-
-    UILabel* label = new UILabel();
-    label->setPosition(glm::vec2(0.5f, 0.5f));
-    label->setText("Hello", 0.5f, *font);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -131,7 +152,9 @@ int main()
         //Draw the UI
         uiRenderer->initialiseFrame();
         uiShader->renderUiComponent(uiPanel);
-        uiShader->renderUiComponent(label);
+
+        vertexPanel->setPositionAndSize(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - maxXpos - 0.02f, 0.01f), glm::vec2(maxXpos + 0.01f, yPos));
+        uiShader->renderUiComponent(vertexPanel);
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();

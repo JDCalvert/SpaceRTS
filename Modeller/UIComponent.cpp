@@ -41,11 +41,15 @@ void UIComponent::setPosition(glm::vec2 position)
     this->position = position;
 }
 
+void UIComponent::setSize(glm::vec2 size)
+{
+    this->size = size;
+}
+
 void UIComponent::setPositionAndSize(glm::vec2 position, glm::vec2 size)
 {
-    this->position = position;
-    this->size = size;
-
+    setPosition(position);
+    setSize(size);
     constructSurface();
 }
 
@@ -82,4 +86,9 @@ GLenum UIComponent::getRenderMode()
 glm::vec2 UIComponent::getPosition()
 {
     return position;
+}
+
+glm::vec2 UIComponent::getSize()
+{
+    return size;
 }
