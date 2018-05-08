@@ -63,7 +63,7 @@ int main()
     GLuint metalTexture = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
 
     Surface* surface = new Surface();
-    surface->loadFromFile("Models/cube.obj");
+    surface->loadFromFile("Models/cube.mesh");
     surface->diffuseMap = metalTexture;
 
     UIPanel* uiPanel = new UIPanel();
@@ -93,37 +93,61 @@ int main()
     std::vector<glm::vec3>& vertices = surface->getVertices();
     std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
     float yPos = 0.01f;
-    float maxXpos = 0.0f;
     float textSize = 0.025f;
+    float labelWidth = 0.10f;
+
+    float xLabelPos = 0.01f;
+    float yLabelPos = xLabelPos + labelWidth + 0.01f;
+    float zLabelPos = yLabelPos + labelWidth + 0.01f;
+
+    UILabel* xPosLabel = new UILabel();
+    xPosLabel->setPositionAndSize(glm::vec2(xLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
+    xPosLabel->setText("x", textSize, *font, CENTRE);
+    vertexPanel->addComponent(xPosLabel);
+
+    UILabel* yPosLabel = new UILabel();
+    yPosLabel->setPositionAndSize(glm::vec2(yLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
+    yPosLabel->setText("y", textSize, *font, CENTRE);
+    vertexPanel->addComponent(yPosLabel);
+
+    UILabel* zPosLabel = new UILabel();
+    zPosLabel->setPositionAndSize(glm::vec2(zLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
+    zPosLabel->setText("y", textSize, *font, CENTRE);
+    vertexPanel->addComponent(zPosLabel);
+
     for (unsigned int i=0; i<vertices.size(); i++)
     {
         glm::vec3 vertexPosition = vertices[i];
         glm::vec2 textureCoordinate = textureCoordinates[i];
 
-        UILabel* xPosLabel = new UILabel();
-        xPosLabel->setPosition(glm::vec2(0.01f, yPos));
-        xPosLabel->setText("x", textSize, *font);
-        vertexPanel->addComponent(xPosLabel);
+        yPos += textSize;
 
-        float xPos = xPosLabel->getPosition().x + xPosLabel->getSize().x + 0.01f;
-
-        std::stringstream ss;
-        ss << std::setw(8) << std::setfill(' ') << std::fixed << std::setprecision(3) << vertexPosition.x;
-        ss << ",";
-        ss << std::setw(8) << std::setfill(' ') << std::fixed << std::setprecision(3) << vertexPosition.y;
-        ss << ",";
-        ss << std::setw(8) << std::setfill(' ') << std::fixed << std::setprecision(3) << vertexPosition.z;
-        std::string vertexX = ss.str();
+        std::stringstream ssx;
+        ssx << std::fixed << std::setprecision(3) << vertexPosition.x;
+        std::string vertexX = ssx.str();
         
         UILabel* xPosValueLabel = new UILabel();
-        xPosValueLabel->setPosition(glm::vec2(xPos, yPos));
-        xPosValueLabel->setText(vertexX, textSize, *font);
+        xPosValueLabel->setPositionAndSize(glm::vec2(xLabelPos, yPos), glm::vec2(labelWidth, textSize));
+        xPosValueLabel->setText(vertexX, textSize, *font, RIGHT);
         vertexPanel->addComponent(xPosValueLabel);
 
-        xPos += xPosValueLabel->getSize().x;
+        std::stringstream ssy;
+        ssy << std::fixed << std::setprecision(3) << vertexPosition.y;
+        std::string vertexY = ssy.str();
 
-        yPos += textSize;
-        maxXpos = std::max(maxXpos, xPos);
+        UILabel* yPosValueLabel = new UILabel();
+        yPosValueLabel->setPositionAndSize(glm::vec2(yLabelPos, yPos), glm::vec2(labelWidth, textSize));
+        yPosValueLabel->setText(vertexY, textSize, *font, RIGHT);
+        vertexPanel->addComponent(yPosValueLabel);
+
+        std::stringstream ssz;
+        ssz << std::fixed << std::setprecision(3) << vertexPosition.z;
+        std::string vertexZ = ssz.str();
+
+        UILabel* zPosValueLabel = new UILabel();
+        zPosValueLabel->setPositionAndSize(glm::vec2(zLabelPos, yPos), glm::vec2(labelWidth, textSize));
+        zPosValueLabel->setText(vertexZ, textSize, *font, RIGHT);
+        vertexPanel->addComponent(zPosValueLabel);
     }
 
     //Model matrix
@@ -153,7 +177,7 @@ int main()
         uiRenderer->initialiseFrame();
         uiShader->renderUiComponent(uiPanel);
 
-        vertexPanel->setPositionAndSize(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - maxXpos - 0.02f, 0.01f), glm::vec2(maxXpos + 0.01f, yPos));
+        vertexPanel->setPositionAndSize(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - 0.50f, 0.01f), glm::vec2(0.49f, yPos));
         uiShader->renderUiComponent(vertexPanel);
 
         //Now we've drawn everything to the renderer, draw to the window

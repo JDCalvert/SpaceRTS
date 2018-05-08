@@ -5,10 +5,12 @@
 
 #include "UIComponent.h"
 
+enum Alignment {LEFT, CENTRE, RIGHT};
+
 class UILabel : public UIComponent
 {
 public:
-    void setText(std::string text, float size, Font font);
+    void setText(std::string text, float size, Font font, Alignment alignment);
     
     GLenum getRenderMode();
 

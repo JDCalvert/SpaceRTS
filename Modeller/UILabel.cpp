@@ -5,19 +5,36 @@ void UILabel::processMouseEvent(MouseEvent* mouseEvent)
     //Do nothing
 }
 
-void UILabel::setText(std::string text, float size, Font font)
+void UILabel::setText(std::string text, float size, Font font, Alignment alignment)
 {
     this->text = text;
 
     if (surface) delete surface;
     surface = new Surface();
 
+    //First, work out how wide the string will be and find where it should start, based on the alignment
+    float textWidth = 0.0f;
+    for (unsigned int i=0; i<text.length(); i++)
+    {
+        char character = text[i];
+        textWidth += (float)font.charWidths[character] / font.cellWidth * size;
+    }
+
+    float xpos = 0.0f;
+    if (alignment == CENTRE)
+    {
+        xpos = (this->size.x - textWidth) / 2;
+    }
+    if (alignment == RIGHT)
+    {
+        xpos = this->size.x - textWidth;
+    }
+
     std::vector<glm::vec3>& vertices = surface->getVertices();
     std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
     std::vector<unsigned int>& indices = surface->getIndices();
 
     //Build up panels to display each letter
-    float xpos = 0;
     for (unsigned int i = 0; i<text.length(); i++)
     {
         char character = text[i];

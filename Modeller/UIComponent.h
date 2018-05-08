@@ -29,14 +29,14 @@ public:
     virtual GLenum getRenderMode();
 
 protected:
+    glm::vec2 position;
+    glm::vec2 size;
+
     virtual void processMouseEvent(MouseEvent* mouseEvent) = 0;
     
     void constructSurface();
 
 private:
-    glm::vec2 position;
-    glm::vec2 size;
-
     bool isClicked(MouseEvent* mouseEvent);
 };
 
