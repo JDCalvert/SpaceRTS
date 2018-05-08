@@ -112,7 +112,7 @@ int main()
 
     UILabel* zPosLabel = new UILabel();
     zPosLabel->setPositionAndSize(glm::vec2(zLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
-    zPosLabel->setText("y", textSize, *font, CENTRE);
+    zPosLabel->setText("z", textSize, *font, CENTRE);
     vertexPanel->addComponent(zPosLabel);
 
     for (unsigned int i=0; i<vertices.size(); i++)
