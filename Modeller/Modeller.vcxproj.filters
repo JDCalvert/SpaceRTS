@@ -81,6 +81,9 @@
     <ClCompile Include="UINumber.cpp">
       <Filter>Source Files\UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="UIVertexInformation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="UserInterface.h">
       <Filter>Header Files\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UIVertexInformation.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
