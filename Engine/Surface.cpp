@@ -46,7 +46,7 @@ void Surface::loadFromFile(const char* objFilePath)
 {
 	std::vector<glm::mat4> boneRelatives;
 	std::vector<int> boneParents;
-	ResourceLoader::loadObj(objFilePath, vertices, textureCoordinates, normals, tangents, bitangents, boneIndicesAndWeights, indices, boneRelatives, boneParents);
+	loadObj(objFilePath, boneRelatives, boneParents);
 
 	for (unsigned int i = 0; i < boneRelatives.size(); i++)
 	{
@@ -59,6 +59,67 @@ void Surface::loadFromFile(const char* objFilePath)
 
 	calculateSizesAndLength();
 	prepareBones();
+}
+
+void Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents)
+{
+    //Open the file as a binary, and start at the end so we can get the length, then go back to the beginning.
+    std::ifstream in(path, std::ios::in | std::ios::binary | std::ios::ate);
+    unsigned int fileSize = (unsigned int)in.tellg();
+    in.seekg(0, std::ios::beg);
+
+    //Read in the file then close
+    char* data = new char[fileSize];
+    in.read(data, fileSize);
+    in.close();
+
+    int lengthsSize = 3 * sizeof(unsigned int);
+    unsigned int* lengths = new unsigned int[3];
+    memcpy(lengths, data, lengthsSize);
+
+    int verticesSize = lengths[0] * sizeof(glm::vec3);
+    int textureCoordinatesSize = lengths[0] * sizeof(glm::vec2);
+    int normalsSize = lengths[0] * sizeof(glm::vec3);
+    int tangentsSize = lengths[0] * sizeof(glm::vec3);
+    int bitangentsSize = lengths[0] * sizeof(glm::vec3);
+    int boneIndicesSize = lengths[0] * sizeof(glm::vec4);
+    int indicesSize = lengths[1] * sizeof(unsigned int);
+    int bonesSize = lengths[2] * sizeof(glm::mat4);
+    int parentsSize = lengths[2] * sizeof(int);
+
+    vertices.resize(lengths[0]);
+    textureCoordinates.resize(lengths[0]);
+    normals.resize(lengths[0]);
+    tangents.resize(lengths[0]);
+    bitangents.resize(lengths[0]);
+    boneIndicesAndWeights.resize(lengths[0]);
+    indices.resize(lengths[1]);
+    bones.resize(lengths[2]);
+    parents.resize(lengths[2]);
+
+    int verticesOffset = lengthsSize;
+    int textureCoordinatesOffset = verticesOffset + verticesSize;
+    int normalsOffset = textureCoordinatesOffset + textureCoordinatesSize;
+    int tangentsOffset = normalsOffset + normalsSize;
+    int bitangentsOffset = tangentsOffset + tangentsSize;
+    int boneIndicesOffset = bitangentsOffset + bitangentsSize;
+    int indicesOffset = boneIndicesOffset + boneIndicesSize;
+    int bonesOffset = indicesOffset + indicesSize;
+    int parentsOffset = bonesOffset + bonesSize;
+
+    memcpy(&vertices[0], data + verticesOffset, verticesSize);
+    memcpy(&textureCoordinates[0], data + textureCoordinatesOffset, textureCoordinatesSize);
+    memcpy(&normals[0], data + normalsOffset, normalsSize);
+    memcpy(&tangents[0], data + tangentsOffset, tangentsSize);
+    memcpy(&bitangents[0], data + bitangentsOffset, bitangentsSize);
+    memcpy(&boneIndicesAndWeights[0], data + boneIndicesOffset, boneIndicesSize);
+    memcpy(&indices[0], data + indicesOffset, indicesSize);
+    memcpy(&bones[0], data + bonesOffset, bonesSize);
+    memcpy(&parents[0], data + parentsOffset, parentsSize);
+
+    //Clean up
+    delete lengths;
+    delete data;
 }
 
 void Surface::setUpColourPointers()

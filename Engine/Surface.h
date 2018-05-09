@@ -97,6 +97,7 @@ private:
     glm::vec4 ambientColour;
     glm::vec4 diffuseColour;
 
+    void loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents);
     void prepareBones();
 };
 

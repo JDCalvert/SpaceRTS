@@ -15,6 +15,8 @@
 #include "OpenGLContext.h"
 #include "Renderer.h"
 
+#include <Font.h>
+
 #include "UIRenderer.h"
 #include "Camera.h"
 #include "Controller.h"
@@ -101,10 +103,11 @@ int main()
     pointButton->surface->diffuseMap = blankTexture;
     uiPanel->addComponent(pointButton);
 
-    Font* font = ResourceLoader::loadBFF("Graphics/font.bff");
+    //Font* font = ResourceLoader::loadBFF("Graphics/font.bff");
+    Font* font = Font::loadBFF("Graphics/font.bff");
     //font->textureId = ResourceLoader::loadDDS("Graphics/font.dds");
 
-    Font* calibri = ResourceLoader::loadBFF("Graphics/calibriLarge.bff");
+    Font* calibri = Font::loadBFF("Graphics/calibriLarge.bff");
 
     UIPanel* vertexPanel = new UIPanel();
 

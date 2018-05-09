@@ -1,7 +1,7 @@
 #ifndef UI_LABEL_H
 #define UI_LABEL_H
 
-#include <ResourceLoader.h>
+#include <Font.h>
 
 #include "UIComponent.h"
 

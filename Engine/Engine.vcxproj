@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="MouseEvent.h" />
     <ClInclude Include="OpenGLContext.h" />
