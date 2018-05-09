@@ -18,14 +18,15 @@ public:
     void addComponent(UIComponent* component);
 
     glm::vec2 getPosition();
-    void setPosition(glm::vec2 position);
-    
     glm::vec2 getSize();
-    void setSize(glm::vec2 size);
-
-    void setPositionAndSize(glm::vec2 position, glm::vec2 size);
+    
+    virtual void setPosition(glm::vec2 position);
+    virtual void setSize(glm::vec2 size);
+    virtual void setPositionAndSize(glm::vec2 position, glm::vec2 size) final;
 
     virtual bool checkAndProcessMouseEvent(MouseEvent* mouseEvent) final;
+
+    virtual void preRender();
     virtual GLenum getRenderMode();
 
 protected:

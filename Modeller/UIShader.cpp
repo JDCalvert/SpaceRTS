@@ -47,9 +47,13 @@ void UIShader::renderUiComponent(UIComponent* component)
 
 void UIShader::renderUiComponent(UIComponent* component, glm::vec2 basePosition)
 {
+    component->preRender();
+
     Surface* surface = component->surface;
 
-    glm::vec2 absolutePosition = component->getPosition() + basePosition;
+    glm::vec2 componentPosition = component->getPosition();
+
+    glm::vec2 absolutePosition = componentPosition + basePosition;
     glUniform2f(basePositionId, absolutePosition.x, absolutePosition.y);
 
     int verticesSize = surface->verticesSize;
@@ -76,6 +80,6 @@ void UIShader::renderUiComponent(UIComponent* component, glm::vec2 basePosition)
     for (auto i = component->components.begin(); i != component->components.end(); i++)
     {
         UIComponent* childComponent = *i;
-        renderUiComponent(childComponent, basePosition + component->getPosition());
+        renderUiComponent(childComponent, basePosition + componentPosition);
     }
 }

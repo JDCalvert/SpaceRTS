@@ -78,6 +78,10 @@ void UIComponent::constructSurface()
     surface->calculateSizesAndLength();
 }
 
+void UIComponent::preRender()
+{
+}
+
 GLenum UIComponent::getRenderMode()
 {
     return GL_TRIANGLE_STRIP;

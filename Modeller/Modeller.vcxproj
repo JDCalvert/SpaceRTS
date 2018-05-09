@@ -132,13 +132,17 @@
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UILabel.cpp" />
+    <ClCompile Include="UINumber.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIRenderer.cpp" />
     <ClCompile Include="UIShader.cpp" />
+    <ClCompile Include="UITextBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="UINumber.h" />
+    <ClInclude Include="UITextBox.h" />
     <ClInclude Include="LineShader.h" />
     <ClInclude Include="PointShader.h" />
     <ClInclude Include="SimpleShader.h" />
@@ -148,6 +152,7 @@
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIRenderer.h" />
     <ClInclude Include="UIShader.h" />
+    <ClInclude Include="UserInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LineShader.frag" />

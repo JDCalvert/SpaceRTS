@@ -10,8 +10,13 @@ enum Alignment {LEFT, CENTRE, RIGHT};
 class UILabel : public UIComponent
 {
 public:
-    void setText(std::string text, float size, Font font, Alignment alignment);
+    void setText(std::string text, float textSize, Font font, Alignment alignment);
+    void setText(std::string text);
+    void setHeight(float height);
+    void setFont(Font font);
+    void setAlignment(Alignment alignment);
     
+    void recalculateSurface();
     GLenum getRenderMode();
 
 protected:
@@ -19,8 +24,9 @@ protected:
 
 private:
     std::string text;
-
+    float height;
     Font font;
+    Alignment alignment;
 };
 
 #endif
