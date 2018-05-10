@@ -25,7 +25,7 @@ void UILabel::setAlignment(Alignment alignment)
     this->alignment = alignment;
 }
 
-void UILabel::setText(std::string text, float height, Font font, Alignment alignment)
+void UILabel::setText(std::string text, float height, Font& font, Alignment alignment)
 {
     setText(text);
     setHeight(height);

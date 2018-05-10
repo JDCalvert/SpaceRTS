@@ -1,9 +1,10 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <GL\glew.h>
+#include <string>
 
-#include "ResourceLoader.h"
+#include <GL\glew.h>
+#include <glm\glm.hpp>
 
 class OpenGLContext;
 
@@ -21,7 +22,7 @@ public:
     void initialiseForScreenSize();
     void initialiseFrame();
 
-    static GLuint loadShaders(ShaderInfo shaders[], int numShaders);
+    void loadShaders(ShaderInfo shaders[], int numShaders);
 
 protected:
     GLuint programId;
@@ -31,8 +32,9 @@ protected:
     void enableVertexAttribute(GLuint attribId, GLuint bufferId, int attribSize);
 
 private:
-    static void compileAndCheckShader(const char* path, std::string &code, GLuint shaderId);
-    static void linkAndCheckProgram(GLuint programId);
+    void compileAndCheckShader(const char* path, std::string &code, GLuint shaderId);
+    void linkAndCheckProgram(GLuint programId);
+    std::string readFromFile(const char* path);
 };
 
 #endif

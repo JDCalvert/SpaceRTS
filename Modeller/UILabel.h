@@ -10,7 +10,7 @@ enum Alignment {LEFT, CENTRE, RIGHT};
 class UILabel : public UIComponent
 {
 public:
-    void setText(std::string text, float textSize, Font font, Alignment alignment);
+    void setText(std::string text, float textSize, Font& font, Alignment alignment);
     void setText(std::string text);
     void setHeight(float height);
     void setFont(Font font);

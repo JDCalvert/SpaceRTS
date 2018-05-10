@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <glm\gtc\matrix_transform.hpp>
 
-static const float PI = 4 * atan(1.0);
+static const float PI = 4.0f * atan(1.0f);
 
 Camera::Camera()
 {

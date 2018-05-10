@@ -9,7 +9,7 @@ void ScreenShader::initialise()
         {GL_VERTEX_SHADER, "../Resources/Shaders/ScreenShader.vert"},
         {GL_FRAGMENT_SHADER, "../Resources/Shaders/ScreenShader.frag"}
     };
-    programId = loadShaders(shaders, 2);
+    loadShaders(shaders, 2);
 
     //Get the program variables
     vertexPositionId = glGetAttribLocation(programId, "vertexPosition");

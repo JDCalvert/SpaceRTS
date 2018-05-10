@@ -37,6 +37,18 @@
     <Filter Include="Resource Files\PointShader">
       <UniqueIdentifier>{e9d2d043-f8e0-4a6e-bb2f-16c62eadff3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UserInterface\Components">
+      <UniqueIdentifier>{f6dd62d1-62cf-46a3-a72f-47254ed2f40e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UserInterface\Panels">
+      <UniqueIdentifier>{d862eccc-3848-4689-b44c-9e5ef6c32d8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UserInterface\Components">
+      <UniqueIdentifier>{dd12a492-9d71-48e9-abcc-66a0e28499b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UserInterface\Panels">
+      <UniqueIdentifier>{f441a9aa-4418-4d91-bc92-ed7d03fb0a83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -57,32 +69,32 @@
     <ClCompile Include="UIRenderer.cpp">
       <Filter>Source Files\UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UIPanel.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UIShader.cpp">
       <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="UIComponent.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UIButton.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UILabel.cpp">
-      <Filter>Source Files\UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="PointShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="UITextBox.cpp">
-      <Filter>Source Files\UserInterface</Filter>
+    <ClCompile Include="UIComponent.cpp">
+      <Filter>Source Files\UserInterface\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UILabel.cpp">
+      <Filter>Source Files\UserInterface\Components</Filter>
     </ClCompile>
     <ClCompile Include="UINumber.cpp">
-      <Filter>Source Files\UserInterface</Filter>
+      <Filter>Source Files\UserInterface\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
+      <Filter>Source Files\UserInterface\Components</Filter>
     </ClCompile>
     <ClCompile Include="UIVertexInformation.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="UITextBox.cpp">
+      <Filter>Source Files\UserInterface\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UIToggleButton.cpp">
+      <Filter>Source Files\UserInterface\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,32 +116,32 @@
     <ClInclude Include="UIShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="UIComponent.h">
-      <Filter>Header Files\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UIButton.h">
-      <Filter>Header Files\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UIPanel.h">
-      <Filter>Header Files\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UILabel.h">
-      <Filter>Header Files\UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="PointShader.h">
       <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="UITextBox.h">
-      <Filter>Header Files\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UINumber.h">
-      <Filter>Header Files\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface.h">
       <Filter>Header Files\UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UIComponent.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UILabel.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UINumber.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UITextBox.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
     <ClInclude Include="UIVertexInformation.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UserInterface\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="UIToggleButton.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

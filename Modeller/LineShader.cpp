@@ -12,7 +12,7 @@ void LineShader::initialise()
         {GL_VERTEX_SHADER, "LineShader.vert"},
         {GL_FRAGMENT_SHADER, "LineShader.frag"}
     };
-    programId = loadShaders(shaders, 2);
+    loadShaders(shaders, 2);
 
     glGenVertexArrays(1, &vertexArrayId);
     glBindVertexArray(vertexArrayId);

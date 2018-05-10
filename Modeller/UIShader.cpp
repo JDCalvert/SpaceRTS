@@ -11,7 +11,7 @@ void UIShader::initialise()
         {GL_VERTEX_SHADER, "UIShader.vert"},
         {GL_FRAGMENT_SHADER, "UIShader.frag"}
     };
-    programId = loadShaders(shaders, 2);
+    loadShaders(shaders, 2);
 
     glGenVertexArrays(1, &vertexArrayId);
     glBindVertexArray(vertexArrayId);

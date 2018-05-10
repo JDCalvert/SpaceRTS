@@ -1,6 +1,7 @@
 #include "Shader.h"
-#include "ResourceLoader.h"
 #include "OpenGLContext.h"
+
+#include <fstream>
 
 void Shader::initialiseForScreenSize()
 {
@@ -32,10 +33,10 @@ void Shader::enableVertexAttribute(GLuint attribId, GLuint bufferId, int attribS
 /**
  * Create and link a shader program with various shaders defined in the input
  */
-GLuint Shader::loadShaders(ShaderInfo shaders[], int numShaders)
+void Shader::loadShaders(ShaderInfo shaders[], int numShaders)
 {
     //Create the program
-    GLuint programId = glCreateProgram();
+    programId = glCreateProgram();
 
     //Compile and attach each shader to the program
     for (int i = 0; i<numShaders; i++)
@@ -49,7 +50,7 @@ GLuint Shader::loadShaders(ShaderInfo shaders[], int numShaders)
         shader.shaderId = shaderId;
 
         //Compile the shader
-        std::string shaderCode = ResourceLoader::readFromFile(shaderPath);
+        std::string shaderCode = readFromFile(shaderPath);
         compileAndCheckShader(shaderPath, shaderCode, shaderId);
 
         glAttachShader(programId, shaderId);
@@ -64,8 +65,6 @@ GLuint Shader::loadShaders(ShaderInfo shaders[], int numShaders)
         GLuint shaderId = shader.shaderId;
         glDeleteShader(shaderId);
     }
-
-    return programId;
 }
 
 void Shader::compileAndCheckShader(const char* path, std::string &code, GLuint shaderId)
@@ -105,4 +104,26 @@ void Shader::linkAndCheckProgram(GLuint programId)
         glGetProgramInfoLog(programId, infoLogLength, NULL, &programErrorMessage[0]);
         printf("%s\n", &programErrorMessage[0]);
     }
+}
+
+std::string Shader::readFromFile(const char* path)
+{
+    std::string output;
+
+    std::ifstream stream(path, std::ios::in);
+    if (!stream.is_open())
+    {
+        printf("Unable to read %s\n", path);
+        getchar();
+        return 0;
+    }
+
+    std::string line = "";
+    while (std::getline(stream, line))
+    {
+        output += "\n" + line;
+    }
+    stream.close();
+
+    return output;
 }

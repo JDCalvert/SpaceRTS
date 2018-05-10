@@ -21,7 +21,7 @@
 #include "Camera.h"
 #include "Controller.h"
 
-#include "ResourceLoader.h"
+#include "Texture.h"
 
 #include "SimpleShader.h"
 #include "LineShader.h"
@@ -31,23 +31,12 @@
 #include "Surface.h"
 
 #include "UIPanel.h"
-#include "UIButton.h"
+#include "UIToggleButton.h"
 #include "UILabel.h"
 #include "UITextBox.h"
 #include "UINumber.h"
 
-void addTextLabel(float& number, glm::vec2 position, glm::vec2 size, float textSize, Font font, GLuint background, UIPanel* panel)
-{
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(3) << number;
-    std::string str = ss.str();
-
-    UINumber* numberBox = new UINumber(number);
-    numberBox->setPositionAndSize(position, size);
-    numberBox->setText(str, textSize, font, RIGHT);
-    numberBox->surface->diffuseMap = background;
-    panel->addComponent(numberBox);
-}
+#include "UIVertexInformation.h"
 
 int main()
 {
@@ -77,8 +66,11 @@ int main()
     UIShader* uiShader = new UIShader();
     uiShader->initialise();
 
-    GLuint metalTexture = ResourceLoader::loadDDS("Graphics/metalTexture.dds");
-    GLuint blankTexture = ResourceLoader::loadDDS("Graphics/blank.dds");
+    Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
+    Texture::loadDDS("Graphics/blank.dds", "Blank");
+
+    GLuint metalTexture = Texture::getTexture("Metal");
+    GLuint blankTexture = Texture::getTexture("Blank");
 
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.mesh");
@@ -88,69 +80,33 @@ int main()
     uiPanel->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.34f, 0.12f));
     uiPanel->surface->diffuseMap = blankTexture;
 
-    UIButton* surfaceButton = new UIButton();
+    bool drawSurface = true;
+    bool drawLines = true;
+    bool drawPoints = true;
+
+    UIToggleButton* surfaceButton = new UIToggleButton(drawSurface);
     surfaceButton->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.1f, 0.1f));
     surfaceButton->surface->diffuseMap = blankTexture;
     uiPanel->addComponent(surfaceButton);
     
-    UIButton* lineButton = new UIButton();
+    UIToggleButton* lineButton = new UIToggleButton(drawLines);
     lineButton->setPositionAndSize(glm::vec2(0.12f, 0.01f), glm::vec2(0.1f, 0.1f));
     lineButton->surface->diffuseMap = blankTexture;
     uiPanel->addComponent(lineButton);
 
-    UIButton* pointButton = new UIButton();
+    UIToggleButton* pointButton = new UIToggleButton(drawPoints);
     pointButton->setPositionAndSize(glm::vec2(0.23f, 0.01f), glm::vec2(0.1f, 0.1f));
     pointButton->surface->diffuseMap = blankTexture;
     uiPanel->addComponent(pointButton);
 
-    //Font* font = ResourceLoader::loadBFF("Graphics/font.bff");
-    Font* font = Font::loadBFF("Graphics/font.bff");
-    //font->textureId = ResourceLoader::loadDDS("Graphics/font.dds");
+    Font::loadFont("Graphics/font.bff", "Default");
+    Font::loadFont("Graphics/calibriLarge.bff", "Calibri");
 
-    Font* calibri = Font::loadBFF("Graphics/calibriLarge.bff");
-
-    UIPanel* vertexPanel = new UIPanel();
+    Font& calibri = Font::getFont("Calibri");
 
     std::vector<glm::vec3>& vertices = surface->getVertices();
-    std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
-    float yPos = 0.01f;
-    float textSize = 0.025f;
-    float labelWidth = 0.10f;
-
-    float xLabelPos = 0.01f;
-    float yLabelPos = xLabelPos + labelWidth + 0.01f;
-    float zLabelPos = yLabelPos + labelWidth + 0.01f;
-
-    float panelWidth = zLabelPos + labelWidth + 0.01f;
-
-    UILabel* xPosLabel = new UILabel();
-    xPosLabel->setPositionAndSize(glm::vec2(xLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
-    xPosLabel->setText("x", textSize, *calibri, CENTRE);
-    vertexPanel->addComponent(xPosLabel);
-
-    UILabel* yPosLabel = new UILabel();
-    yPosLabel->setPositionAndSize(glm::vec2(yLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
-    yPosLabel->setText("y", textSize, *calibri, CENTRE);
-    vertexPanel->addComponent(yPosLabel);
-
-    UILabel* zPosLabel = new UILabel();
-    zPosLabel->setPositionAndSize(glm::vec2(zLabelPos, yPos), glm::vec2(labelWidth, 0.01f));
-    zPosLabel->setText("z", textSize, *calibri, CENTRE);
-    vertexPanel->addComponent(zPosLabel);
-
-    yPos += textSize;
-
-    for (unsigned int i=0; i<vertices.size(); i++)
-    {
-        glm::vec3& vertexPosition = vertices[i];
-        glm::vec2& textureCoordinate = textureCoordinates[i];        
-
-        addTextLabel(vertexPosition.x, glm::vec2(xLabelPos, yPos), glm::vec2(labelWidth, textSize), textSize, *calibri, blankTexture, vertexPanel);
-        addTextLabel(vertexPosition.y, glm::vec2(yLabelPos, yPos), glm::vec2(labelWidth, textSize), textSize, *calibri, blankTexture, vertexPanel);
-        addTextLabel(vertexPosition.z, glm::vec2(zLabelPos, yPos), glm::vec2(labelWidth, textSize), textSize, *calibri, blankTexture, vertexPanel);
-
-        yPos += textSize + 0.001f;
-    }
+    UIVertexInformation* vertexPanel = new UIVertexInformation();
+    vertexPanel->build(vertices);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -171,16 +127,17 @@ int main()
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
-        if (surfaceButton->toggle) simpleShader->renderSurface(surface, modelViewProjectionMatrix);
-        if (lineButton->toggle) lineShader->renderSurface(surface, modelViewProjectionMatrix);
-        if (pointButton->toggle) pointShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (drawSurface) simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (drawLines) lineShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (drawPoints) pointShader->renderSurface(surface, modelViewProjectionMatrix);
 
         //Draw the UI
         uiRenderer->initialiseFrame();
         uiShader->renderUiComponent(uiPanel);
 
-        vertexPanel->setPositionAndSize(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - (panelWidth + 0.01f), 0.01f), glm::vec2(panelWidth, yPos + 0.01f));
-        vertexPanel->surface->diffuseMap = blankTexture;
+        float panelWidth = vertexPanel->getSize().x;
+        vertexPanel->setPosition(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - (panelWidth + 0.01f), 0.01f));
+
         uiShader->renderUiComponent(vertexPanel);
 
         //Now we've drawn everything to the renderer, draw to the window

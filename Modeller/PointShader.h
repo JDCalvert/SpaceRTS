@@ -1,6 +1,8 @@
 #ifndef POINT_SHADER_H
 #define POINT_SHADER_H
 
+#include <glm\glm.hpp>
+
 #include <Shader.h>
 
 class Surface;

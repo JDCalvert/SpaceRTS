@@ -1,5 +1,6 @@
 #include "Surface.h"
-#include "ResourceLoader.h"
+
+#include <fstream>
 
 #include <glm\gtx\transform.hpp>
 

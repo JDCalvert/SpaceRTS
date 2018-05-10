@@ -10,7 +10,7 @@ void PointShader::initialise()
         {GL_VERTEX_SHADER, "PointShader.vert"},
         {GL_FRAGMENT_SHADER, "PointShader.frag"}
     };
-    programId = loadShaders(shaders, 2);
+    loadShaders(shaders, 2);
 
     glGenVertexArrays(1, &vertexArrayId);
     glBindVertexArray(vertexArrayId);
