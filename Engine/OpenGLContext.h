@@ -9,7 +9,7 @@
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 
-#include "MouseEvent.h"
+#include "Event.h"
 
 class Renderer;
 
@@ -40,6 +40,7 @@ public:
     //Callbacks for GLFW events
     static void windowResized(GLFWwindow* window, int width, int height);
     static void mouseButtonEvent(GLFWwindow* window, int button, int action, int mods);
+    static void textEvent(GLFWwindow* window, unsigned int codepoint);
 
     void initialiseFrame();
 
@@ -52,10 +53,13 @@ public:
     
     void resize(int width, int height);
     void mouseButtonEvent(int button, int action, int mods);
+    void keyEvent(int codepoint);
 
     void bindDefaultFrameBuffer();
     void clearScreen();
     void flip();
+
+    bool shouldClose();
 
     double getDeltaTime();
     GLFWwindow* getWindow();

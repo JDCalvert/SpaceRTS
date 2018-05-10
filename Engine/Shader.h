@@ -6,6 +6,9 @@
 #include <GL\glew.h>
 #include <glm\glm.hpp>
 
+#include <string>
+#include <unordered_map>
+
 class OpenGLContext;
 
 struct ShaderInfo
@@ -18,6 +21,19 @@ struct ShaderInfo
 class Shader
 {
 public:
+    static std::unordered_map<std::string, Shader*> shaders;
+
+    template <class T>
+    static T* loadShader(T* shader, std::string shaderName)
+    {
+        shaders[shaderName] = shader;
+        shader->initialise();
+        return shader;
+    }
+
+    static Shader* getShader(std::string shaderName);
+
+
     virtual void initialise() = 0;
     void initialiseForScreenSize();
     void initialiseFrame();

@@ -202,6 +202,10 @@ std::vector<glm::vec2>& Surface::getTextureCoordinates()
 {
     return textureCoordinates;
 }
+std::vector<glm::vec3>& Surface::getNormals()
+{
+    return normals;
+}
 std::vector<unsigned int>& Surface::getIndices()
 {
     return indices;

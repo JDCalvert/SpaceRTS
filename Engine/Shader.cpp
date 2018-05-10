@@ -3,6 +3,13 @@
 
 #include <fstream>
 
+std::unordered_map<std::string, Shader*> Shader::shaders;
+
+Shader* Shader::getShader(std::string shaderName)
+{
+    return shaders[shaderName];
+}
+
 void Shader::initialiseForScreenSize()
 {
 }

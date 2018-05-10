@@ -18,6 +18,12 @@ void OpenGLContext::mouseButtonEvent(GLFWwindow* window, int button, int action,
     context->mouseButtonEvent(button, action, mods);
 }
 
+void OpenGLContext::textEvent(GLFWwindow* window, unsigned int codepoint)
+{
+    OpenGLContext* context = contextsByWindow[window];
+    context->keyEvent(codepoint);
+}
+
 OpenGLContext* OpenGLContext::currentContext()
 {
     return currentGlContext;
@@ -58,6 +64,7 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     
     glfwSetWindowSizeCallback(window, windowResized);
     glfwSetMouseButtonCallback(window, mouseButtonEvent);
+    glfwSetCharCallback(window, textEvent);
 
     OpenGLContext* context = new OpenGLContext();
     context->window = window;
@@ -141,6 +148,11 @@ void OpenGLContext::resize(int width, int height)
     }
 }
 
+bool OpenGLContext::shouldClose()
+{
+    return keyPressed(GLFW_KEY_ESCAPE) || glfwWindowShouldClose(window);
+}
+
 void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
 {
     double xpos, ypos;
@@ -150,6 +162,12 @@ void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
 
     MouseEvent* mouseEvent = new MouseEvent {cursorPosition, button, action};
     mouseEvents.push(mouseEvent);
+}
+
+void OpenGLContext::keyEvent(int codepoint)
+{
+    //KeyEvent* keyEvent = new KeyEvent {codepoint};
+    //events.push(keyEvent);
 }
 
 MouseEvent* OpenGLContext::nextMouseEvent()

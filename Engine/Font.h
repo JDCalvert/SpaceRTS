@@ -12,7 +12,7 @@ struct Font
 public:
     int cellWidth, cellHeight, rowWidth;
     float cellWidthNormalised, cellHeightNormalised;
-    char charWidths[256];
+    unsigned char charWidths[256];
     char base;
     GLuint textureId;
 

@@ -96,6 +96,9 @@
     <ClCompile Include="UIToggleButton.cpp">
       <Filter>Source Files\UserInterface\Components</Filter>
     </ClCompile>
+    <ClCompile Include="UIRenderOptions.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="UIToggleButton.h">
       <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UIRenderOptions.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

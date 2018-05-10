@@ -5,7 +5,7 @@
 
 #include <gl\glew.h>
 
-#include <MouseEvent.h>
+#include <Event.h>
 #include <Surface.h>
 
 class UIComponent

@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Font.h" />
     <ClInclude Include="Geometry.h" />
-    <ClInclude Include="MouseEvent.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="OpenGLContext.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ScreenShader.h" />
