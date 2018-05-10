@@ -30,12 +30,7 @@
 
 #include "Surface.h"
 
-#include "UIPanel.h"
-#include "UIToggleButton.h"
-#include "UILabel.h"
-#include "UITextBox.h"
-#include "UINumber.h"
-
+#include "UserInterface.h"
 #include "UIVertexInformation.h"
 #include "UIRenderOptions.h"
 
@@ -52,7 +47,7 @@ int main()
     glContext->addRenderer(uiRenderer);
 
     Camera* camera = new Camera();
-    Controller* controller = new Controller(camera);    
+    Controller* controller = new Controller(camera);
 
     SimpleShader* simpleShader = Shader::loadShader(new SimpleShader(), "Simple");
     LineShader* lineShader = Shader::loadShader(new LineShader(), "Line");
@@ -62,6 +57,7 @@ int main()
 
     Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
     Texture::loadDDS("Graphics/blank.dds", "Blank");
+    Texture::loadDDS("Graphics/blankDark.dds", "BlankDark");
 
     Font::loadFont("Graphics/font.bff", "Default");
     Font::loadFont("Graphics/calibriLarge.bff", "Calibri");
@@ -72,11 +68,15 @@ int main()
     surface->loadFromFile("Models/cube.mesh");
     surface->diffuseMap = Texture::getTexture("Metal");
 
+    UserInterface* ui = new UserInterface();
+
     UIRenderOptions* renderOptions = new UIRenderOptions();
     renderOptions->build();
+    ui->addComponent(renderOptions);
 
     UIVertexInformation* vertexPanel = new UIVertexInformation();
     vertexPanel->build(surface);
+    ui->addComponent(vertexPanel);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -102,8 +102,7 @@ int main()
 
         //Draw the UI
         uiRenderer->initialiseFrame();
-        uiShader->renderUiComponent(renderOptions);
-        uiShader->renderUiComponent(vertexPanel);
+        ui->render();
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();
@@ -113,15 +112,7 @@ int main()
         renderer->renderFrame();
         uiRenderer->renderFrame();
 
-        MouseEvent* mouseEvent = OpenGLContext::currentContext()->nextMouseEvent();
-        if (mouseEvent != nullptr)
-        {
-            if (mouseEvent->action == GLFW_PRESS)
-            {
-                renderOptions->checkAndProcessMouseEvent(mouseEvent);
-            }
-            delete mouseEvent;
-        }
+        ui->handleEvents();
 
         glContext->flip();
     }

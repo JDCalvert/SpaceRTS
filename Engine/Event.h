@@ -21,7 +21,7 @@ struct MouseEvent : Event
     int button;
     int action;
 
-    MouseEvent() : Event(MOUSE)
+    MouseEvent(glm::vec2 position, int button, int action) : position(position), button(button), action(action), Event(MOUSE)
     {
     }
 
@@ -34,6 +34,8 @@ struct MouseEvent : Event
 struct KeyEvent : Event
 {
     unsigned int codepoint;
+
+    KeyEvent(int codepoint) : codepoint(codepoint), Event(TEXT) {}
 };
 
 #endif

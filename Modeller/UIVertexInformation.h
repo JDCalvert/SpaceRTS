@@ -36,6 +36,8 @@ private:
     void addSubHeader(std::string text, float xPosition);
     void addNumber(float& number, glm::vec2 position, GLuint background);
     void addIndexLabel(unsigned int& number, glm::vec2 position);
+
+    void addToggleButton(bool& toggle, float& xpos, float buttonSize, GLuint texture);
 };
 
 #endif

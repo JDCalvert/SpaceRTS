@@ -140,6 +140,7 @@
     <ClCompile Include="UIShader.cpp" />
     <ClCompile Include="UITextBox.cpp" />
     <ClCompile Include="UIVertexInformation.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

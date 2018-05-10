@@ -33,7 +33,6 @@ public:
 
     static Shader* getShader(std::string shaderName);
 
-
     virtual void initialise() = 0;
     void initialiseForScreenSize();
     void initialiseFrame();

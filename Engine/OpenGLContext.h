@@ -26,7 +26,7 @@ private:
     GLsizei width, height;
 
     glm::dvec2 mousePosition, deltaMousePosition;
-    std::queue<MouseEvent*> mouseEvents;
+    std::queue<Event*> events;
 
     double time, deltaTime;
 
@@ -67,7 +67,7 @@ public:
     GLsizei getWidth();
     GLsizei getHeight();
 
-    MouseEvent* nextMouseEvent();
+    Event* nextEvent();
 
     glm::dvec2 getMousePositionScreenSpace();
     glm::dvec2 getDeltaMousePosition();

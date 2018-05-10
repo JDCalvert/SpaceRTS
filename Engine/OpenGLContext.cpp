@@ -161,7 +161,7 @@ void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
     cursorPosition /= height;
 
     MouseEvent* mouseEvent = new MouseEvent {cursorPosition, button, action};
-    mouseEvents.push(mouseEvent);
+    events.push(mouseEvent);
 }
 
 void OpenGLContext::keyEvent(int codepoint)
@@ -170,14 +170,14 @@ void OpenGLContext::keyEvent(int codepoint)
     //events.push(keyEvent);
 }
 
-MouseEvent* OpenGLContext::nextMouseEvent()
+Event* OpenGLContext::nextEvent()
 {
-    if (mouseEvents.size() == 0) return nullptr;
+    if (events.size() == 0) return nullptr;
 
-    MouseEvent* mouseEvent = mouseEvents.front();
-    mouseEvents.pop();
+    Event* event = events.front();
+    events.pop();
 
-    return mouseEvent;
+    return event;
 }
 
 bool OpenGLContext::mouseButtonDown(int key)

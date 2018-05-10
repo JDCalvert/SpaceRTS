@@ -8,9 +8,13 @@ class UIToggleButton : public UIComponent
 public:
     UIToggleButton(bool& toggle);
 
+    void preRender();
+
 protected:
     void processMouseEvent(MouseEvent* mouseEvent);
     bool& toggle;
+
+    GLuint onMap, offMap;
 };
 
 #endif

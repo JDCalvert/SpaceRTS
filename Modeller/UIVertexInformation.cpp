@@ -9,6 +9,7 @@
 
 #include "UILabel.h"
 #include "UINumber.h"
+#include "UIToggleButton.h"
 
 void UIVertexInformation::build(Surface* infoSurface)
 {
@@ -46,9 +47,17 @@ void UIVertexInformation::preRender()
 
 void UIVertexInformation::rebuildPanels()
 {
+    components.clear();
+
     GLuint blankTexture = Texture::getTexture("Blank");
 
     float xpos = border;
+    float buttonSize = 0.02f;
+    addToggleButton(showVertices, xpos, buttonSize, blankTexture);
+    addToggleButton(showTextureCoordinates, xpos, buttonSize, blankTexture);
+    addToggleButton(showNormals, xpos, buttonSize, blankTexture);
+
+    xpos = border;
     float ypos = border + textSize * 2;
 
     std::vector<glm::vec3>& vertices = infoSurface->getVertices();
@@ -151,4 +160,14 @@ void UIVertexInformation::addIndexLabel(unsigned int& number, glm::vec2 position
     label->setPositionAndSize(position, glm::vec2(indexWidth, textSize));
     label->setText(str, textSize, *font, RIGHT);
     addComponent(label);
+}
+
+void UIVertexInformation::addToggleButton(bool& toggle, float& xpos, float buttonSize, GLuint texture)
+{
+    UIToggleButton* button = new UIToggleButton(toggle);
+    button->setPositionAndSize(glm::vec2(xpos, 0.01f), glm::vec2(buttonSize, buttonSize));
+    button->surface->diffuseMap = texture;
+    addComponent(button);
+
+    xpos += buttonSize + border;
 }
