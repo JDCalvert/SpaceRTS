@@ -1,26 +1,29 @@
 #include "UIComponent.h"
 
-bool UIComponent::checkAndProcessMouseEvent(MouseEvent* mouseEvent)
+#include "UserInterface.h"
+
+UIComponent* UIComponent::checkAndProcessMouseEvent(MouseEvent* mouseEvent)
 {
-    if (!isClicked(mouseEvent))
-    {
-        return false;
-    }
+    //If this wasn't clicked, then none of the subcomponents will have been.
+    if (!isClicked(mouseEvent)) return nullptr;
 
-    MouseEvent* relativeMouseEvent = mouseEvent->getRelative(position);
-
-    //Go through our sub-components and, check if any were clicked. If so process and then return out.
-    for (auto i = components.begin(); i != components.end(); i++)
+    if (shouldCheckMouseEventForChildren())
     {
-        UIComponent* component = *i;
-        if (component->checkAndProcessMouseEvent(relativeMouseEvent))
+        MouseEvent* relativeMouseEvent = mouseEvent->getRelative(position);
+
+        //Go through our sub-components and, check if any were clicked. If so process and then return that component.
+        for (auto i = components.begin(); i != components.end(); i++)
         {
-            return true;
+            UIComponent* component = *i;
+            UIComponent* eventComponent = component->checkAndProcessMouseEvent(relativeMouseEvent);
+        
+            if (eventComponent) return eventComponent;
         }
     }
 
+    //If none of our child components were clicked, then this was clicked
     processMouseEvent(mouseEvent);
-    return true;
+    return this;
 }
 
 bool UIComponent::isClicked(MouseEvent* mouseEvent)
@@ -29,6 +32,33 @@ bool UIComponent::isClicked(MouseEvent* mouseEvent)
         && mouseEvent->position.y > position.y
         && mouseEvent->position.x < position.x + size.x
         && mouseEvent->position.y < position.y + size.y;
+}
+
+void UIComponent::processMouseEvent(MouseEvent* mouseEvent)
+{
+}
+
+void UIComponent::processKeyEvent(KeyEvent* keyEvent)
+{
+}
+
+void UIComponent::processTextEvent(TextEvent* textEvent)
+{
+}
+
+void UIComponent::becomeInactive()
+{
+    UserInterface* ui = UserInterface::getInstance();
+    ui->clearActiveComponent(this);
+}
+
+void UIComponent::processNotActive()
+{
+}
+
+bool UIComponent::shouldRemainActive()
+{
+    return false;
 }
 
 void UIComponent::addComponent(UIComponent* component)
@@ -85,6 +115,11 @@ void UIComponent::preRender()
 GLenum UIComponent::getRenderMode()
 {
     return GL_TRIANGLE_STRIP;
+}
+
+bool UIComponent::shouldCheckMouseEventForChildren()
+{
+    return true;
 }
 
 glm::vec2 UIComponent::getPosition()

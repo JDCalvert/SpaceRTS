@@ -19,8 +19,10 @@ public:
     void recalculateSurface();
     GLenum getRenderMode();
 
-protected:
-    void processMouseEvent(MouseEvent* mouseEvent);
+    void addChar(char newChar);
+    void removeLastChar();
+
+    std::string getText();
 
 private:
     std::string text;

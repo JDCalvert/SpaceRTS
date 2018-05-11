@@ -24,7 +24,12 @@ public:
     virtual void setSize(glm::vec2 size);
     virtual void setPositionAndSize(glm::vec2 position, glm::vec2 size) final;
 
-    virtual bool checkAndProcessMouseEvent(MouseEvent* mouseEvent) final;
+    virtual UIComponent* checkAndProcessMouseEvent(MouseEvent* mouseEvent) final;
+    virtual void processKeyEvent(KeyEvent* keyEvent);
+    virtual void processTextEvent(TextEvent* textEvent);
+    
+    virtual void processNotActive();
+    virtual bool shouldRemainActive();
 
     virtual void preRender();
     virtual GLenum getRenderMode();
@@ -33,7 +38,9 @@ protected:
     glm::vec2 position;
     glm::vec2 size;
 
-    virtual void processMouseEvent(MouseEvent* mouseEvent) = 0;
+    virtual void becomeInactive();
+    virtual bool shouldCheckMouseEventForChildren();
+    virtual void processMouseEvent(MouseEvent* mouseEvent);
     
     void constructSurface();
 

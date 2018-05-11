@@ -8,14 +8,24 @@ class UIComponent;
 class UserInterface
 {
 public:
-    UIComponent* activeComponent;
+    void addComponent(UIComponent* component);
+    
+    void render();
+    void handleEvents();
+    
+    bool hasActiveComponent();
+    void clearActiveComponent();
+    void clearActiveComponent(UIComponent* component);
+
+    static UserInterface* initialise();
+    static UserInterface* getInstance();
+
+private:
+    static UserInterface* instance;
 
     std::vector<UIComponent*> components;
 
-    void addComponent(UIComponent* component);
-    void render();
-
-    void handleEvents();
+    UIComponent* activeComponent;
 };
 
 #endif

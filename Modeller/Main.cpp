@@ -68,7 +68,7 @@ int main()
     surface->loadFromFile("Models/cube.mesh");
     surface->diffuseMap = Texture::getTexture("Metal");
 
-    UserInterface* ui = new UserInterface();
+    UserInterface* ui = UserInterface::initialise();
 
     UIRenderOptions* renderOptions = new UIRenderOptions();
     renderOptions->build();
@@ -83,6 +83,8 @@ int main()
     
     while (!glContext->shouldClose())
     {
+        ui->handleEvents();
+        
         glContext->initialiseFrame();
 
         //Update the camera position
@@ -111,8 +113,6 @@ int main()
         //Draw the renderers onto the context
         renderer->renderFrame();
         uiRenderer->renderFrame();
-
-        ui->handleEvents();
 
         glContext->flip();
     }

@@ -21,7 +21,13 @@ void OpenGLContext::mouseButtonEvent(GLFWwindow* window, int button, int action,
 void OpenGLContext::textEvent(GLFWwindow* window, unsigned int codepoint)
 {
     OpenGLContext* context = contextsByWindow[window];
-    context->keyEvent(codepoint);
+    context->textEvent(codepoint);
+}
+
+void OpenGLContext::keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    OpenGLContext* context = contextsByWindow[window];
+    context->keyEvent(key, scancode, action, mods);
 }
 
 OpenGLContext* OpenGLContext::currentContext()
@@ -64,6 +70,7 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     
     glfwSetWindowSizeCallback(window, windowResized);
     glfwSetMouseButtonCallback(window, mouseButtonEvent);
+    glfwSetKeyCallback(window, keyEvent);
     glfwSetCharCallback(window, textEvent);
 
     OpenGLContext* context = new OpenGLContext();
@@ -164,10 +171,16 @@ void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
     events.push(mouseEvent);
 }
 
-void OpenGLContext::keyEvent(int codepoint)
+void OpenGLContext::keyEvent(int key, int scancode, int action, int mods)
 {
-    //KeyEvent* keyEvent = new KeyEvent {codepoint};
-    //events.push(keyEvent);
+    KeyEvent* keyEvent = new KeyEvent {key, scancode, action, mods};
+    events.push(keyEvent);
+}
+
+void OpenGLContext::textEvent(int codepoint)
+{
+    TextEvent* keyEvent = new TextEvent {codepoint};
+    events.push(keyEvent);
 }
 
 Event* OpenGLContext::nextEvent()

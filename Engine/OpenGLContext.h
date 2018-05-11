@@ -40,6 +40,7 @@ public:
     //Callbacks for GLFW events
     static void windowResized(GLFWwindow* window, int width, int height);
     static void mouseButtonEvent(GLFWwindow* window, int button, int action, int mods);
+    static void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void textEvent(GLFWwindow* window, unsigned int codepoint);
 
     void initialiseFrame();
@@ -53,7 +54,8 @@ public:
     
     void resize(int width, int height);
     void mouseButtonEvent(int button, int action, int mods);
-    void keyEvent(int codepoint);
+    void keyEvent(int key, int scancode, int action, int mods);
+    void textEvent(int codepoint);
 
     void bindDefaultFrameBuffer();
     void clearScreen();

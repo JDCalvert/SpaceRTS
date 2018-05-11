@@ -16,10 +16,11 @@ public:
     char base;
     GLuint textureId;
 
-    static std::unordered_map<std::string, Font> fonts;
-
     static void loadFont(const char* bffFilePath, std::string fontName);
     static Font& getFont(std::string fontName);
+
+private:
+    static std::unordered_map<std::string, Font> fonts;
 };
 
 #endif FONT_H

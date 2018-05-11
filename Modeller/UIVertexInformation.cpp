@@ -31,14 +31,14 @@ void UIVertexInformation::build(Surface* infoSurface)
 
 void UIVertexInformation::preRender()
 {
-    setPosition(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 0.01f));
-
     if (showVertices != previousShowVertices
      || showTextureCoordinates != previousShowTextureCoordinates
      || showNormals != previousShowNormals)
     {
         rebuildPanels();
     }
+
+    setPosition(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 0.01f));
 
     previousShowVertices = showVertices;
     previousShowTextureCoordinates = showTextureCoordinates;

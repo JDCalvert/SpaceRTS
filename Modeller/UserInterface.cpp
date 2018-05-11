@@ -7,6 +7,19 @@
 #include "UIComponent.h"
 #include "UIShader.h"
 
+UserInterface* UserInterface::instance;
+
+UserInterface* UserInterface::initialise()
+{
+    UserInterface::instance = new UserInterface();
+    return UserInterface::instance;
+}
+
+UserInterface* UserInterface::getInstance()
+{
+    return UserInterface::instance;
+}
+
 void UserInterface::render()
 {
     UIShader* shader = (UIShader*)Shader::getShader("UI");
@@ -23,6 +36,22 @@ void UserInterface::addComponent(UIComponent* component)
     components.push_back(component);
 }
 
+void UserInterface::clearActiveComponent()
+{
+    if (activeComponent) activeComponent->processNotActive();
+    activeComponent = nullptr;
+}
+
+void UserInterface::clearActiveComponent(UIComponent* component)
+{
+    if (activeComponent == component) clearActiveComponent();
+}
+
+bool UserInterface::hasActiveComponent()
+{
+    return activeComponent;
+}
+
 void UserInterface::handleEvents()
 {
     Event* event = OpenGLContext::currentContext()->nextEvent();
@@ -33,17 +62,35 @@ void UserInterface::handleEvents()
         MouseEvent* mouseEvent = (MouseEvent*)event;
         if (mouseEvent->action == GLFW_PRESS)
         {
-            bool handled = false;
-            for (auto i = components.begin(); i != components.end() && !handled; i++)
+            //We might have an active component already. If we clicked on another component, we
+            //should tell the active one that it's no longer active.
+            UIComponent* eventComponent = nullptr;
+
+            for (auto i = components.begin(); i != components.end() && !eventComponent; i++)
             {
                 UIComponent* component = *i;
-                component->checkAndProcessMouseEvent(mouseEvent);
+                eventComponent = component->checkAndProcessMouseEvent(mouseEvent);
+            }
+
+            if (activeComponent != eventComponent)
+            {
+                clearActiveComponent();
+            }
+            
+            if (eventComponent
+             && eventComponent->shouldRemainActive())
+            {
+                activeComponent = eventComponent;
             }
         }
     }
+    else if (event->type == KEY)
+    {
+        if (activeComponent) activeComponent->processKeyEvent((KeyEvent*)event);
+    }
     else if (event->type == TEXT)
     {
-        KeyEvent* keyEvent = (KeyEvent*)event;
+        if (activeComponent) activeComponent->processTextEvent((TextEvent*)event);
     }
 
     delete event;

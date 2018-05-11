@@ -3,7 +3,7 @@
 
 #include <glm\glm.hpp>
 
-enum EventType {MOUSE, TEXT};
+enum EventType {MOUSE, KEY, TEXT};
 
 struct Event
 {
@@ -33,9 +33,23 @@ struct MouseEvent : Event
 
 struct KeyEvent : Event
 {
+    int key;
+    int scancode;
+    int action;
+    int mods;
+
+    KeyEvent(int key, int scancode, int action, int mods) : key(key), scancode(scancode), action(action), mods(mods), Event(KEY)
+    {
+    }
+};
+
+struct TextEvent : Event
+{
     unsigned int codepoint;
 
-    KeyEvent(int codepoint) : codepoint(codepoint), Event(TEXT) {}
+    TextEvent(int codepoint) : codepoint(codepoint), Event(TEXT)
+    {
+    }
 };
 
 #endif

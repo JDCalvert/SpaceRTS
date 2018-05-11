@@ -1,10 +1,5 @@
 #include "UILabel.h"
 
-void UILabel::processMouseEvent(MouseEvent* mouseEvent)
-{
-    //Do nothing
-}
-
 void UILabel::setText(std::string text)
 {
     this->text = text;
@@ -32,6 +27,23 @@ void UILabel::setText(std::string text, float height, Font& font, Alignment alig
     setFont(font);
     setAlignment(alignment);
 
+    recalculateSurface();
+}
+
+std::string UILabel::getText()
+{
+    return text;
+}
+
+void UILabel::addChar(char newChar)
+{
+    text += newChar;
+    recalculateSurface();
+}
+
+void UILabel::removeLastChar()
+{
+    text = text.substr(0, text.length() - 1);
     recalculateSurface();
 }
 
