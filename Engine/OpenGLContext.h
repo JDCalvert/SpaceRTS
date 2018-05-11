@@ -9,7 +9,7 @@
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 
-#include "MouseEvent.h"
+#include "Event.h"
 
 class Renderer;
 
@@ -26,7 +26,7 @@ private:
     GLsizei width, height;
 
     glm::dvec2 mousePosition, deltaMousePosition;
-    std::queue<MouseEvent*> mouseEvents;
+    std::queue<Event*> events;
 
     double time, deltaTime;
 
@@ -40,6 +40,8 @@ public:
     //Callbacks for GLFW events
     static void windowResized(GLFWwindow* window, int width, int height);
     static void mouseButtonEvent(GLFWwindow* window, int button, int action, int mods);
+    static void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void textEvent(GLFWwindow* window, unsigned int codepoint);
 
     void initialiseFrame();
 
@@ -52,10 +54,14 @@ public:
     
     void resize(int width, int height);
     void mouseButtonEvent(int button, int action, int mods);
+    void keyEvent(int key, int scancode, int action, int mods);
+    void textEvent(int codepoint);
 
     void bindDefaultFrameBuffer();
     void clearScreen();
     void flip();
+
+    bool shouldClose();
 
     double getDeltaTime();
     GLFWwindow* getWindow();
@@ -63,7 +69,7 @@ public:
     GLsizei getWidth();
     GLsizei getHeight();
 
-    MouseEvent* nextMouseEvent();
+    Event* nextEvent();
 
     glm::dvec2 getMousePositionScreenSpace();
     glm::dvec2 getDeltaMousePosition();

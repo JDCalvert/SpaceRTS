@@ -2,8 +2,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <OpenGLContext.h>
+
 #include "Camera.h"
-#include "OpenGLContext.h"
+#include "UserInterface.h"
 
 Controller::Controller(Camera* camera)
 {
@@ -19,6 +21,12 @@ void Controller::update()
         glm::dvec2 deltaMousePosition = glContext->getDeltaMousePosition();
         camera->rotate(deltaMousePosition);
 	}
+
+    UserInterface* ui = UserInterface::getInstance();
+    if (ui->hasActiveComponent())
+    {
+        return;
+    }
 
     if (glContext->keyPressed(GLFW_KEY_Q)) camera->lookLeft();
     if (glContext->keyPressed(GLFW_KEY_E)) camera->lookRight();

@@ -87,7 +87,7 @@ void Font::loadFont(const char* bffFilePath, std::string fontName)
     unsigned int imageSize = imageWidth * imageHeight * (bpp / 8);
     image = new char[imageSize];
 
-    char charWidths[256];
+    unsigned char charWidths[256];
     memcpy(charWidths, &data[WIDTH_DATA_OFFSET], 256);
     memcpy(image, &data[MAP_DATA_OFFSET], imageSize);
 

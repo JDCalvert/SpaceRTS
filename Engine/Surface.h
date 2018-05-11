@@ -81,6 +81,7 @@ public:
     //The actual parts of the surface
     std::vector<glm::vec3>& getVertices();
     std::vector<glm::vec2>& getTextureCoordinates();
+    std::vector<glm::vec3>& getNormals();
     std::vector<unsigned int>& getIndices();
 
 private:

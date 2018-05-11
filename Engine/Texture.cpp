@@ -51,6 +51,9 @@ void Texture::loadDDS(const char* imagePath, std::string textureName)
     unsigned char* buffer;
     unsigned int bufferSize;
 
+    //Some varients output 0 as the number of mipmaps when there is only the main texture, we need to have at least 1
+    mipMapCount = mipMapCount == 0 ? 1 : mipMapCount;
+
     //If we have at least one mipmap, then the total length of the image data will be less than double the length of the original image
     if (mipMapCount > 1)
     {
@@ -91,6 +94,15 @@ void Texture::loadDDS(const char* imagePath, std::string textureName)
     GLuint textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
+
+    if (mipMapCount == 1)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    }
 
     unsigned int blockSize = 16;
     if (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT)

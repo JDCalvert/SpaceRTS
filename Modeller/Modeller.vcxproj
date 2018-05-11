@@ -130,6 +130,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PointShader.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
+    <ClCompile Include="UIRenderOptions.cpp" />
     <ClCompile Include="UIToggleButton.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UILabel.cpp" />
@@ -139,11 +140,13 @@
     <ClCompile Include="UIShader.cpp" />
     <ClCompile Include="UITextBox.cpp" />
     <ClCompile Include="UIVertexInformation.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="UINumber.h" />
+    <ClInclude Include="UIRenderOptions.h" />
     <ClInclude Include="UITextBox.h" />
     <ClInclude Include="LineShader.h" />
     <ClInclude Include="PointShader.h" />

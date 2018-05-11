@@ -18,6 +18,18 @@ void OpenGLContext::mouseButtonEvent(GLFWwindow* window, int button, int action,
     context->mouseButtonEvent(button, action, mods);
 }
 
+void OpenGLContext::textEvent(GLFWwindow* window, unsigned int codepoint)
+{
+    OpenGLContext* context = contextsByWindow[window];
+    context->textEvent(codepoint);
+}
+
+void OpenGLContext::keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    OpenGLContext* context = contextsByWindow[window];
+    context->keyEvent(key, scancode, action, mods);
+}
+
 OpenGLContext* OpenGLContext::currentContext()
 {
     return currentGlContext;
@@ -58,6 +70,8 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     
     glfwSetWindowSizeCallback(window, windowResized);
     glfwSetMouseButtonCallback(window, mouseButtonEvent);
+    glfwSetKeyCallback(window, keyEvent);
+    glfwSetCharCallback(window, textEvent);
 
     OpenGLContext* context = new OpenGLContext();
     context->window = window;
@@ -141,6 +155,11 @@ void OpenGLContext::resize(int width, int height)
     }
 }
 
+bool OpenGLContext::shouldClose()
+{
+    return keyPressed(GLFW_KEY_ESCAPE) || glfwWindowShouldClose(window);
+}
+
 void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
 {
     double xpos, ypos;
@@ -149,17 +168,29 @@ void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
     cursorPosition /= height;
 
     MouseEvent* mouseEvent = new MouseEvent {cursorPosition, button, action};
-    mouseEvents.push(mouseEvent);
+    events.push(mouseEvent);
 }
 
-MouseEvent* OpenGLContext::nextMouseEvent()
+void OpenGLContext::keyEvent(int key, int scancode, int action, int mods)
 {
-    if (mouseEvents.size() == 0) return nullptr;
+    KeyEvent* keyEvent = new KeyEvent {key, scancode, action, mods};
+    events.push(keyEvent);
+}
 
-    MouseEvent* mouseEvent = mouseEvents.front();
-    mouseEvents.pop();
+void OpenGLContext::textEvent(int codepoint)
+{
+    TextEvent* keyEvent = new TextEvent {codepoint};
+    events.push(keyEvent);
+}
 
-    return mouseEvent;
+Event* OpenGLContext::nextEvent()
+{
+    if (events.size() == 0) return nullptr;
+
+    Event* event = events.front();
+    events.pop();
+
+    return event;
 }
 
 bool OpenGLContext::mouseButtonDown(int key)

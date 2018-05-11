@@ -30,19 +30,14 @@
 
 #include "Surface.h"
 
-#include "UIPanel.h"
-#include "UIToggleButton.h"
-#include "UILabel.h"
-#include "UITextBox.h"
-#include "UINumber.h"
-
+#include "UserInterface.h"
 #include "UIVertexInformation.h"
+#include "UIRenderOptions.h"
 
 int main()
 {
     //Create an OpenGLContext. This will create a window for us with an OpenGL context
     OpenGLContext* glContext = OpenGLContext::initialiseNewContext();
-    GLFWwindow* window = glContext->getWindow();
 
     //Use the basic renderer to draw to the screen and register it with our context
     Renderer* renderer = Renderer::createRenderer();
@@ -52,68 +47,44 @@ int main()
     glContext->addRenderer(uiRenderer);
 
     Camera* camera = new Camera();
-    Controller* controller = new Controller(camera);    
+    Controller* controller = new Controller(camera);
 
-    SimpleShader* simpleShader = new SimpleShader();
-    simpleShader->initialise();
+    SimpleShader* simpleShader = Shader::loadShader(new SimpleShader(), "Simple");
+    LineShader* lineShader = Shader::loadShader(new LineShader(), "Line");
+    PointShader* pointShader = Shader::loadShader(new PointShader(), "Point");
 
-    LineShader* lineShader = new LineShader();
-    lineShader->initialise();
-
-    PointShader* pointShader = new PointShader();
-    pointShader->initialise();
-
-    UIShader* uiShader = new UIShader();
-    uiShader->initialise();
+    UIShader* uiShader = Shader::loadShader(new UIShader(), "UI");
 
     Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
     Texture::loadDDS("Graphics/blank.dds", "Blank");
-
-    GLuint metalTexture = Texture::getTexture("Metal");
-    GLuint blankTexture = Texture::getTexture("Blank");
-
-    Surface* surface = new Surface();
-    surface->loadFromFile("Models/cube.mesh");
-    surface->diffuseMap = metalTexture;
-
-    UIPanel* uiPanel = new UIPanel();
-    uiPanel->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.34f, 0.12f));
-    uiPanel->surface->diffuseMap = blankTexture;
-
-    bool drawSurface = true;
-    bool drawLines = true;
-    bool drawPoints = true;
-
-    UIToggleButton* surfaceButton = new UIToggleButton(drawSurface);
-    surfaceButton->setPositionAndSize(glm::vec2(0.01f, 0.01f), glm::vec2(0.1f, 0.1f));
-    surfaceButton->surface->diffuseMap = blankTexture;
-    uiPanel->addComponent(surfaceButton);
-    
-    UIToggleButton* lineButton = new UIToggleButton(drawLines);
-    lineButton->setPositionAndSize(glm::vec2(0.12f, 0.01f), glm::vec2(0.1f, 0.1f));
-    lineButton->surface->diffuseMap = blankTexture;
-    uiPanel->addComponent(lineButton);
-
-    UIToggleButton* pointButton = new UIToggleButton(drawPoints);
-    pointButton->setPositionAndSize(glm::vec2(0.23f, 0.01f), glm::vec2(0.1f, 0.1f));
-    pointButton->surface->diffuseMap = blankTexture;
-    uiPanel->addComponent(pointButton);
+    Texture::loadDDS("Graphics/blankDark.dds", "BlankDark");
 
     Font::loadFont("Graphics/font.bff", "Default");
     Font::loadFont("Graphics/calibriLarge.bff", "Calibri");
 
     Font& calibri = Font::getFont("Calibri");
 
-    std::vector<glm::vec3>& vertices = surface->getVertices();
+    Surface* surface = new Surface();
+    surface->loadFromFile("Models/cube.mesh");
+    surface->diffuseMap = Texture::getTexture("Metal");
+
+    UserInterface* ui = UserInterface::initialise();
+
+    UIRenderOptions* renderOptions = new UIRenderOptions();
+    renderOptions->build();
+    ui->addComponent(renderOptions);
+
     UIVertexInformation* vertexPanel = new UIVertexInformation();
-    vertexPanel->build(vertices);
+    vertexPanel->build(surface);
+    ui->addComponent(vertexPanel);
 
     //Model matrix
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     
-    while (!glContext->keyPressed(GLFW_KEY_ESCAPE)
-        && glfwWindowShouldClose(window) == 0)
+    while (!glContext->shouldClose())
     {
+        ui->handleEvents();
+        
         glContext->initialiseFrame();
 
         //Update the camera position
@@ -127,18 +98,13 @@ int main()
         glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
         //Draw our cube
-        if (drawSurface) simpleShader->renderSurface(surface, modelViewProjectionMatrix);
-        if (drawLines) lineShader->renderSurface(surface, modelViewProjectionMatrix);
-        if (drawPoints) pointShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (renderOptions->renderSurface) simpleShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (renderOptions->renderLines) lineShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (renderOptions->renderPoints) pointShader->renderSurface(surface, modelViewProjectionMatrix);
 
         //Draw the UI
         uiRenderer->initialiseFrame();
-        uiShader->renderUiComponent(uiPanel);
-
-        float panelWidth = vertexPanel->getSize().x;
-        vertexPanel->setPosition(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - (panelWidth + 0.01f), 0.01f));
-
-        uiShader->renderUiComponent(vertexPanel);
+        ui->render();
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();
@@ -147,16 +113,6 @@ int main()
         //Draw the renderers onto the context
         renderer->renderFrame();
         uiRenderer->renderFrame();
-
-        MouseEvent* mouseEvent = OpenGLContext::currentContext()->nextMouseEvent();
-        if (mouseEvent != nullptr)
-        {
-            if (mouseEvent->action == GLFW_PRESS)
-            {
-                uiPanel->checkAndProcessMouseEvent(mouseEvent);
-            }
-            delete mouseEvent;
-        }
 
         glContext->flip();
     }
