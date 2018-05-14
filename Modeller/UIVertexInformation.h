@@ -1,22 +1,15 @@
 #ifndef UI_VERTEX_INFORMATION_H
 #define UI_VERTEX_INFORMATION_H
 
+#include <Font.h>
 #include <Surface.h>
+#include <UIPanel.h>
 
-#include "UIPanel.h"
-
-struct Font;
+#include "UIVertexPanel.h"
 
 class UIVertexInformation : public UIPanel
 {
 public:
-    void build(Surface* surface);
-
-    void preRender();
-
-private:
-    Surface* infoSurface;
-
     Font* font;
     float textSize;
     float indexWidth;
@@ -27,16 +20,26 @@ private:
     bool showTextureCoordinates, previousShowTextureCoordinates;
     bool showNormals, previousShowNormals;
 
+    GLuint blankTexture;
+
+    float xpos;
+
+    void build(Surface* surface);
+    void preRender();
+
+    std::vector<UIVertexPanel*>& getVertexPanels();
+
+private:
+    Surface * infoSurface;
+    std::vector<UIVertexPanel*> vertexPanels;
+
     void rebuildPanels();
 
-    void addRowVec2(glm::vec2& row, float& xpos, float ypos, bool shouldAddHeader, std::string header, char firstSubHeader, GLuint texture);
-    void addRowVec3(glm::vec3& row, float& xpos, float ypos, bool shouldAddHeader, std::string header, char firstSubHeader, GLuint texture);
+    void addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders);
+    void addHeader(std::string text, int numColumns);
+    void addSubHeader(char subHeader);
 
-    void addHeader(std::string text, float xPosition, int numColumns);
-    void addSubHeader(std::string text, float xPosition);
-    void addNumber(float& number, glm::vec2 position, GLuint background);
-    void addIndexLabel(unsigned int& number, glm::vec2 position);
-
+    void addVertexPanel(unsigned int i, float ypos);
     void addToggleButton(bool& toggle, float& xpos, float buttonSize, GLuint texture);
 };
 

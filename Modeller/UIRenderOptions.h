@@ -1,7 +1,7 @@
 #ifndef UI_RENDER_OPTIONS_H
 #define UI_RENDER_OPTIONS_H
 
-#include "UIPanel.h"
+#include <UIPanel.h>
 
 class UIRenderOptions : public UIPanel
 {

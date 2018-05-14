@@ -12,8 +12,8 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
-#include "OpenGLContext.h"
-#include "Renderer.h"
+#include <OpenGLContext.h>
+#include <Renderer.h>
 
 #include <Font.h>
 
@@ -30,7 +30,7 @@
 
 #include "Surface.h"
 
-#include "UserInterface.h"
+#include "UserInterfaceModeller.h"
 #include "UIVertexInformation.h"
 #include "UIRenderOptions.h"
 
@@ -58,9 +58,10 @@ int main()
     Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
     Texture::loadDDS("Graphics/blank.dds", "Blank");
     Texture::loadDDS("Graphics/blankDark.dds", "BlankDark");
+    Texture::loadDDS("Graphics/blankNothing.dds", "BlankNothing");
 
     Font::loadFont("Graphics/font.bff", "Default");
-    Font::loadFont("Graphics/calibriLarge.bff", "Calibri");
+    Font::loadFont("Graphics/calibri.bff", "Calibri");
 
     Font& calibri = Font::getFont("Calibri");
 
@@ -68,18 +69,15 @@ int main()
     surface->loadFromFile("Models/cube.mesh");
     surface->diffuseMap = Texture::getTexture("Metal");
 
-    UserInterface* ui = UserInterface::initialise();
+    /*std::vector<glm::vec3>& vertices = surface->getVertices();
+    std::vector<glm::vec3>& normals = surface->getNormals();
+    for (unsigned int i=0; i<vertices.size(); i++)
+    {
+        vertices[i] += normals[i];
+    }*/
 
-    UIRenderOptions* renderOptions = new UIRenderOptions();
-    renderOptions->build();
-    ui->addComponent(renderOptions);
-
-    UIVertexInformation* vertexPanel = new UIVertexInformation();
-    vertexPanel->build(surface);
-    ui->addComponent(vertexPanel);
-
-    //Model matrix
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    UserInterfaceModeller* ui = UserInterface::initialise(new UserInterfaceModeller());
+    ui->build(surface);
     
     while (!glContext->shouldClose())
     {
@@ -95,16 +93,19 @@ int main()
 
         glm::mat4 projectionMatrix = camera->getProjectionMatrix();
         glm::mat4 viewMatrix = camera->getViewMatrix();
-        glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
+        glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
         //Draw our cube
-        if (renderOptions->renderSurface) simpleShader->renderSurface(surface, modelViewProjectionMatrix);
-        if (renderOptions->renderLines) lineShader->renderSurface(surface, modelViewProjectionMatrix);
-        if (renderOptions->renderPoints) pointShader->renderSurface(surface, modelViewProjectionMatrix);
+        if (ui->renderOptions->renderSurface) simpleShader->renderSurface(surface, viewProjectionMatrix);
+        if (ui->renderOptions->renderLines) lineShader->renderSurface(surface, viewProjectionMatrix);
+        if (ui->renderOptions->renderPoints) pointShader->renderSurface(surface, viewProjectionMatrix);
 
         //Draw the UI
         uiRenderer->initialiseFrame();
         ui->render();
+
+        std::vector<glm::vec3> highlights = ui->getHighlightPoints();
+        pointShader->renderPoints(highlights, viewProjectionMatrix);
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();

@@ -3,9 +3,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <OpenGLContext.h>
+#include <UserInterface.h>
 
 #include "Camera.h"
-#include "UserInterface.h"
 
 Controller::Controller(Camera* camera)
 {

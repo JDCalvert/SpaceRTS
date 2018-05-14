@@ -43,6 +43,8 @@ public:
     static void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void textEvent(GLFWwindow* window, unsigned int codepoint);
 
+    glm::vec2 getCursorPosition();
+
     void initialiseFrame();
 
     bool mouseButtonDown(int key);

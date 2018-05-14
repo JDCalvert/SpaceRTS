@@ -15,19 +15,19 @@ struct Event
     }
 };
 
-struct MouseEvent : Event
+struct MouseClickEvent : Event
 {
     glm::vec2 position;
     int button;
     int action;
 
-    MouseEvent(glm::vec2 position, int button, int action) : position(position), button(button), action(action), Event(MOUSE)
+    MouseClickEvent(glm::vec2 position, int button, int action) : position(position), button(button), action(action), Event(MOUSE)
     {
     }
 
-    MouseEvent* getRelative(glm::vec2 relative)
+    MouseClickEvent* getRelative(glm::vec2 relative)
     {
-        return new MouseEvent {position - relative, button, action};
+        return new MouseClickEvent {position - relative, button, action};
     }
 };
 
