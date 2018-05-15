@@ -4,7 +4,9 @@
 #include <Font.h>
 #include <UIPanel.h>
 
-class UITriangleInformation : UIPanel
+#include "UITrianglePanel.h"
+
+class UITriangleInformation : public UIPanel
 {
 public:
     Font* font;
@@ -12,17 +14,21 @@ public:
     float border;
     float indexWidth;
 
+    GLuint blankTexture;
+
     void build(Surface* surface);
+
+    std::vector<UITrianglePanel*>& getTrianglePanels();
 
 private:
     Surface* infoSurface;
-
-    GLuint blankTexture;
+    std::vector<UITrianglePanel*> trianglePanels;
 
     float xpos, ypos;
 
     void rebuildPanels();
     void addHeader(std::string header);
+    void addTrianglePanel(Surface* infoSurface, unsigned int firstIndex);
 };
 
 #endif

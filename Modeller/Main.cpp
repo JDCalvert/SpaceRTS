@@ -24,8 +24,7 @@
 #include "Texture.h"
 
 #include "SimpleShader.h"
-#include "LineShader.h"
-#include "PointShader.h"
+#include "BlankShader.h"
 #include "UIShader.h"
 
 #include "Surface.h"
@@ -50,8 +49,7 @@ int main()
     Controller* controller = new Controller(camera);
 
     SimpleShader* simpleShader = Shader::loadShader(new SimpleShader(), "Simple");
-    LineShader* lineShader = Shader::loadShader(new LineShader(), "Line");
-    PointShader* pointShader = Shader::loadShader(new PointShader(), "Point");
+    BlankShader* blankShader = Shader::loadShader(new BlankShader(), "Blank");
 
     UIShader* uiShader = Shader::loadShader(new UIShader(), "UI");
 
@@ -97,15 +95,18 @@ int main()
 
         //Draw our cube
         if (ui->renderOptions->renderSurface) simpleShader->renderSurface(surface, viewProjectionMatrix);
-        if (ui->renderOptions->renderLines) lineShader->renderSurface(surface, viewProjectionMatrix);
-        if (ui->renderOptions->renderPoints) pointShader->renderSurface(surface, viewProjectionMatrix);
+        if (ui->renderOptions->renderLines) blankShader->renderLines(surface, viewProjectionMatrix);
+        if (ui->renderOptions->renderPoints) blankShader->renderVertices(surface, viewProjectionMatrix);
 
         //Draw the UI
         uiRenderer->initialiseFrame();
         ui->render();
 
-        std::vector<glm::vec3> highlights = ui->getHighlightPoints();
-        pointShader->renderPoints(highlights, viewProjectionMatrix);
+        std::vector<glm::vec3> highlightVertices = ui->getHighlightVertices();
+        blankShader->renderVertices(highlightVertices, viewProjectionMatrix);
+
+        std::vector<unsigned int> highlightIndices = ui->getHighlightIndices();
+        blankShader->renderTriangles(surface, viewProjectionMatrix, highlightIndices);
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();

@@ -126,12 +126,12 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="LineShader.cpp" />
+    <ClCompile Include="BlankShader.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PointShader.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="UIRenderOptions.cpp" />
     <ClCompile Include="UITriangleInformation.cpp" />
+    <ClCompile Include="UITrianglePanel.cpp" />
     <ClCompile Include="UIVertexInformation.cpp" />
     <ClCompile Include="UIVertexPanel.cpp" />
     <ClCompile Include="UserInterfaceModeller.cpp" />
@@ -140,8 +140,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="UIRenderOptions.h" />
-    <ClInclude Include="LineShader.h" />
-    <ClInclude Include="PointShader.h" />
+    <ClInclude Include="BlankShader.h" />
     <ClInclude Include="SimpleShader.h" />
     <ClInclude Include="UITriangleInformation.h" />
     <ClInclude Include="UIVertexInformation.h" />
@@ -149,14 +148,11 @@
     <ClInclude Include="UserInterfaceModeller.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LineShader.frag" />
-    <None Include="LineShader.vert" />
-    <None Include="PointShader.frag" />
-    <None Include="PointShader.vert" />
+    <None Include="BlankShader.frag" />
+    <None Include="BlankShader.vert" />
     <None Include="SimpleShader.frag" />
     <None Include="SimpleShader.vert" />
-    <None Include="UIShader.frag" />
-    <None Include="UIShader.vert" />
+    <None Include="UITrianglePanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

@@ -17,7 +17,6 @@ UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, 
     UIPanel()
 {
     this->parent = parent;
-    this->infoSurface = infoSurface;
     this->index = index;
 
     onMap = Texture::getTexture("Blank");

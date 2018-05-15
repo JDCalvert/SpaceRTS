@@ -28,20 +28,14 @@
     <Filter Include="Resource Files\SimpleShader">
       <UniqueIdentifier>{e9ca3c9c-91ff-4149-8abb-96604ff894c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\LineShader">
-      <UniqueIdentifier>{38c5aa5c-348a-400b-b5cf-649e894b79f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\UIShader">
-      <UniqueIdentifier>{23eae438-1f8c-4ad0-b955-bedc31548164}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\PointShader">
-      <UniqueIdentifier>{e9d2d043-f8e0-4a6e-bb2f-16c62eadff3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\UserInterface\Panels">
       <UniqueIdentifier>{d862eccc-3848-4689-b44c-9e5ef6c32d8e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\UserInterface\Panels">
       <UniqueIdentifier>{f441a9aa-4418-4d91-bc92-ed7d03fb0a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\BlankShader">
+      <UniqueIdentifier>{38c5aa5c-348a-400b-b5cf-649e894b79f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,12 +50,6 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LineShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="PointShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="UIVertexInformation.cpp">
       <Filter>Source Files\UserInterface\Panels</Filter>
@@ -78,6 +66,12 @@
     <ClCompile Include="UITriangleInformation.cpp">
       <Filter>Source Files\UserInterface\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="UITrianglePanel.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="BlankShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -86,14 +80,8 @@
     <ClInclude Include="Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointShader.h">
-      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="UIVertexInformation.h">
       <Filter>Header Files\UserInterface\Panels</Filter>
@@ -110,6 +98,9 @@
     <ClInclude Include="UITriangleInformation.h">
       <Filter>Header Files\UserInterface\Panels</Filter>
     </ClInclude>
+    <ClInclude Include="BlankShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleShader.frag">
@@ -118,23 +109,14 @@
     <None Include="SimpleShader.vert">
       <Filter>Resource Files\SimpleShader</Filter>
     </None>
-    <None Include="LineShader.frag">
-      <Filter>Resource Files\LineShader</Filter>
+    <None Include="UITrianglePanel.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
     </None>
-    <None Include="LineShader.vert">
-      <Filter>Resource Files\LineShader</Filter>
+    <None Include="BlankShader.frag">
+      <Filter>Resource Files\BlankShader</Filter>
     </None>
-    <None Include="UIShader.frag">
-      <Filter>Resource Files\UIShader</Filter>
-    </None>
-    <None Include="UIShader.vert">
-      <Filter>Resource Files\UIShader</Filter>
-    </None>
-    <None Include="PointShader.vert">
-      <Filter>Resource Files\PointShader</Filter>
-    </None>
-    <None Include="PointShader.frag">
-      <Filter>Resource Files\PointShader</Filter>
+    <None Include="BlankShader.vert">
+      <Filter>Resource Files\BlankShader</Filter>
     </None>
   </ItemGroup>
 </Project>

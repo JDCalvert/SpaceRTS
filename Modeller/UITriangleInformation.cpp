@@ -1,8 +1,12 @@
 #include "UITriangleInformation.h"
 
+#include <sstream>
+
 #include <Texture.h>
 #include <UILabel.h>
 #include <UIInteger.h>
+
+#include "UITrianglePanel.h"
 
 void UITriangleInformation::build(Surface* infoSurface)
 {
@@ -34,12 +38,14 @@ void UITriangleInformation::rebuildPanels()
     std::vector<unsigned int>& indices = infoSurface->getIndices();
     for (unsigned int i=0; i<indices.size(); i+=3)
     {
-        std::string
-
-        UIInteger* uiInteger = new UIInteger(indices[i]);
-        uiInteger->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(indexWidth, ypos));
-        uiInteger->setText(str, textSize, *font, RIGHT);
+        addTrianglePanel(infoSurface, i);
+        ypos += textSize + 0.002f;
     }
+
+    setPosition(glm::vec2(border, 1.0f - (ypos + border)));
+    setSize(glm::vec2(xpos, ypos + border - 0.002f));
+    constructSurface();
+    surface->diffuseMap = blankTexture;
 }
 
 void UITriangleInformation::addHeader(std::string header)
@@ -50,4 +56,19 @@ void UITriangleInformation::addHeader(std::string header)
     addComponent(label);
 
     xpos += indexWidth + border;
+}
+
+void UITriangleInformation::addTrianglePanel(Surface* infoSurface, unsigned int firstIndex)
+{
+    UITrianglePanel* trianglePanel = new UITrianglePanel(this, infoSurface, firstIndex);
+    trianglePanel->setPosition(glm::vec2(border, ypos));
+    trianglePanel->buildPanel();
+    addComponent(trianglePanel);
+
+    trianglePanels.push_back(trianglePanel);
+}
+
+std::vector<UITrianglePanel*>& UITriangleInformation::getTrianglePanels()
+{
+    return trianglePanels;
 }

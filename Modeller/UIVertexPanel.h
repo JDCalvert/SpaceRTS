@@ -22,7 +22,6 @@ public:
 private:
     UIVertexInformation* parent;
 
-    Surface* infoSurface;
     unsigned int index;
 
     float xpos;
