@@ -72,6 +72,9 @@
     <ClCompile Include="BlankShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="UISaveLoadPanel.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="BlankShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="UISaveLoadPanel.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

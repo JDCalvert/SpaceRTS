@@ -42,8 +42,8 @@ void UITriangleInformation::rebuildPanels()
         ypos += textSize + 0.002f;
     }
 
-    setPosition(glm::vec2(border, 1.0f - (ypos + border)));
-    setSize(glm::vec2(xpos, ypos + border - 0.002f));
+    setPosition(border, 1.0f - (ypos + border));
+    setSize(xpos, ypos + border - 0.002f);
     constructSurface();
     surface->diffuseMap = blankTexture;
 }
@@ -61,7 +61,7 @@ void UITriangleInformation::addHeader(std::string header)
 void UITriangleInformation::addTrianglePanel(Surface* infoSurface, unsigned int firstIndex)
 {
     UITrianglePanel* trianglePanel = new UITrianglePanel(this, infoSurface, firstIndex);
-    trianglePanel->setPosition(glm::vec2(border, ypos));
+    trianglePanel->setPosition(border, ypos);
     trianglePanel->buildPanel();
     addComponent(trianglePanel);
 

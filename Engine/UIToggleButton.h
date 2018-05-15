@@ -12,8 +12,9 @@ public:
 
 protected:
     void processMouseEvent(MouseClickEvent* mouseEvent);
-    bool& toggle;
 
+private:
+    bool& toggle;
     GLuint onMap, offMap;
 };
 

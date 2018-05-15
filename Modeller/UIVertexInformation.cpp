@@ -38,7 +38,7 @@ void UIVertexInformation::preRender()
         rebuildPanels();
     }
 
-    setPosition(glm::vec2(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 0.01f));
+    setPosition(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 0.01f);
 
     previousShowVertices = showVertices;
     previousShowTextureCoordinates = showTextureCoordinates;
@@ -71,7 +71,7 @@ void UIVertexInformation::rebuildPanels()
         ypos += textSize + 0.002f;
     }
 
-    setSize(glm::vec2(xpos, ypos + border - 0.002f));
+    setSize(xpos, ypos + border - 0.002f);
     constructSurface();
     surface->diffuseMap = blankTexture;
 }
@@ -79,7 +79,7 @@ void UIVertexInformation::rebuildPanels()
 void UIVertexInformation::addVertexPanel(unsigned int i, float ypos)
 {
     UIVertexPanel* vertexPanel = new UIVertexPanel(this, infoSurface, i);
-    vertexPanel->setPosition(glm::vec2(border, ypos));
+    vertexPanel->setPosition(border, ypos);
     vertexPanel->buildPanel();
     addComponent(vertexPanel);
 

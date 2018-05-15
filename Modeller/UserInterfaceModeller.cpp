@@ -19,6 +19,10 @@ void UserInterfaceModeller::build(Surface* infoSurface)
     triangleInformation = new UITriangleInformation();
     triangleInformation->build(infoSurface);
     addComponent(triangleInformation);
+
+    saveLoadPanel = new UISaveLoadPanel();
+    saveLoadPanel->build();
+    addComponent(saveLoadPanel);
 }
 
 std::vector<glm::vec3> UserInterfaceModeller::getHighlightVertices()

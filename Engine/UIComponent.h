@@ -26,8 +26,12 @@ public:
     glm::vec2 getPosition();
     glm::vec2 getSize();
     
+    virtual void setPosition(float x, float y);
     virtual void setPosition(glm::vec2 position);
+    
+    virtual void setSize(float x, float y);
     virtual void setSize(glm::vec2 size);
+
     virtual void setPositionAndSize(glm::vec2 position, glm::vec2 size) final;
 
     virtual UIComponent* checkAndProcessMouseEvent(MouseClickEvent* mouseEvent) final;

@@ -28,6 +28,9 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIActionListener.h" />
+    <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIInteger.h" />
     <ClInclude Include="UILabel.h" />
     <ClInclude Include="UINumber.h" />
@@ -46,6 +49,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIInteger.cpp" />
     <ClCompile Include="UILabel.cpp" />

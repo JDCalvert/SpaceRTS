@@ -113,9 +113,19 @@ void UIComponent::addComponent(UIComponent* component)
     components.push_back(component);
 }
 
+void UIComponent::setPosition(float x, float y)
+{
+    setPosition(glm::vec2(x, y));
+}
+
 void UIComponent::setPosition(glm::vec2 position)
 {
     this->position = position;
+}
+
+void UIComponent::setSize(float x, float y)
+{
+    setSize(glm::vec2(x, y));
 }
 
 void UIComponent::setSize(glm::vec2 size)

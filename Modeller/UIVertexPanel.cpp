@@ -44,7 +44,7 @@ void UIVertexPanel::buildPanel()
     if (parent->showTextureCoordinates) addRowVec2(vertexTextureCoordinate);
     if (parent->showNormals) addRowVec3(vertexNormal);
 
-    setSize(glm::vec2(xpos - parent->border, parent->textSize));
+    setSize(xpos - parent->border, parent->textSize);
     constructSurface();
 }
 

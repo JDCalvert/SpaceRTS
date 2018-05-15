@@ -6,6 +6,7 @@
 #include "UIRenderOptions.h"
 #include "UIVertexInformation.h"
 #include "UITriangleInformation.h"
+#include "UISaveLoadPanel.h"
 
 class UserInterfaceModeller : public UserInterface
 {
@@ -13,6 +14,7 @@ public:
     UIRenderOptions* renderOptions;
     UIVertexInformation* vertexInformation;
     UITriangleInformation* triangleInformation;
+    UISaveLoadPanel* saveLoadPanel;
 
     static UserInterfaceModeller* getInstance();
 
