@@ -5,9 +5,27 @@
 #include <vector>
 #include <GL/glew.h>
 
+bool operator > (glm::vec2 point1, glm::vec2 point2)
+{
+    return point1.x > point2.x
+        && point1.y > point2.y;
+}
+
+bool operator < (glm::vec2 point1, glm::vec2 point2)
+{
+    return point1.x < point2.x
+        && point1.y < point2.y;
+}
+
 class Geometry
 {
 public:
+
+    static bool isPointInBox(glm::vec2 pointPosition, glm::vec2 boxPosition, glm::vec2 boxSize)
+    {
+        return pointPosition > boxPosition
+            && pointPosition < boxPosition + boxSize;
+    }
 
     static void constructFrustum(float(&collisionPlanes)[6][4], glm::vec3(&frustumPoints)[8])
     {

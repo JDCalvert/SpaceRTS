@@ -162,13 +162,16 @@ bool OpenGLContext::shouldClose()
 
 void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
 {
+    MouseClickEvent* mouseEvent = new MouseClickEvent {getCursorPosition(), button, action};
+    events.push(mouseEvent);
+}
+
+glm::vec2 OpenGLContext::getCursorPosition()
+{
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     glm::vec2 cursorPosition(xpos, ypos);
-    cursorPosition /= height;
-
-    MouseEvent* mouseEvent = new MouseEvent {cursorPosition, button, action};
-    events.push(mouseEvent);
+    return cursorPosition /= height;
 }
 
 void OpenGLContext::keyEvent(int key, int scancode, int action, int mods)
