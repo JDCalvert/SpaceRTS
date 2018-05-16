@@ -25,7 +25,6 @@ UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent* mouseE
         
             if (eventComponent)
             {
-                delete mouseEvent;
                 return eventComponent;
             }
         }
@@ -33,7 +32,6 @@ UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent* mouseE
 
     //If none of our child components were clicked, then this was clicked
     processMouseClick(mouseEvent);
-    delete mouseEvent;
     return this;
 }
 
