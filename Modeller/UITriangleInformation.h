@@ -16,9 +16,15 @@ public:
 
     GLuint blankTexture;
 
+    int startTriangle;
+    int maxTriangles;
+
     UITriangleInformation(Surface* surface);
     
     void build();
+
+    bool processMouseScroll(MouseScrollEvent* mouseEvent) override;
+
     std::vector<UITrianglePanel*>& getTrianglePanels();
 
 private:

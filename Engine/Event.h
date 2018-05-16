@@ -46,6 +46,11 @@ struct MouseScrollEvent : MouseEvent
     MouseScrollEvent(glm::vec2 position, double xOffset, double yOffset) : xOffset(xOffset), yOffset(yOffset), MouseEvent(position, MOUSE_SCROLL)
     {
     }
+
+    MouseScrollEvent* getRelative(glm::vec2 relative)
+    {
+        return new MouseScrollEvent {position - relative, xOffset, yOffset};
+    }
 };
 
 struct KeyEvent : Event

@@ -133,15 +133,19 @@ void UIVertexInformation::addToggleButton(bool& toggle, float& xpos, float butto
 
 bool UIVertexInformation::processMouseScroll(MouseScrollEvent* mouseEvent)
 {
+    int numVertices = infoSurface->getVertices().size();
+
     if (mouseEvent->yOffset > 0
      && startVertex > 0)
     {
         startVertex--;
+        build();
     }
     else if (mouseEvent->yOffset < 0
-        && startVertex  < vertexPanels.size() - maxVertices)
+        && startVertex  < numVertices - maxVertices)
     {
         startVertex++;
+        build();
     }
 
     return true;

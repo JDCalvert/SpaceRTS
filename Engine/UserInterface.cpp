@@ -89,8 +89,6 @@ void UserInterface::handleEvents()
             {
                 activeComponent = eventComponent;
             }
-
-            if (!eventComponent) delete mouseEvent;
         }
     }
     else if (event->type == MOUSE_SCROLL)
@@ -98,7 +96,6 @@ void UserInterface::handleEvents()
         MouseScrollEvent* mouseScrollEvent = (MouseScrollEvent*)event;
 
         bool processed = false;
-
         for (auto i=components.begin(); i!=components.end() && !processed; i++)
         {
             UIComponent* component = *i;

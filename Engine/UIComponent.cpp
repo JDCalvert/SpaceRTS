@@ -37,6 +37,8 @@ UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent* mouseE
 
 bool UIComponent::checkAndProcessMouseScrollEvent(MouseScrollEvent* mouseEvent)
 {
+    MouseScrollEvent* relativeMouseEvent = mouseEvent->getRelative(position);
+
     //If we aren't hovering over this, then don't do anything with this or any of its children
     if (!isPointOnMe(mouseEvent->position)) return false;
     
@@ -44,7 +46,7 @@ bool UIComponent::checkAndProcessMouseScrollEvent(MouseScrollEvent* mouseEvent)
     for (auto i = components.begin(); i != components.end(); i++)
     {
         UIComponent* component = *i;
-        if (component->checkAndProcessMouseScrollEvent(mouseEvent)) return true;
+        if (component->checkAndProcessMouseScrollEvent(relativeMouseEvent)) return true;
     }
 
     //If none of our children processed the scroll event, then return our own

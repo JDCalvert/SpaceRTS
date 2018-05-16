@@ -16,9 +16,6 @@ public:
     float columnWidth;
     float border;
 
-    int startVertex;
-    int maxVertices;
-
     bool showVertices, previousShowVertices;
     bool showTextureCoordinates, previousShowTextureCoordinates;
     bool showNormals, previousShowNormals;
@@ -26,13 +23,15 @@ public:
     GLuint blankTexture;
 
     float xpos;
+    int startVertex;
+    int maxVertices;
 
     UIVertexInformation(Surface* infoSurface);
 
     void build();
     void preRender();
 
-    bool processMouseScroll(MouseScrollEvent* mouseEvent);
+    bool processMouseScroll(MouseScrollEvent* mouseEvent) override;
 
     std::vector<UIVertexPanel*>& getVertexPanels();
 
