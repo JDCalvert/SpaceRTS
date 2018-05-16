@@ -36,7 +36,7 @@ public:
     int normalsSize = 0;
     int tangentsSize = 0;
     int bitangentsSize = 0;
-    int bonesSize = 0;
+    int boneIndicesSize = 0;
     int indicesSize = 0;
 
     int boneMatricesSize = 0;
@@ -46,7 +46,7 @@ public:
     glm::vec3* normalsPointer = nullptr;
     glm::vec3* tangentsPointer = nullptr;
     glm::vec3* bitangentsPointer = nullptr;
-    glm::vec4* bonesPointer = nullptr;
+    glm::vec4* boneIndicesPointer = nullptr;
     unsigned int* indicesPointer = nullptr;
 
     glm::mat4* boneMatricesPointer = nullptr;
@@ -67,6 +67,10 @@ public:
     //Load from file
     void loadFromFile(const char* objFilePath);
     void loadFromFile(const char* objFilePath, float scale);
+
+    //Write to file
+    void writeToFile(const char* objFilePath);
+    void calculateTangents();
     
     //Set specific things about the texture
     void setTextures(GLuint diffuseMap, GLuint normalmap, GLuint specularMap);

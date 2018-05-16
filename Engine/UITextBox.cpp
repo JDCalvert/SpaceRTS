@@ -22,7 +22,7 @@ void UITextBox::setSize(glm::vec2 size)
     constructSurface();
 }
 
-bool UITextBox::shouldCheckMouseEventForChildren()
+bool UITextBox::shouldCheckMouseClickEventForChildren()
 {
     return false;
 }
@@ -50,4 +50,9 @@ void UITextBox::processKeyEvent(KeyEvent* event)
 void UITextBox::processTextEvent(TextEvent* event)
 {
     label->addChar(event->codepoint);
+}
+
+std::string UITextBox::getText()
+{
+    return label->getText();
 }

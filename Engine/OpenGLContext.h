@@ -33,13 +33,14 @@ private:
 public:
     OpenGLContext();
 
-    static OpenGLContext* initialiseNewContext();
+    static OpenGLContext* initialiseContext();
     static OpenGLContext* currentContext();
     static void setCurrentContext(OpenGLContext* glContext);
     
     //Callbacks for GLFW events
     static void windowResized(GLFWwindow* window, int width, int height);
     static void mouseButtonEvent(GLFWwindow* window, int button, int action, int mods);
+    static void mouseScrollEvent(GLFWwindow* window, double xOffset, double yOffset);
     static void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void textEvent(GLFWwindow* window, unsigned int codepoint);
 
@@ -56,6 +57,7 @@ public:
     
     void resize(int width, int height);
     void mouseButtonEvent(int button, int action, int mods);
+    void mouseScrollEvent(double xOffset, double yOffset);
     void keyEvent(int key, int scancode, int action, int mods);
     void textEvent(int codepoint);
 
@@ -72,6 +74,7 @@ public:
     GLsizei getHeight();
 
     Event* nextEvent();
+    void clearKeyEvent(KeyEvent* event);
 
     glm::dvec2 getMousePositionScreenSpace();
     glm::dvec2 getDeltaMousePosition();

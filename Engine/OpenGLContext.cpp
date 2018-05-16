@@ -18,6 +18,12 @@ void OpenGLContext::mouseButtonEvent(GLFWwindow* window, int button, int action,
     context->mouseButtonEvent(button, action, mods);
 }
 
+void OpenGLContext::mouseScrollEvent(GLFWwindow* window, double xOffset, double yOffset)
+{
+    OpenGLContext* context = contextsByWindow[window];
+    context->mouseScrollEvent(xOffset, yOffset);
+}
+
 void OpenGLContext::textEvent(GLFWwindow* window, unsigned int codepoint)
 {
     OpenGLContext* context = contextsByWindow[window];
@@ -35,7 +41,7 @@ OpenGLContext* OpenGLContext::currentContext()
     return currentGlContext;
 }
 
-OpenGLContext* OpenGLContext::initialiseNewContext()
+OpenGLContext* OpenGLContext::initialiseContext()
 {
     int width = 800;
     int height = 600;
@@ -70,6 +76,7 @@ OpenGLContext* OpenGLContext::initialiseNewContext()
     
     glfwSetWindowSizeCallback(window, windowResized);
     glfwSetMouseButtonCallback(window, mouseButtonEvent);
+    glfwSetScrollCallback(window, mouseScrollEvent);
     glfwSetKeyCallback(window, keyEvent);
     glfwSetCharCallback(window, textEvent);
 
@@ -166,6 +173,12 @@ void OpenGLContext::mouseButtonEvent(int button, int action, int mods)
     events.push(mouseEvent);
 }
 
+void OpenGLContext::mouseScrollEvent(double xOffset, double yOffset)
+{
+    MouseScrollEvent* mouseEvent = new MouseScrollEvent {getCursorPosition(), xOffset, yOffset};
+    events.push(mouseEvent);
+}
+
 glm::vec2 OpenGLContext::getCursorPosition()
 {
     double xpos, ypos;
@@ -204,6 +217,11 @@ bool OpenGLContext::mouseButtonDown(int key)
 bool OpenGLContext::keyPressed(int key)
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
+}
+
+void OpenGLContext::clearKeyEvent(KeyEvent* event)
+{
+    glfwGetKey(window, event->key);
 }
 
 GLFWwindow* OpenGLContext::getWindow()

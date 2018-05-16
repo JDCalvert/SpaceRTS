@@ -8,10 +8,10 @@ class UIToggleButton : public UIComponent
 public:
     UIToggleButton(bool& toggle);
 
-    void preRender();
+    void preRender() override;
 
 protected:
-    void processMouseEvent(MouseClickEvent* mouseEvent);
+    void processMouseClick(MouseClickEvent* mouseEvent) override;
 
 private:
     bool& toggle;

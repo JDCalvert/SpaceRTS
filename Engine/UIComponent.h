@@ -34,7 +34,9 @@ public:
 
     virtual void setPositionAndSize(glm::vec2 position, glm::vec2 size) final;
 
-    virtual UIComponent* checkAndProcessMouseEvent(MouseClickEvent* mouseEvent) final;
+    virtual UIComponent* checkAndProcessMouseClickEvent(MouseClickEvent* mouseEvent) final;
+    virtual bool checkAndProcessMouseScrollEvent(MouseScrollEvent* mouseEvent) final;
+
     virtual void processKeyEvent(KeyEvent* keyEvent);
     virtual void processTextEvent(TextEvent* textEvent);
     
@@ -54,11 +56,12 @@ protected:
     bool isChild(UIComponent* component);
 
     virtual void becomeInactive();
-    virtual bool shouldCheckMouseEventForChildren();
-    virtual void processMouseEvent(MouseClickEvent* mouseEvent);
+    virtual bool shouldCheckMouseClickEventForChildren();
+    virtual void processMouseClick(MouseClickEvent* mouseEvent);
+    virtual bool processMouseScroll(MouseScrollEvent* mouseEvent);
 
 private:
-    bool isClicked(MouseClickEvent* mouseEvent);
+    bool isPointOnMe(glm::vec2 point);
 };
 
 #endif

@@ -16,7 +16,7 @@ public:
     void setAlignment(Alignment alignment);
     
     void recalculateSurface();
-    GLenum getRenderMode();
+    GLenum getRenderMode() override;
 
     void addChar(char newChar);
     void removeLastChar();

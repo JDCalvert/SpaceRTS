@@ -7,6 +7,7 @@
 #include <Font.h>
 
 class UIButton;
+class UITextBox;
 
 class UISaveLoadPanel : public UIPanel, UIActionListener
 {
@@ -25,6 +26,8 @@ public:
     void actionPerformed(UIComponent* component);
 
 private:
+    UITextBox* loadBox;
+    UITextBox* saveBox;
     UIButton* loadButton;
     UIButton* saveButton;
 };

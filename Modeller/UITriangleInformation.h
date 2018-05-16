@@ -16,8 +16,9 @@ public:
 
     GLuint blankTexture;
 
-    void build(Surface* surface);
-
+    UITriangleInformation(Surface* surface);
+    
+    void build();
     std::vector<UITrianglePanel*>& getTrianglePanels();
 
 private:
@@ -26,7 +27,6 @@ private:
 
     float xpos, ypos;
 
-    void rebuildPanels();
     void addHeader(std::string header);
     void addTrianglePanel(Surface* infoSurface, unsigned int firstIndex);
 };

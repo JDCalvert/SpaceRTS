@@ -5,8 +5,6 @@
 
 class UIPanel : public UIComponent
 {
-protected:
-    void processMouseEvent(MouseClickEvent* mouseEvent);
 };
 
 #endif

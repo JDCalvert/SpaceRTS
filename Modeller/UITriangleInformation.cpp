@@ -8,7 +8,7 @@
 
 #include "UITrianglePanel.h"
 
-void UITriangleInformation::build(Surface* infoSurface)
+UITriangleInformation::UITriangleInformation(Surface* infoSurface)
 {
     this->infoSurface = infoSurface;
 
@@ -18,12 +18,11 @@ void UITriangleInformation::build(Surface* infoSurface)
 
     font = &Font::getFont("Calibri");
     blankTexture = Texture::getTexture("Blank");
-
-    rebuildPanels();
 }
 
-void UITriangleInformation::rebuildPanels()
+void UITriangleInformation::build()
 {
+    trianglePanels.clear();
     clearComponents();
 
     xpos = border;

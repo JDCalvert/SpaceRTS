@@ -59,11 +59,12 @@ void UserInterface::handleEvents()
         UIComponent* component = *i;
         component->checkHover(cursorPosition);
     }
-
-    Event* event = OpenGLContext::currentContext()->nextEvent();
+    
+    OpenGLContext* glContext = OpenGLContext::currentContext();
+    Event* event = glContext->nextEvent();
     if (event == nullptr) return;
 
-    if (event->type == MOUSE)
+    if (event->type == MOUSE_CLICK)
     {
         MouseClickEvent* mouseEvent = (MouseClickEvent*)event;
         if (mouseEvent->action == GLFW_PRESS)
@@ -75,7 +76,7 @@ void UserInterface::handleEvents()
             for (auto i = components.begin(); i != components.end() && !eventComponent; i++)
             {
                 UIComponent* component = *i;
-                eventComponent = component->checkAndProcessMouseEvent(mouseEvent);
+                eventComponent = component->checkAndProcessMouseClickEvent(mouseEvent);
             }
 
             if (activeComponent != eventComponent)
@@ -88,11 +89,30 @@ void UserInterface::handleEvents()
             {
                 activeComponent = eventComponent;
             }
+
+            if (!eventComponent) delete mouseEvent;
+        }
+    }
+    else if (event->type == MOUSE_SCROLL)
+    {
+        MouseScrollEvent* mouseScrollEvent = (MouseScrollEvent*)event;
+
+        bool processed = false;
+
+        for (auto i=components.begin(); i!=components.end() && !processed; i++)
+        {
+            UIComponent* component = *i;
+            processed = component->checkAndProcessMouseScrollEvent(mouseScrollEvent);
         }
     }
     else if (event->type == KEY)
     {
-        if (activeComponent) activeComponent->processKeyEvent((KeyEvent*)event);
+        if (activeComponent)
+        {
+            KeyEvent* keyEvent = (KeyEvent*)event;
+            activeComponent->processKeyEvent(keyEvent);
+            glContext->clearKeyEvent(keyEvent); //Discard the key press so we don't process it again
+        }
     }
     else if (event->type == TEXT)
     {

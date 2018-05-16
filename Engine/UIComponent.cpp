@@ -8,12 +8,12 @@ UIComponent::~UIComponent()
     clearComponents();
 }
 
-UIComponent* UIComponent::checkAndProcessMouseEvent(MouseClickEvent* mouseEvent)
+UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent* mouseEvent)
 {
     //If this wasn't clicked, then none of the subcomponents will have been.
-    if (!isClicked(mouseEvent)) return nullptr;
+    if (!isPointOnMe(mouseEvent->position)) return nullptr;
 
-    if (shouldCheckMouseEventForChildren())
+    if (shouldCheckMouseClickEventForChildren())
     {
         MouseClickEvent* relativeMouseEvent = mouseEvent->getRelative(position);
 
@@ -21,20 +21,46 @@ UIComponent* UIComponent::checkAndProcessMouseEvent(MouseClickEvent* mouseEvent)
         for (auto i = components.begin(); i != components.end(); i++)
         {
             UIComponent* component = *i;
-            UIComponent* eventComponent = component->checkAndProcessMouseEvent(relativeMouseEvent);
+            UIComponent* eventComponent = component->checkAndProcessMouseClickEvent(relativeMouseEvent);
         
-            if (eventComponent) return eventComponent;
+            if (eventComponent)
+            {
+                delete mouseEvent;
+                return eventComponent;
+            }
         }
     }
 
     //If none of our child components were clicked, then this was clicked
-    processMouseEvent(mouseEvent);
+    processMouseClick(mouseEvent);
+    delete mouseEvent;
     return this;
+}
+
+bool UIComponent::checkAndProcessMouseScrollEvent(MouseScrollEvent* mouseEvent)
+{
+    //If we aren't hovering over this, then don't do anything with this or any of its children
+    if (!isPointOnMe(mouseEvent->position)) return false;
+    
+    //Go through the children and process them
+    for (auto i = components.begin(); i != components.end(); i++)
+    {
+        UIComponent* component = *i;
+        if (component->checkAndProcessMouseScrollEvent(mouseEvent)) return true;
+    }
+
+    //If none of our children processed the scroll event, then return our own
+    return processMouseScroll(mouseEvent);
+}
+
+bool UIComponent::isPointOnMe(glm::vec2 point)
+{
+    return Geometry::isPointInBox(point, position, size);
 }
 
 void UIComponent::checkHover(glm::vec2 mousePosition)
 {
-    if (Geometry::isPointInBox(mousePosition, position, size))
+    if (isPointOnMe(mousePosition))
     {
         hover = true;
         for (auto i = components.begin(); i != components.end(); i++)
@@ -59,13 +85,13 @@ void UIComponent::setNoHover()
     }
 }
 
-bool UIComponent::isClicked(MouseClickEvent* mouseEvent)
+void UIComponent::processMouseClick(MouseClickEvent* mouseEvent)
 {
-    return Geometry::isPointInBox(mouseEvent->position, position, size);
 }
 
-void UIComponent::processMouseEvent(MouseClickEvent* mouseEvent)
+bool UIComponent::processMouseScroll(MouseScrollEvent* mouseEvent)
 {
+    return false;
 }
 
 void UIComponent::processKeyEvent(KeyEvent* keyEvent)
@@ -183,7 +209,7 @@ GLenum UIComponent::getRenderMode()
     return GL_TRIANGLE_STRIP;
 }
 
-bool UIComponent::shouldCheckMouseEventForChildren()
+bool UIComponent::shouldCheckMouseClickEventForChildren()
 {
     return true;
 }

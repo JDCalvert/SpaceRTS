@@ -5,7 +5,12 @@ UIButton::UIButton(UIActionListener* listener)
     this->listener = listener;
 }
 
-void UIButton::processMouseEvent(MouseClickEvent* mouseEvent)
+void UIButton::processMouseClick(MouseClickEvent* mouseEvent)
 {
     listener->actionPerformed(this);
+}
+
+bool UIButton::shouldCheckMouseClickEventForChildren()
+{
+    return false;
 }
