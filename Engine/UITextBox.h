@@ -12,8 +12,8 @@ public:
     void setText(std::string text, float size, Font font, Alignment alignment);
     void setSize(glm::vec2 size);
 
-    void processKeyEvent(KeyEvent* event) override;
-    void processTextEvent(TextEvent* event) override;
+    void processKeyEvent(KeyEvent event) override;
+    void processTextEvent(TextEvent event) override;
 
     bool shouldRemainActive() override;
 

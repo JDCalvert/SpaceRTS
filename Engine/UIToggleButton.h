@@ -11,7 +11,7 @@ public:
     void preRender() override;
 
 protected:
-    void processMouseClick(MouseClickEvent* mouseEvent) override;
+    void processMouseClick(MouseClickEvent mouseEvent) override;
 
 private:
     bool& toggle;

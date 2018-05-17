@@ -31,7 +31,7 @@ public:
     void build();
     void preRender();
 
-    bool processMouseScroll(MouseScrollEvent* mouseEvent) override;
+    EventStatus processMouseScroll(MouseScrollEvent mouseEvent) override;
 
     std::vector<UIVertexPanel*>& getVertexPanels();
 

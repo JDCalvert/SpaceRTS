@@ -9,6 +9,7 @@ public:
     bool renderSurface = true;
     bool renderLines = true;
     bool renderPoints = true;
+    bool renderBones = true;
 
     float buttonSize;
 

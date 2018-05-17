@@ -74,24 +74,24 @@ void UITriangleInformation::addTrianglePanel(Surface* infoSurface, unsigned int 
     trianglePanels.push_back(trianglePanel);
 }
 
-bool UITriangleInformation::processMouseScroll(MouseScrollEvent* mouseEvent)
+EventStatus UITriangleInformation::processMouseScroll(MouseScrollEvent mouseEvent)
 {
     int numIndices = infoSurface->getIndices().size();
 
-    if (mouseEvent->yOffset > 0
+    if (mouseEvent.yOffset > 0
         && startTriangle > 0)
     {
         startTriangle -= 3;
         build();
     }
-    else if (mouseEvent->yOffset < 0
+    else if (mouseEvent.yOffset < 0
         && startTriangle  < numIndices - maxTriangles)
     {
         startTriangle += 3;
         build();
     }
 
-    return true;
+    return PROCESSED;
 }
 
 std::vector<UITrianglePanel*>& UITriangleInformation::getTrianglePanels()

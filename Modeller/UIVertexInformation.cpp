@@ -131,24 +131,24 @@ void UIVertexInformation::addToggleButton(bool& toggle, float& xpos, float butto
     xpos += buttonSize + border;
 }
 
-bool UIVertexInformation::processMouseScroll(MouseScrollEvent* mouseEvent)
+EventStatus UIVertexInformation::processMouseScroll(MouseScrollEvent mouseEvent)
 {
     int numVertices = infoSurface->getVertices().size();
 
-    if (mouseEvent->yOffset > 0
+    if (mouseEvent.yOffset > 0
      && startVertex > 0)
     {
         startVertex--;
         build();
     }
-    else if (mouseEvent->yOffset < 0
+    else if (mouseEvent.yOffset < 0
         && startVertex  < numVertices - maxVertices)
     {
         startVertex++;
         build();
     }
 
-    return true;
+    return PROCESSED;
 }
 
 std::vector<UIVertexPanel*>& UIVertexInformation::getVertexPanels()

@@ -81,6 +81,24 @@ void BlankShader::renderLines(Surface* surface, glm::mat4 modelViewProjectionMat
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void BlankShader::renderLines(std::vector<glm::vec3>& vertices, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
+{
+    if (indices.size() == 0) return;
+
+    renderCommon(modelViewProjectionMatrix, colour);
+
+    int verticesSize = vertices.size() * sizeof(glm::vec3);
+    glm::vec3* verticesPointer = &vertices[0];
+    bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
+
+    int length = indices.size();
+    int indicesSize = length * sizeof(unsigned int);
+    unsigned int* indicesPointer = &indices[0];
+    bindElementArrayBufferData(indexBufferId, indicesSize, indicesPointer);
+
+    glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, (void*)0);
+}
+
 void BlankShader::renderVertices(Surface* surface, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
 {
     int numVertices = surface->getVertices().size();
@@ -109,4 +127,26 @@ void BlankShader::renderVertices(int numVertices, int verticesSize, glm::vec3* v
 
     glPointSize(pointSize);
     glDrawArrays(GL_POINTS, 0, numVertices);
+}
+
+void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMatrix)
+{
+    std::vector<BindBone>& bones = surface->getBones();
+
+    std::vector<glm::vec3> vertices;
+    std::vector<unsigned int> lineIndices;
+    for (unsigned int i=0; i<bones.size(); i++)
+    {
+        BindBone& bone = bones[i];
+        vertices.push_back(bone.absolute[3]);
+
+        if (bone.parent != -1)
+        {
+            lineIndices.push_back(bone.parent);
+            lineIndices.push_back(i);
+        }
+    }
+
+    renderVertices(vertices, modelViewProjectionMatrix, glm::vec4(1.0f));
+    renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f));
 }

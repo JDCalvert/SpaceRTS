@@ -23,7 +23,7 @@ public:
     
     void build();
 
-    bool processMouseScroll(MouseScrollEvent* mouseEvent) override;
+    EventStatus processMouseScroll(MouseScrollEvent mouseEvent) override;
 
     std::vector<UITrianglePanel*>& getTrianglePanels();
 

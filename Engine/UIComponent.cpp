@@ -8,14 +8,14 @@ UIComponent::~UIComponent()
     clearComponents();
 }
 
-UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent* mouseEvent)
+UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent mouseEvent)
 {
     //If this wasn't clicked, then none of the subcomponents will have been.
-    if (!isPointOnMe(mouseEvent->position)) return nullptr;
+    if (!isPointOnMe(mouseEvent.position)) return nullptr;
 
     if (shouldCheckMouseClickEventForChildren())
     {
-        MouseClickEvent* relativeMouseEvent = mouseEvent->getRelative(position);
+        MouseClickEvent relativeMouseEvent = mouseEvent.getRelative(position);
 
         //Go through our sub-components and, check if any were clicked. If so process and then return that component.
         for (auto i = components.begin(); i != components.end(); i++)
@@ -35,18 +35,23 @@ UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent* mouseE
     return this;
 }
 
-bool UIComponent::checkAndProcessMouseScrollEvent(MouseScrollEvent* mouseEvent)
+EventStatus UIComponent::checkAndProcessMouseScrollEvent(MouseScrollEvent mouseEvent)
 {
-    MouseScrollEvent* relativeMouseEvent = mouseEvent->getRelative(position);
-
     //If we aren't hovering over this, then don't do anything with this or any of its children
-    if (!isPointOnMe(mouseEvent->position)) return false;
+    if (!isPointOnMe(mouseEvent.position)) return NOT_HANDLED;
+
+    MouseScrollEvent relativeMouseEvent = mouseEvent.getRelative(position);
     
     //Go through the children and process them
-    for (auto i = components.begin(); i != components.end(); i++)
+    EventStatus status = NOT_HANDLED;
+    for (auto i = components.begin(); i != components.end() && status == NOT_HANDLED; i++)
     {
         UIComponent* component = *i;
-        if (component->checkAndProcessMouseScrollEvent(relativeMouseEvent)) return true;
+        EventStatus status = component->checkAndProcessMouseScrollEvent(relativeMouseEvent);
+        if (status == PROCESSED)
+        {
+            return PROCESSED;
+        }
     }
 
     //If none of our children processed the scroll event, then return our own
@@ -85,20 +90,20 @@ void UIComponent::setNoHover()
     }
 }
 
-void UIComponent::processMouseClick(MouseClickEvent* mouseEvent)
+void UIComponent::processMouseClick(MouseClickEvent mouseEvent)
 {
 }
 
-bool UIComponent::processMouseScroll(MouseScrollEvent* mouseEvent)
+EventStatus UIComponent::processMouseScroll(MouseScrollEvent mouseEvent)
 {
-    return false;
+    return HANDLED_NOT_PROCESSED;
 }
 
-void UIComponent::processKeyEvent(KeyEvent* keyEvent)
+void UIComponent::processKeyEvent(KeyEvent keyEvent)
 {
 }
 
-void UIComponent::processTextEvent(TextEvent* textEvent)
+void UIComponent::processTextEvent(TextEvent textEvent)
 {
 }
 

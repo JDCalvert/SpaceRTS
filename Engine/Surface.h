@@ -87,6 +87,7 @@ public:
     std::vector<glm::vec2>& getTextureCoordinates();
     std::vector<glm::vec3>& getNormals();
     std::vector<unsigned int>& getIndices();
+    std::vector<BindBone>& getBones();
 
 private:
     std::vector<glm::vec3> vertices;

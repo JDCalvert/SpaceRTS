@@ -66,8 +66,8 @@ void UserInterface::handleEvents()
 
     if (event->type == MOUSE_CLICK)
     {
-        MouseClickEvent* mouseEvent = (MouseClickEvent*)event;
-        if (mouseEvent->action == GLFW_PRESS)
+        MouseClickEvent mouseEvent = *static_cast<MouseClickEvent*>(event);
+        if (mouseEvent.action == GLFW_PRESS)
         {
             //We might have an active component already. If we clicked on another component, we
             //should tell the active one that it's no longer active.
@@ -93,27 +93,31 @@ void UserInterface::handleEvents()
     }
     else if (event->type == MOUSE_SCROLL)
     {
-        MouseScrollEvent* mouseScrollEvent = (MouseScrollEvent*)event;
+        MouseScrollEvent mouseScrollEvent = *static_cast<MouseScrollEvent*>(event);
 
-        bool processed = false;
-        for (auto i=components.begin(); i!=components.end() && !processed; i++)
+        EventStatus status = NOT_HANDLED;
+        for (auto i=components.begin(); i!=components.end() && status == NOT_HANDLED; i++)
         {
             UIComponent* component = *i;
-            processed = component->checkAndProcessMouseScrollEvent(mouseScrollEvent);
+            status = component->checkAndProcessMouseScrollEvent(mouseScrollEvent);
         }
     }
     else if (event->type == KEY)
     {
         if (activeComponent)
         {
-            KeyEvent* keyEvent = (KeyEvent*)event;
+            KeyEvent keyEvent = *static_cast<KeyEvent*>(event);
             activeComponent->processKeyEvent(keyEvent);
             glContext->clearKeyEvent(keyEvent); //Discard the key press so we don't process it again
         }
     }
     else if (event->type == TEXT)
     {
-        if (activeComponent) activeComponent->processTextEvent((TextEvent*)event);
+        if (activeComponent)
+        {
+            TextEvent textEvent = *static_cast<TextEvent*>(event);
+            activeComponent->processTextEvent(textEvent);
+        }
     }
 
     delete event;

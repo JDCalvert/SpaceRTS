@@ -9,7 +9,7 @@ public:
     UIButton(UIActionListener* listener);
 
 protected:
-    void processMouseClick(MouseClickEvent* mouseEvent) override;
+    void processMouseClick(MouseClickEvent mouseEvent) override;
     bool shouldCheckMouseClickEventForChildren() override;
 
 private:

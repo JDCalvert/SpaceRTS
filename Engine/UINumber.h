@@ -9,7 +9,7 @@ public:
     UINumber(float& value);
 
     void preRender() override;
-    void processTextEvent(TextEvent* event) override;
+    void processTextEvent(TextEvent event) override;
 
 private:
     const char acceptableChars[12] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-'};

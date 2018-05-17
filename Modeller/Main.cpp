@@ -86,6 +86,7 @@ int main()
         if (ui->renderOptions->renderSurface) simpleShader->renderSurface(surface, viewProjectionMatrix);
         if (ui->renderOptions->renderLines) blankShader->renderLines(surface, viewProjectionMatrix, colour);
         if (ui->renderOptions->renderPoints) blankShader->renderVertices(surface, viewProjectionMatrix, colour);
+        if (ui->renderOptions->renderBones) blankShader->renderBones(surface, viewProjectionMatrix);
 
         //Draw the UI
         uiRenderer->initialiseFrame();

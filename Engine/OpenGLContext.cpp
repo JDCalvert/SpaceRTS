@@ -219,9 +219,9 @@ bool OpenGLContext::keyPressed(int key)
     return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
-void OpenGLContext::clearKeyEvent(KeyEvent* event)
+void OpenGLContext::clearKeyEvent(KeyEvent event)
 {
-    glfwGetKey(window, event->key);
+    glfwGetKey(window, event.key);
 }
 
 GLFWwindow* OpenGLContext::getWindow()

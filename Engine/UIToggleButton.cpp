@@ -7,7 +7,7 @@ UIToggleButton::UIToggleButton(bool& toggle) : toggle(toggle), UIComponent()
     offMap = Texture::getTexture("BlankDark");
 }
 
-void UIToggleButton::processMouseClick(MouseClickEvent* mouseEvent)
+void UIToggleButton::processMouseClick(MouseClickEvent mouseEvent)
 {
     toggle = !toggle;
 }

@@ -69,6 +69,8 @@ void Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     unsigned int fileSize = (unsigned int)in.tellg();
     in.seekg(0, std::ios::beg);
 
+    if (!in) return;
+
     //Read in the file then close
     char* data = new char[fileSize];
     in.read(data, fileSize);
@@ -297,4 +299,8 @@ std::vector<glm::vec3>& Surface::getNormals()
 std::vector<unsigned int>& Surface::getIndices()
 {
     return indices;
+}
+std::vector<BindBone>& Surface::getBones()
+{
+    return bones;
 }

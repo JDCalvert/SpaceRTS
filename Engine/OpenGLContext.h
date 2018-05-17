@@ -74,7 +74,7 @@ public:
     GLsizei getHeight();
 
     Event* nextEvent();
-    void clearKeyEvent(KeyEvent* event);
+    void clearKeyEvent(KeyEvent event);
 
     glm::dvec2 getMousePositionScreenSpace();
     glm::dvec2 getDeltaMousePosition();
