@@ -2,39 +2,29 @@
 #define UI_TRIANGLE_INFORMATION_H
 
 #include <Font.h>
-#include <UIPanel.h>
 
+#include "UIInformation.h"
 #include "UITrianglePanel.h"
 
-class UITriangleInformation : public UIPanel
+class UITriangleInformation : public UIInformation
 {
 public:
-    Font* font;
-    float textSize;
-    float border;
     float indexWidth;
-
-    GLuint blankTexture;
-
-    int startTriangle;
-    int maxTriangles;
 
     UITriangleInformation(Surface* surface);
     
-    void build();
-
-    EventStatus processMouseScroll(MouseScrollEvent mouseEvent) override;
+    void build() override;
 
     std::vector<UITrianglePanel*>& getTrianglePanels();
+    int getNumItemsTotal() override;
 
 private:
-    Surface* infoSurface;
     std::vector<UITrianglePanel*> trianglePanels;
 
-    float xpos, ypos;
+    float xpos;
 
     void addHeader(std::string header);
-    void addTrianglePanel(Surface* infoSurface, unsigned int firstIndex);
+    UIComponent* addPanel(unsigned int index);
 };
 
 #endif

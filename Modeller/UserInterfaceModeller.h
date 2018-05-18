@@ -6,6 +6,7 @@
 #include "UIRenderOptions.h"
 #include "UIVertexInformation.h"
 #include "UITriangleInformation.h"
+#include "UIBoneInformation.h"
 #include "UISaveLoadPanel.h"
 
 class UserInterfaceModeller : public UserInterface
@@ -14,6 +15,7 @@ public:
     UIRenderOptions * renderOptions;
     UIVertexInformation* vertexInformation;
     UITriangleInformation* triangleInformation;
+    UIBoneInformation* boneInformation;
     UISaveLoadPanel* saveLoadPanel;
 
     UserInterfaceModeller(Surface* infoSurface);

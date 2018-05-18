@@ -75,6 +75,15 @@
     <ClCompile Include="UISaveLoadPanel.cpp">
       <Filter>Source Files\UserInterface\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="UIInformation.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBoneInformation.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBonePanel.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -105,6 +114,15 @@
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="UISaveLoadPanel.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBoneInformation.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="UIInformation.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBonePanel.h">
       <Filter>Header Files\UserInterface\Panels</Filter>
     </ClInclude>
   </ItemGroup>

@@ -89,6 +89,6 @@ void UIVertexPanel::addNumber(float& number, glm::vec2 position)
     UINumber* numberBox = new UINumber(number);
     numberBox->setPositionAndSize(position, glm::vec2(parent->columnWidth, parent->textSize));
     numberBox->setText(str, parent->textSize, *parent->font, RIGHT);
-    numberBox->surface->diffuseMap = parent->blankTexture;
+    numberBox->surface->diffuseMap = parent->texture;
     addComponent(numberBox);
 }

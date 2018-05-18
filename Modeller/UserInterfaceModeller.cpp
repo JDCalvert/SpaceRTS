@@ -25,6 +25,10 @@ void UserInterfaceModeller::build()
     triangleInformation->build();
     addComponent(triangleInformation);
 
+    boneInformation = new UIBoneInformation(infoSurface);
+    boneInformation->build();
+    addComponent(boneInformation);
+
     saveLoadPanel = new UISaveLoadPanel();
     saveLoadPanel->build();
     addComponent(saveLoadPanel);

@@ -21,7 +21,6 @@ public:
     GLuint blankTexture;
 
     void build();
-    void preRender();
 
     void actionPerformed(UIComponent* component);
 

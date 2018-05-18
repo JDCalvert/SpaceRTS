@@ -11,24 +11,16 @@
 #include "UINumber.h"
 #include "UIToggleButton.h"
 
-UIVertexInformation::UIVertexInformation(Surface* infoSurface)
+UIVertexInformation::UIVertexInformation(Surface* infoSurface) : UIInformation(infoSurface)
 {
-    this->infoSurface = infoSurface;
-
     showVertices = true;
     showTextureCoordinates = false;
     showNormals = false;
 
-    border = 0.01f;
-    textSize = 0.025f;
     indexWidth = 0.03f;
     columnWidth = 0.075f;
 
-    startVertex = 0;
-    maxVertices = 12;
-
-    font = &Font::getFont("Calibri");
-    blankTexture = Texture::getTexture("Blank");
+    numItemsDisplay = 12;
 }
 
 void UIVertexInformation::preRender()
@@ -54,9 +46,9 @@ void UIVertexInformation::build()
 
     xpos = border;
     float buttonSize = 0.02f;
-    addToggleButton(showVertices, xpos, buttonSize, blankTexture);
-    addToggleButton(showTextureCoordinates, xpos, buttonSize, blankTexture);
-    addToggleButton(showNormals, xpos, buttonSize, blankTexture);
+    addToggleButton(showVertices, xpos, buttonSize, texture);
+    addToggleButton(showTextureCoordinates, xpos, buttonSize, texture);
+    addToggleButton(showNormals, xpos, buttonSize, texture);
 
     xpos = border + indexWidth + border;
 
@@ -64,23 +56,12 @@ void UIVertexInformation::build()
     addHeaderAndSubHeaders(showTextureCoordinates, "Texture Coordinates", 'U', 2);
     addHeaderAndSubHeaders(showNormals, "Normals", 'X', 3);
     
-    float ypos = border + textSize * 2;
+    ypos = border + textSize * 2;
 
-    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
-    int numVertices = vertices.size();
-    int maxVertex = std::min(startVertex + maxVertices, numVertices);
-    for (unsigned int i=startVertex; i<maxVertex; i++)
-    {
-        addVertexPanel(i, ypos);
-        ypos += textSize + 0.002f;
-    }
-
-    setSize(xpos, ypos + border - 0.002f);
-    constructSurface();
-    surface->diffuseMap = blankTexture;
+    addPanels();
 }
 
-void UIVertexInformation::addVertexPanel(unsigned int i, float ypos)
+UIComponent* UIVertexInformation::addPanel(unsigned int i)
 {
     UIVertexPanel* vertexPanel = new UIVertexPanel(this, infoSurface, i);
     vertexPanel->setPosition(border, ypos);
@@ -88,6 +69,8 @@ void UIVertexInformation::addVertexPanel(unsigned int i, float ypos)
     addComponent(vertexPanel);
 
     vertexPanels.push_back(vertexPanel);
+
+    return vertexPanel;
 }
 
 void UIVertexInformation::addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders)
@@ -131,27 +114,12 @@ void UIVertexInformation::addToggleButton(bool& toggle, float& xpos, float butto
     xpos += buttonSize + border;
 }
 
-EventStatus UIVertexInformation::processMouseScroll(MouseScrollEvent mouseEvent)
-{
-    int numVertices = infoSurface->getVertices().size();
-
-    if (mouseEvent.yOffset > 0
-     && startVertex > 0)
-    {
-        startVertex--;
-        build();
-    }
-    else if (mouseEvent.yOffset < 0
-        && startVertex  < numVertices - maxVertices)
-    {
-        startVertex++;
-        build();
-    }
-
-    return PROCESSED;
-}
-
 std::vector<UIVertexPanel*>& UIVertexInformation::getVertexPanels()
 {
     return vertexPanels;
+}
+
+int UIVertexInformation::getNumItemsTotal()
+{
+    return infoSurface->getVertices().size();
 }

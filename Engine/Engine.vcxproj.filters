@@ -84,9 +84,6 @@
     <ClInclude Include="ScreenShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="UIInteger.h">
-      <Filter>Header Files\UserInterface\Components</Filter>
-    </ClInclude>
     <ClInclude Include="UIButton.h">
       <Filter>Header Files\UserInterface\Components</Filter>
     </ClInclude>
@@ -94,6 +91,12 @@
       <Filter>Header Files\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UIComponent.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UIUnsignedInteger.h">
+      <Filter>Header Files\UserInterface\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UIInteger.h">
       <Filter>Header Files\UserInterface\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,10 +149,13 @@
     <ClCompile Include="UIShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="UIInteger.cpp">
+    <ClCompile Include="UIButton.cpp">
       <Filter>Source Files\UserInterface\Components</Filter>
     </ClCompile>
-    <ClCompile Include="UIButton.cpp">
+    <ClCompile Include="UIUnsignedInteger.cpp">
+      <Filter>Source Files\UserInterface\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UIInteger.cpp">
       <Filter>Source Files\UserInterface\Components</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,6 +11,8 @@
 
 void UISaveLoadPanel::build()
 {
+    setPosition(0.01f, 0.14f);
+
     font = &Font::getFont("Calibri");
     textSize = 0.025f;
     textBoxWidth = 0.2f;
@@ -78,9 +80,4 @@ void UISaveLoadPanel::actionPerformed(UIComponent* component)
         std::string fileName = saveBox->getText();
         UserInterfaceModeller::getInstance()->saveSurface(&fileName[0]);
     }
-}
-
-void UISaveLoadPanel::preRender()
-{
-    setPosition(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 1 - (size.y + 0.01f));
 }

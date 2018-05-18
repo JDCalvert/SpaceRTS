@@ -2,48 +2,40 @@
 #define UI_VERTEX_INFORMATION_H
 
 #include <Font.h>
-#include <Surface.h>
-#include <UIPanel.h>
 
+#include "UIInformation.h"
 #include "UIVertexPanel.h"
 
-class UIVertexInformation : public UIPanel
+class UIVertexInformation : public UIInformation
 {
 public:
-    Font* font;
-    float textSize;
     float indexWidth;
     float columnWidth;
-    float border;
 
     bool showVertices, previousShowVertices;
     bool showTextureCoordinates, previousShowTextureCoordinates;
     bool showNormals, previousShowNormals;
 
-    GLuint blankTexture;
-
     float xpos;
-    int startVertex;
-    int maxVertices;
 
     UIVertexInformation(Surface* infoSurface);
 
-    void build();
+    void build() override;
     void preRender();
 
-    EventStatus processMouseScroll(MouseScrollEvent mouseEvent) override;
-
     std::vector<UIVertexPanel*>& getVertexPanels();
+    
+protected:
+    UIComponent* addPanel(unsigned int i) override;
+    int getNumItemsTotal() override;
 
 private:
-    Surface * infoSurface;
     std::vector<UIVertexPanel*> vertexPanels;
 
     void addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders);
     void addHeader(std::string text, int numColumns);
     void addSubHeader(char subHeader);
 
-    void addVertexPanel(unsigned int i, float ypos);
     void addToggleButton(bool& toggle, float& xpos, float buttonSize, GLuint texture);
 };
 

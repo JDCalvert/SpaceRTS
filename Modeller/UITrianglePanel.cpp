@@ -3,15 +3,15 @@
 #include <sstream>
 
 #include <UserInterface.h>
-#include <UIInteger.h>
+#include <UIUnsignedInteger.h>
 #include <Texture.h>
 
 #include "UITriangleInformation.h"
 
-UITrianglePanel::UITrianglePanel(UITriangleInformation* parent, Surface* infoSurface, unsigned int firstIndex) :
-    index1(infoSurface->getIndices()[firstIndex]),
-    index2(infoSurface->getIndices()[firstIndex + 1]),
-    index3(infoSurface->getIndices()[firstIndex + 2])
+UITrianglePanel::UITrianglePanel(UITriangleInformation* parent, Surface* infoSurface, unsigned int index) :
+    index1(infoSurface->getIndices()[index*3]),
+    index2(infoSurface->getIndices()[index*3 + 1]),
+    index3(infoSurface->getIndices()[index*3 + 2])
 {
     this->parent = parent;
 
@@ -49,10 +49,10 @@ void UITrianglePanel::addNumber(unsigned int& index)
     ss << index;
     std::string str = ss.str();
 
-    UIInteger* uiInteger = new UIInteger(index);
+    UIUnsignedInteger* uiInteger = new UIUnsignedInteger(index);
     uiInteger->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
     uiInteger->setText(str, parent->textSize, *parent->font, RIGHT);
-    uiInteger->surface->diffuseMap = parent->blankTexture;
+    uiInteger->surface->diffuseMap = parent->texture;
     addComponent(uiInteger);
 
     xpos += parent->indexWidth + parent->border;

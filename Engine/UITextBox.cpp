@@ -7,7 +7,7 @@ UITextBox::UITextBox()
     label = new UILabel();
     addComponent(label);
 
-    label->setPosition(0.0f, 0.0f);
+    label->setPosition(0.002f, 0.0f);
 }
 
 void UITextBox::setText(std::string text, float size, Font font, Alignment alignment)
@@ -18,7 +18,7 @@ void UITextBox::setText(std::string text, float size, Font font, Alignment align
 void UITextBox::setSize(glm::vec2 size)
 {
     UIComponent::setSize(size);
-    label->setSize(size);
+    label->setSize(size.x - 0.004f, size.y);
     constructSurface();
 }
 
