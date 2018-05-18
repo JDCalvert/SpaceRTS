@@ -130,6 +130,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="UIRenderOptions.cpp" />
+    <ClCompile Include="UISaveLoadPanel.cpp" />
     <ClCompile Include="UITriangleInformation.cpp" />
     <ClCompile Include="UITrianglePanel.cpp" />
     <ClCompile Include="UIVertexInformation.cpp" />
@@ -139,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="UISaveLoadPanel.h" />
     <ClInclude Include="UIRenderOptions.h" />
     <ClInclude Include="BlankShader.h" />
     <ClInclude Include="SimpleShader.h" />

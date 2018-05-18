@@ -27,7 +27,7 @@ void UITrianglePanel::buildPanel()
     addNumber(index2);
     addNumber(index3);
 
-    setSize(glm::vec2(xpos - parent->border, parent->textSize));
+    setSize(xpos - parent->border, parent->textSize);
     constructSurface();
 }
 

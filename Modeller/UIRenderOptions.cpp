@@ -6,7 +6,7 @@
 
 void UIRenderOptions::build()
 {
-    setPosition(glm::vec2(0.01f, 0.01f));
+    setPosition(0.01f, 0.01f);
 
     buttonSize = 0.1f;
 
@@ -15,8 +15,9 @@ void UIRenderOptions::build()
     addToggleButton(renderSurface, glm::vec2(0.01f, 0.01f), blankTexture);
     addToggleButton(renderLines, glm::vec2(0.12f, 0.01f), blankTexture);
     addToggleButton(renderPoints, glm::vec2(0.23f, 0.01f), blankTexture);
+    addToggleButton(renderBones, glm::vec2(0.34f, 0.01f), blankTexture);
 
-    setSize(glm::vec2(0.34f, 0.12f));
+    setSize(0.45f, 0.12f);
     constructSurface();
     surface->diffuseMap = blankTexture;
 }

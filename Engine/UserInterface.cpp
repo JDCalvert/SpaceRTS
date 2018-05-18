@@ -59,14 +59,15 @@ void UserInterface::handleEvents()
         UIComponent* component = *i;
         component->checkHover(cursorPosition);
     }
-
-    Event* event = OpenGLContext::currentContext()->nextEvent();
+    
+    OpenGLContext* glContext = OpenGLContext::currentContext();
+    Event* event = glContext->nextEvent();
     if (event == nullptr) return;
 
-    if (event->type == MOUSE)
+    if (event->type == MOUSE_CLICK)
     {
-        MouseClickEvent* mouseEvent = (MouseClickEvent*)event;
-        if (mouseEvent->action == GLFW_PRESS)
+        MouseClickEvent mouseEvent = *static_cast<MouseClickEvent*>(event);
+        if (mouseEvent.action == GLFW_PRESS)
         {
             //We might have an active component already. If we clicked on another component, we
             //should tell the active one that it's no longer active.
@@ -75,7 +76,7 @@ void UserInterface::handleEvents()
             for (auto i = components.begin(); i != components.end() && !eventComponent; i++)
             {
                 UIComponent* component = *i;
-                eventComponent = component->checkAndProcessMouseEvent(mouseEvent);
+                eventComponent = component->checkAndProcessMouseClickEvent(mouseEvent);
             }
 
             if (activeComponent != eventComponent)
@@ -90,13 +91,33 @@ void UserInterface::handleEvents()
             }
         }
     }
+    else if (event->type == MOUSE_SCROLL)
+    {
+        MouseScrollEvent mouseScrollEvent = *static_cast<MouseScrollEvent*>(event);
+
+        EventStatus status = NOT_HANDLED;
+        for (auto i=components.begin(); i!=components.end() && status == NOT_HANDLED; i++)
+        {
+            UIComponent* component = *i;
+            status = component->checkAndProcessMouseScrollEvent(mouseScrollEvent);
+        }
+    }
     else if (event->type == KEY)
     {
-        if (activeComponent) activeComponent->processKeyEvent((KeyEvent*)event);
+        if (activeComponent)
+        {
+            KeyEvent keyEvent = *static_cast<KeyEvent*>(event);
+            activeComponent->processKeyEvent(keyEvent);
+            glContext->clearKeyEvent(keyEvent); //Discard the key press so we don't process it again
+        }
     }
     else if (event->type == TEXT)
     {
-        if (activeComponent) activeComponent->processTextEvent((TextEvent*)event);
+        if (activeComponent)
+        {
+            TextEvent textEvent = *static_cast<TextEvent*>(event);
+            activeComponent->processTextEvent(textEvent);
+        }
     }
 
     delete event;

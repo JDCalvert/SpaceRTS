@@ -3,7 +3,8 @@
 
 #include <glm\glm.hpp>
 
-enum EventType {MOUSE, KEY, TEXT};
+enum EventType {MOUSE_CLICK, MOUSE_SCROLL, KEY, TEXT};
+enum EventStatus {PROCESSED, HANDLED_NOT_PROCESSED, NOT_HANDLED};
 
 struct Event
 {
@@ -15,19 +16,41 @@ struct Event
     }
 };
 
-struct MouseClickEvent : Event
+struct MouseEvent : Event
 {
     glm::vec2 position;
+
+    MouseEvent(glm::vec2 position, EventType type) : position(position), Event(type)
+    {
+    }
+};
+
+struct MouseClickEvent : MouseEvent
+{
     int button;
     int action;
 
-    MouseClickEvent(glm::vec2 position, int button, int action) : position(position), button(button), action(action), Event(MOUSE)
+    MouseClickEvent(glm::vec2 position, int button, int action) : button(button), action(action), MouseEvent(position, MOUSE_CLICK)
     {
     }
 
-    MouseClickEvent* getRelative(glm::vec2 relative)
+    MouseClickEvent getRelative(glm::vec2 relative)
     {
-        return new MouseClickEvent {position - relative, button, action};
+        return MouseClickEvent {position - relative, button, action};
+    }
+};
+
+struct MouseScrollEvent : MouseEvent
+{
+    double xOffset, yOffset;
+
+    MouseScrollEvent(glm::vec2 position, double xOffset, double yOffset) : xOffset(xOffset), yOffset(yOffset), MouseEvent(position, MOUSE_SCROLL)
+    {
+    }
+
+    MouseScrollEvent getRelative(glm::vec2 relative)
+    {
+        return MouseScrollEvent {position - relative, xOffset, yOffset};
     }
 };
 

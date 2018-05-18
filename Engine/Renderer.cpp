@@ -2,14 +2,6 @@
 #include "ScreenShader.h"
 #include "OpenGLContext.h"
 
-Renderer* Renderer::createRenderer()
-{
-    Renderer* renderer = new Renderer();
-    renderer->initialise();
-
-    return renderer;
-}
-
 void Renderer::initialise()
 {
     initialiseFrameBuffer();

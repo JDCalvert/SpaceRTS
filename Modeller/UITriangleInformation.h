@@ -16,7 +16,14 @@ public:
 
     GLuint blankTexture;
 
-    void build(Surface* surface);
+    int startTriangle;
+    int maxTriangles;
+
+    UITriangleInformation(Surface* surface);
+    
+    void build();
+
+    EventStatus processMouseScroll(MouseScrollEvent mouseEvent) override;
 
     std::vector<UITrianglePanel*>& getTrianglePanels();
 
@@ -26,7 +33,6 @@ private:
 
     float xpos, ypos;
 
-    void rebuildPanels();
     void addHeader(std::string header);
     void addTrianglePanel(Surface* infoSurface, unsigned int firstIndex);
 };

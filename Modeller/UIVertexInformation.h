@@ -23,17 +23,21 @@ public:
     GLuint blankTexture;
 
     float xpos;
+    int startVertex;
+    int maxVertices;
 
-    void build(Surface* surface);
+    UIVertexInformation(Surface* infoSurface);
+
+    void build();
     void preRender();
+
+    EventStatus processMouseScroll(MouseScrollEvent mouseEvent) override;
 
     std::vector<UIVertexPanel*>& getVertexPanels();
 
 private:
     Surface * infoSurface;
     std::vector<UIVertexPanel*> vertexPanels;
-
-    void rebuildPanels();
 
     void addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders);
     void addHeader(std::string text, int numColumns);

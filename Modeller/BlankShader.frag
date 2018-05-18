@@ -1,8 +1,10 @@
 #version 430 core
 
+uniform vec4 colour;
+
 out vec4 color;
 
 void main()
 {
-    color = vec4(0.75);
+    color = colour;
 }

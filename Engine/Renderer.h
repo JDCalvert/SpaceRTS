@@ -10,7 +10,13 @@ class OpenGLContext;
 class Renderer
 {
 public:
-    static Renderer* createRenderer();
+    template <class T>
+    static T* initialiseRenderer(T* renderer, OpenGLContext* glContext)
+    {
+        renderer->initialise();
+        glContext->addRenderer(renderer);
+        return renderer;
+    }
 
     void initialise();
     void initialiseFrame();

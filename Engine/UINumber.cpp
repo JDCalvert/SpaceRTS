@@ -28,9 +28,9 @@ void UINumber::recalculateSurface()
     label->recalculateSurface();
 }
 
-void UINumber::processTextEvent(TextEvent* event)
+void UINumber::processTextEvent(TextEvent event)
 {
-    if (!isAcceptableChar(event->codepoint)) return;
+    if (!isAcceptableChar(event.codepoint)) return;
 
     UITextBox::processTextEvent(event);
 }

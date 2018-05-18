@@ -36,7 +36,6 @@ void SimpleShader::initialise()
 void SimpleShader::renderSurface(Surface* surface, glm::mat4 modelViewProjectionMatrix)
 {
     glUseProgram(programId);
-
     glBindVertexArray(vertexArrayId);
 
     int verticesSize = surface->verticesSize;

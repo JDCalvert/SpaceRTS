@@ -69,6 +69,8 @@ void Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     unsigned int fileSize = (unsigned int)in.tellg();
     in.seekg(0, std::ios::beg);
 
+    if (!in) return;
+
     //Read in the file then close
     char* data = new char[fileSize];
     in.read(data, fileSize);
@@ -123,6 +125,97 @@ void Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     delete data;
 }
 
+void Surface::writeToFile(const char* fileName)
+{
+    calculateTangents();
+
+    unsigned int numBones = bones.size();
+
+    std::vector<glm::mat4> boneRelatives(numBones);
+    std::vector<int> boneParents(numBones);
+    for (unsigned int i=0; i<numBones; i++)
+    {
+        Bone bone = bones[i];
+        boneRelatives.push_back(bone.relative);
+        boneParents.push_back(bone.parent);
+    }
+
+    std::vector<unsigned int> sizes = {vertices.size(), indices.size(), bones.size()};
+
+    int sizesSize = sizes.size() * sizeof(unsigned int);
+    int boneRelativesSize = bones.size() * sizeof(glm::mat4);
+    int boneParentsSize = bones.size() * sizeof(int);
+
+    int verticesOffset = sizesSize;
+    int textureCoordinatesOffset = verticesOffset + verticesSize;
+    int normalsOffset = textureCoordinatesOffset + textureCoordinatesSize;
+    int tangentsOffset = normalsOffset + normalsSize;
+    int bitangentsOffset = tangentsOffset + tangentsSize;
+    int boneIndicesOffset = bitangentsOffset + bitangentsSize;
+    int indicesOffset = boneIndicesOffset + boneIndicesSize;
+    int bonesOffset = indicesOffset + indicesSize;
+    int parentsOffset = bonesOffset + boneRelativesSize;
+    int totalSize = parentsOffset + boneParentsSize;
+
+    char* data = new char[totalSize];
+    memcpy(&data[0], &sizes[0], sizesSize);
+    memcpy(&data[verticesOffset], verticesPointer, verticesSize);
+    memcpy(&data[textureCoordinatesOffset], textureCoordinatesPointer, textureCoordinatesSize);
+    memcpy(&data[normalsOffset], normalsPointer, normalsSize);
+    memcpy(&data[tangentsOffset], tangentsPointer, tangentsSize);
+    memcpy(&data[bitangentsOffset], bitangentsPointer, bitangentsSize);
+    memcpy(&data[boneIndicesOffset], boneIndicesPointer, boneIndicesSize);
+    memcpy(&data[indicesOffset], indicesPointer, indicesSize);
+    memcpy(&data[bonesOffset], &boneRelatives[0], boneRelativesSize);
+    memcpy(&data[parentsOffset], &boneParents[0], boneParentsSize);
+
+    std::ofstream objFile(fileName, std::ios::out | std::ios::binary);
+    objFile.write(data, totalSize);
+    objFile.close();
+}
+
+void Surface::calculateTangents()
+{
+    tangents.clear();
+    bitangents.clear();
+
+    unsigned int numVertices = vertices.size();
+    tangents.resize(numVertices);
+    bitangents.resize(numVertices);
+
+    for (unsigned int i = 0; i<indices.size(); i += 3)
+    {
+        int index0 = indices[i];
+        int index1 = indices[i + 1];
+        int index2 = indices[i + 2];
+
+        glm::vec3 vertex0 = vertices[index0];
+        glm::vec3 vertex1 = vertices[index1];
+        glm::vec3 vertex2 = vertices[index2];
+
+        glm::vec3 deltaPos1 = vertex1 - vertex0;
+        glm::vec3 deltaPos2 = vertex2 - vertex0;
+
+        glm::vec2 texCoord0 = textureCoordinates[index0];
+        glm::vec2 texCoord1 = textureCoordinates[index1];
+        glm::vec2 texCoord2 = textureCoordinates[index2];
+
+        glm::vec2 deltaTextureCoordinate1 = texCoord1 - texCoord0;
+        glm::vec2 deltaTextureCoordinate2 = texCoord2 - texCoord0;
+
+        float r = 1.0f / (deltaTextureCoordinate1.x * deltaTextureCoordinate2.y - deltaTextureCoordinate1.y * deltaTextureCoordinate2.x);
+        glm::vec3 tangent = (deltaPos1 * deltaTextureCoordinate2.y - deltaPos2 * deltaTextureCoordinate1.y) * r;
+        glm::vec3 bitangent = (deltaPos2 * deltaTextureCoordinate1.x - deltaPos1 * deltaTextureCoordinate2.x) * r;
+
+        tangents[index0] += tangent;
+        tangents[index1] += tangent;
+        tangents[index2] += tangent;
+        bitangents[index0] += bitangent;
+        bitangents[index1] += bitangent;
+        bitangents[index2] += bitangent;
+    }
+}
+
 void Surface::setUpColourPointers()
 {
 	ambientPointer = &ambientColour[0];
@@ -138,7 +231,7 @@ void Surface::calculateSizesAndLength()
 	normalsSize = normals.size() * sizeof(glm::vec3);
 	tangentsSize = tangents.size() * sizeof(glm::vec3);
 	bitangentsSize = bitangents.size() * sizeof(glm::vec3);
-	bonesSize = boneIndicesAndWeights.size() * sizeof(glm::vec4);
+	boneIndicesSize = boneIndicesAndWeights.size() * sizeof(glm::vec4);
 	indicesSize = length * sizeof(unsigned int);
 
 	if (vertices.size() > 0) verticesPointer = &vertices[0];
@@ -147,7 +240,7 @@ void Surface::calculateSizesAndLength()
 	if (tangents.size() > 0) tangentsPointer = &tangents[0];
 	if (bitangents.size() > 0) bitangentsPointer = &bitangents[0];
 	if (indices.size() > 0) indicesPointer = &indices[0];
-	if (boneIndicesAndWeights.size() > 0) bonesPointer = &boneIndicesAndWeights[0];
+	if (boneIndicesAndWeights.size() > 0) boneIndicesPointer = &boneIndicesAndWeights[0];
 }
 
 void Surface::prepareBones()
@@ -170,10 +263,7 @@ void Surface::prepareBones()
 	}
 
 	boneMatricesSize = bones.size() * sizeof(glm::mat4);
-	if (boneMatricesSize > 0)
-	{
-		boneMatricesPointer = &boneMatrices[0];
-	}
+	if (boneMatricesSize > 0) boneMatricesPointer = &boneMatrices[0];
 }
 
 void Surface::recalculateModelBoneMatrices()
@@ -209,4 +299,8 @@ std::vector<glm::vec3>& Surface::getNormals()
 std::vector<unsigned int>& Surface::getIndices()
 {
     return indices;
+}
+std::vector<BindBone>& Surface::getBones()
+{
+    return bones;
 }

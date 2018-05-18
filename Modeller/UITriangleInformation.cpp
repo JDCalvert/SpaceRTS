@@ -1,6 +1,7 @@
 #include "UITriangleInformation.h"
 
 #include <sstream>
+#include <algorithm>
 
 #include <Texture.h>
 #include <UILabel.h>
@@ -8,7 +9,7 @@
 
 #include "UITrianglePanel.h"
 
-void UITriangleInformation::build(Surface* infoSurface)
+UITriangleInformation::UITriangleInformation(Surface* infoSurface)
 {
     this->infoSurface = infoSurface;
 
@@ -16,14 +17,16 @@ void UITriangleInformation::build(Surface* infoSurface)
     indexWidth = 0.05f;
     textSize = 0.025f;
 
+    startTriangle = 0;
+    maxTriangles = 36;
+
     font = &Font::getFont("Calibri");
     blankTexture = Texture::getTexture("Blank");
-
-    rebuildPanels();
 }
 
-void UITriangleInformation::rebuildPanels()
+void UITriangleInformation::build()
 {
+    trianglePanels.clear();
     clearComponents();
 
     xpos = border;
@@ -36,14 +39,17 @@ void UITriangleInformation::rebuildPanels()
     ypos += textSize;
 
     std::vector<unsigned int>& indices = infoSurface->getIndices();
-    for (unsigned int i=0; i<indices.size(); i+=3)
+
+    int numTriangles = indices.size();
+    int maxTriangle = std::min(startTriangle + maxTriangles, numTriangles);
+    for (unsigned int i = startTriangle; i<maxTriangle; i+=3)
     {
         addTrianglePanel(infoSurface, i);
         ypos += textSize + 0.002f;
     }
 
-    setPosition(glm::vec2(border, 1.0f - (ypos + border)));
-    setSize(glm::vec2(xpos, ypos + border - 0.002f));
+    setPosition(border, 1.0f - (ypos + border));
+    setSize(xpos, ypos + border - 0.002f);
     constructSurface();
     surface->diffuseMap = blankTexture;
 }
@@ -61,11 +67,31 @@ void UITriangleInformation::addHeader(std::string header)
 void UITriangleInformation::addTrianglePanel(Surface* infoSurface, unsigned int firstIndex)
 {
     UITrianglePanel* trianglePanel = new UITrianglePanel(this, infoSurface, firstIndex);
-    trianglePanel->setPosition(glm::vec2(border, ypos));
+    trianglePanel->setPosition(border, ypos);
     trianglePanel->buildPanel();
     addComponent(trianglePanel);
 
     trianglePanels.push_back(trianglePanel);
+}
+
+EventStatus UITriangleInformation::processMouseScroll(MouseScrollEvent mouseEvent)
+{
+    int numIndices = infoSurface->getIndices().size();
+
+    if (mouseEvent.yOffset > 0
+        && startTriangle > 0)
+    {
+        startTriangle -= 3;
+        build();
+    }
+    else if (mouseEvent.yOffset < 0
+        && startTriangle  < numIndices - maxTriangles)
+    {
+        startTriangle += 3;
+        build();
+    }
+
+    return PROCESSED;
 }
 
 std::vector<UITrianglePanel*>& UITriangleInformation::getTrianglePanels()
