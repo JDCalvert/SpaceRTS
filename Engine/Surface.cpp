@@ -270,7 +270,7 @@ void Surface::recalculateModelBoneMatrices()
 {
 	for (unsigned int i = 0; i < bones.size(); i++)
 	{
-		Bone &bone = modelBonesPointer[i];
+		Bone &bone = bones[i];
 		int index = bone.parent;
 		if (index == -1)
 		{
@@ -278,7 +278,7 @@ void Surface::recalculateModelBoneMatrices()
 		}
 		else
 		{
-			bone.absolute = modelBonesPointer[index].absolute * bone.relative;
+			bone.absolute = bones[index].absolute * bone.relative;
 		}
 		boneMatricesPointer[i] = bone.absolute * bones[i].inverseBind;
 	}

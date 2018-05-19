@@ -82,13 +82,9 @@ void UIVertexPanel::addRowVec3(glm::vec3& row)
 
 void UIVertexPanel::addNumber(float& number, glm::vec2 position)
 {
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(3) << number;
-    std::string str = ss.str();
-
     UINumber* numberBox = new UINumber(number);
     numberBox->setPositionAndSize(position, glm::vec2(parent->columnWidth, parent->textSize));
-    numberBox->setText(str, parent->textSize, *parent->font, RIGHT);
+    numberBox->setText(parent->textSize, *parent->font, RIGHT);
     numberBox->surface->diffuseMap = parent->texture;
     addComponent(numberBox);
 }

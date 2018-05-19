@@ -55,3 +55,12 @@ void UINumber::processNotActive()
 
     recalculateSurface();
 }
+
+void UINumber::setText(float size, Font font, Alignment alignment)
+{
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(3) << value;
+    std::string str = ss.str();
+
+    UITextBox::setText(str, size, font, alignment);
+}

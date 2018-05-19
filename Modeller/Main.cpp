@@ -81,6 +81,8 @@ int main()
         glm::mat4 viewMatrix = camera->getViewMatrix();
         glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
+        surface->recalculateModelBoneMatrices();
+
         //Draw our cube
         glm::vec4 colour(1.0f, 1.0f, 1.0f, 0.75f);
         if (ui->renderOptions->renderSurface) simpleShader->renderSurface(surface, viewProjectionMatrix);

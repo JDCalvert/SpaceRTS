@@ -50,8 +50,15 @@ void UIUnsignedInteger::processNotActive()
     {
         value = std::stof(str);
     }
-    catch (std::invalid_argument e) {
-    }
-    catch (std::out_of_range e) {
-    }
+    catch (std::invalid_argument e) {}
+    catch (std::out_of_range e) {}
+}
+
+void UIUnsignedInteger::setText(float size, Font font, Alignment alignment)
+{
+    std::stringstream ss;
+    ss << value;
+    std::string str = ss.str();
+
+    UITextBox::setText(str, size, font, alignment);
 }

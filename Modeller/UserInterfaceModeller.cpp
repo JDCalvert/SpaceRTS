@@ -40,6 +40,7 @@ void UserInterfaceModeller::loadSurface(const char* fileName)
 
     vertexInformation->build();
     triangleInformation->build();
+    boneInformation->build();
 }
 
 void UserInterfaceModeller::saveSurface(const char* fileName)

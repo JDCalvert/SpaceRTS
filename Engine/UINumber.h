@@ -9,6 +9,8 @@ public:
     UINumber(float& value);
 
     void preRender() override;
+    void setText(float size, Font font, Alignment alignment);
+
     void processTextEvent(TextEvent event) override;
 
 private:

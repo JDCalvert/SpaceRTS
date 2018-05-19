@@ -71,13 +71,9 @@ void UIBonePanel::addIndexLabel()
 
 void UIBonePanel::addParentNumber()
 {
-    std::stringstream ss;
-    ss << index;
-    std::string str = ss.str();
-
     UIInteger* uiInteger = new UIInteger(bone.parent);
     uiInteger->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
-    uiInteger->setText(str, parent->textSize, *parent->font, RIGHT);
+    uiInteger->setText(parent->textSize, *parent->font, RIGHT);
     uiInteger->surface->diffuseMap = parent->texture;
     addComponent(uiInteger);
 
@@ -86,13 +82,9 @@ void UIBonePanel::addParentNumber()
 
 void UIBonePanel::addNumber(float& value)
 {
-    std::stringstream ss;
-    ss << value;
-    std::string str = ss.str();
-
     UINumber* uiNumber = new UINumber(value);
     uiNumber->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(parent->columnWidth, parent->textSize));
-    uiNumber->setText(str, parent->textSize, *parent->font, RIGHT);
+    uiNumber->setText(parent->textSize, *parent->font, RIGHT);
     uiNumber->surface->diffuseMap = parent->texture;
     addComponent(uiNumber);
 }

@@ -50,7 +50,6 @@ public:
     unsigned int* indicesPointer = nullptr;
 
     glm::mat4* boneMatricesPointer = nullptr;
-    Bone* modelBonesPointer = nullptr;
 
     GLfloat* ambientPointer = nullptr;
     GLfloat* diffusePointer = nullptr;

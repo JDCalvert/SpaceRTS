@@ -45,13 +45,9 @@ void UITrianglePanel::preRender()
 
 void UITrianglePanel::addNumber(unsigned int& index)
 {
-    std::stringstream ss;
-    ss << index;
-    std::string str = ss.str();
-
     UIUnsignedInteger* uiInteger = new UIUnsignedInteger(index);
     uiInteger->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
-    uiInteger->setText(str, parent->textSize, *parent->font, RIGHT);
+    uiInteger->setText(parent->textSize, *parent->font, RIGHT);
     uiInteger->surface->diffuseMap = parent->texture;
     addComponent(uiInteger);
 
