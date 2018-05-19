@@ -6,6 +6,7 @@
 UINumber::UINumber(float& value) : value(value), UITextBox()
 {
     previousValue = value;
+    numDigits = 3;
 }
 
 void UINumber::preRender()
@@ -21,7 +22,7 @@ void UINumber::preRender()
 void UINumber::recalculateSurface()
 {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(3) << value;
+    ss << std::fixed << std::setprecision(numDigits) << value;
     std::string str = ss.str();
 
     label->setText(str);
@@ -59,8 +60,13 @@ void UINumber::processNotActive()
 void UINumber::setText(float size, Font font, Alignment alignment)
 {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(3) << value;
+    ss << std::fixed << std::setprecision(numDigits) << value;
     std::string str = ss.str();
 
     UITextBox::setText(str, size, font, alignment);
+}
+
+void UINumber::setNumDigits(int numDigits)
+{
+    this->numDigits = numDigits;
 }

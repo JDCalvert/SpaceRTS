@@ -11,10 +11,12 @@ class UIVertexInformation : public UIInformation
 public:
     float indexWidth;
     float columnWidth;
+    float buttonSize;
 
     bool showVertices, previousShowVertices;
     bool showTextureCoordinates, previousShowTextureCoordinates;
     bool showNormals, previousShowNormals;
+    bool showBones, previousShowBones;
 
     float xpos;
 
@@ -34,9 +36,11 @@ private:
 
     void addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders);
     void addHeader(std::string text, int numColumns);
-    void addSubHeader(char subHeader);
+    
+    void addSubHeader(char subHeader, float width);
+    void addSubHeader(std::string subHeader, float width);
 
-    void addToggleButton(bool& toggle, float& xpos, float buttonSize, GLuint texture);
+    void addToggleButton(bool& toggle);
 };
 
 #endif

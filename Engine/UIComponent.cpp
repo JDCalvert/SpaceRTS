@@ -162,13 +162,13 @@ void UIComponent::setSize(float x, float y)
 void UIComponent::setSize(glm::vec2 size)
 {
     this->size = size;
+    constructSurface();
 }
 
 void UIComponent::setPositionAndSize(glm::vec2 position, glm::vec2 size)
 {
     setPosition(position);
     setSize(size);
-    constructSurface();
 }
 
 void UIComponent::constructSurface()

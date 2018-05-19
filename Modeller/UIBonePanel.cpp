@@ -35,6 +35,11 @@ void UIBonePanel::preRender()
     surface->diffuseMap = highlighted ? onMap : offMap;
 }
 
+void UIBonePanel::actionPerformed(UIComponent* component)
+{
+    parent->actionPerformed(this);
+}
+
 void UIBonePanel::buildPanel()
 {
     addIndexLabel();

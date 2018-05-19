@@ -30,6 +30,8 @@ public:
     std::vector<glm::vec3> getHighlightVertices();
     std::vector<unsigned int> getHighlightIndices();
 
+    void recalculateVertexPositions();
+
 private:
     Surface* infoSurface;
 };

@@ -131,13 +131,13 @@ void BlankShader::renderVertices(int numVertices, int verticesSize, glm::vec3* v
 
 void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMatrix)
 {
-    std::vector<BindBone>& bones = surface->getBones();
+    std::vector<Bone>& bones = surface->getBones();
 
     std::vector<glm::vec3> vertices;
     std::vector<unsigned int> lineIndices;
     for (unsigned int i=0; i<bones.size(); i++)
     {
-        BindBone& bone = bones[i];
+        Bone& bone = bones[i];
         vertices.push_back(bone.absolute[3]);
 
         if (bone.parent != -1)

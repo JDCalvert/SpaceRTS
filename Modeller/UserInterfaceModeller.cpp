@@ -73,3 +73,58 @@ std::vector<unsigned int> UserInterfaceModeller::getHighlightIndices()
 
     return highlights;
 }
+
+void UserInterfaceModeller::recalculateVertexPositions()
+{
+    //Update the absolute positions of all the bones
+    std::vector<Bone>& bones = infoSurface->getBones();
+    std::vector<glm::mat4> transformMatrices;
+    std::vector<glm::mat3> transposeMatrices;
+    for (int i=0; i<bones.size(); i++)
+    {
+        Bone& bone = bones[i];
+        int parent = bone.parent;
+        if (parent > -1)
+        {
+            bone.absolute = bones[parent].absolute * bone.relative;
+        }
+        else
+        {
+            bone.absolute = bone.relative;
+        }
+
+        glm::mat4 transformMatrix = bone.absolute * bone.inverseBind;
+        glm::mat3 transposeMatrix = glm::transpose(glm::mat3(transformMatrix));
+
+        transformMatrices.push_back(transformMatrix);
+        transposeMatrices.push_back(transposeMatrix);
+    }
+
+    //Update all the vertices depending on those
+    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+    std::vector<glm::vec3>& normals = infoSurface->getNormals();
+    std::vector<glm::vec3>& tangents = infoSurface->getTangents();
+    std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
+    std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
+    for (int i=0; i<vertices.size(); i++)
+    {
+        glm::vec3& vertex = vertices[i];
+        
+        int parentIndex[2] {boneIndices[i][0], boneIndices[i][2]};
+
+        glm::mat4 transformMatrix[2];
+        glm::mat3 transposeMatrix[2];
+
+        for (unsigned int j=0; j<2; j++)
+        {
+            if (parentIndex[j])
+            {
+                transformMatrix[j] = transformMatrices[parentIndex[j]];
+                transposeMatrix[j] = transposeMatrices[parentIndex[j]];
+            }
+        }
+
+        vertex = 
+    }
+
+}

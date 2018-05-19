@@ -2,9 +2,10 @@
 #define UI_BONE_INFORMATION_H
 
 #include "UIInformation.h"
+#include "UIActionListener.h"
 #include "UIBonePanel.h"
 
-class UIBoneInformation : public UIInformation
+class UIBoneInformation : public UIInformation, UIActionListener
 {
 public:
     float indexWidth;
@@ -16,6 +17,8 @@ public:
     void preRender() override;
 
     std::vector<UIBonePanel*>& getBonePanels();
+
+    void actionPerformed(UIComponent* component);
 
 protected:
     UIComponent* addPanel(unsigned int i);

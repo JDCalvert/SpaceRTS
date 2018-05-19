@@ -16,9 +16,11 @@ UIVertexInformation::UIVertexInformation(Surface* infoSurface) : UIInformation(i
     showVertices = true;
     showTextureCoordinates = false;
     showNormals = false;
+    showBones = false;
 
     indexWidth = 0.03f;
     columnWidth = 0.075f;
+    buttonSize = 0.02f;
 
     numItemsDisplay = 12;
 }
@@ -27,7 +29,8 @@ void UIVertexInformation::preRender()
 {
     if (showVertices != previousShowVertices
         || showTextureCoordinates != previousShowTextureCoordinates
-        || showNormals != previousShowNormals)
+        || showNormals != previousShowNormals
+        || showBones != previousShowBones)
     {
         build();
     }
@@ -37,6 +40,7 @@ void UIVertexInformation::preRender()
     previousShowVertices = showVertices;
     previousShowTextureCoordinates = showTextureCoordinates;
     previousShowNormals = showNormals;
+    previousShowBones = showBones;
 }
 
 void UIVertexInformation::build()
@@ -45,16 +49,25 @@ void UIVertexInformation::build()
     clearComponents();
 
     xpos = border;
-    float buttonSize = 0.02f;
-    addToggleButton(showVertices, xpos, buttonSize, texture);
-    addToggleButton(showTextureCoordinates, xpos, buttonSize, texture);
-    addToggleButton(showNormals, xpos, buttonSize, texture);
+    addToggleButton(showVertices);
+    addToggleButton(showTextureCoordinates);
+    addToggleButton(showNormals);
+    addToggleButton(showBones);
 
     xpos = border + indexWidth + border;
 
     addHeaderAndSubHeaders(showVertices, "Vertices", 'X', 3);
     addHeaderAndSubHeaders(showTextureCoordinates, "Texture Coordinates", 'U', 2);
     addHeaderAndSubHeaders(showNormals, "Normals", 'X', 3);
+
+    if (showBones)
+    {
+        addHeader("Bones", 3);
+        addSubHeader('i', indexWidth);
+        addSubHeader('v', columnWidth);
+        addSubHeader('i', indexWidth);
+        addSubHeader('v', columnWidth);
+    }
     
     ypos = border + textSize * 2;
 
@@ -80,7 +93,7 @@ void UIVertexInformation::addHeaderAndSubHeaders(bool shouldAdd, std::string hea
     addHeader(header, numSubHeaders);
     for (int i = 0; i<numSubHeaders; i++)
     {
-        addSubHeader(firstSubHeader + i);
+        addSubHeader(firstSubHeader + i, columnWidth);
     }
 }
 
@@ -94,17 +107,22 @@ void UIVertexInformation::addHeader(std::string text, int numColumns)
     addComponent(label);
 }
 
-void UIVertexInformation::addSubHeader(char subHeader)
+void UIVertexInformation::addSubHeader(char subHeader, float width)
 {
-    UILabel* label = new UILabel();
-    label->setPositionAndSize(glm::vec2(xpos, border + textSize), glm::vec2(columnWidth, textSize));
-    label->setText(std::string(1, subHeader), textSize, *font, CENTRE);
-    addComponent(label);
-
-    xpos += columnWidth + border;
+    addSubHeader(std::string(1, subHeader), width);
 }
 
-void UIVertexInformation::addToggleButton(bool& toggle, float& xpos, float buttonSize, GLuint texture)
+void UIVertexInformation::addSubHeader(std::string subHeader, float width)
+{
+    UILabel* label = new UILabel();
+    label->setPositionAndSize(glm::vec2(xpos, border + textSize), glm::vec2(width, textSize));
+    label->setText(subHeader, textSize, *font, CENTRE);
+    addComponent(label);
+
+    xpos += width + border;
+}
+
+void UIVertexInformation::addToggleButton(bool& toggle)
 {
     UIToggleButton* button = new UIToggleButton(toggle);
     button->setPositionAndSize(glm::vec2(xpos, 0.01f), glm::vec2(buttonSize, buttonSize));

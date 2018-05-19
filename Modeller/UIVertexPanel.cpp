@@ -14,6 +14,7 @@ UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, 
     vertexPosition(infoSurface->getVertices()[index]),
     vertexTextureCoordinate(infoSurface->getTextureCoordinates()[index]),
     vertexNormal(infoSurface->getNormals()[index]),
+    vertexBoneIndices(infoSurface->getBoneIndicesAndWeights()[index]),
     UIPanel()
 {
     this->parent = parent;
@@ -43,6 +44,7 @@ void UIVertexPanel::buildPanel()
     if (parent->showVertices) addRowVec3(vertexPosition);
     if (parent->showTextureCoordinates) addRowVec2(vertexTextureCoordinate);
     if (parent->showNormals) addRowVec3(vertexNormal);
+    if (parent->showBones) addBones();
 
     setSize(xpos - parent->border, parent->textSize);
     constructSurface();
@@ -66,8 +68,7 @@ void UIVertexPanel::addRowVec2(glm::vec2& row)
 {
     for (unsigned int i = 0; i < 2; i++)
     {
-        addNumber(row[i], glm::vec2(xpos, 0.0f));
-        xpos += parent->columnWidth + parent->border;
+        addNumber(row[i], 3, parent->columnWidth);
     }
 }
 
@@ -75,16 +76,26 @@ void UIVertexPanel::addRowVec3(glm::vec3& row)
 {
     for (unsigned int i = 0; i < 3; i++)
     {
-        addNumber(row[i], glm::vec2(xpos, 0.0f));
-        xpos += parent->columnWidth + parent->border;
+        addNumber(row[i], 3, parent->columnWidth);
     }
 }
 
-void UIVertexPanel::addNumber(float& number, glm::vec2 position)
+void UIVertexPanel::addBones()
+{
+    addNumber(vertexBoneIndices[0], 0, parent->indexWidth);
+    addNumber(vertexBoneIndices[1], 3, parent->columnWidth);
+    addNumber(vertexBoneIndices[2], 0, parent->indexWidth);
+    addNumber(vertexBoneIndices[3], 3, parent->columnWidth);
+}
+
+void UIVertexPanel::addNumber(float& number, int numDigits, float width)
 {
     UINumber* numberBox = new UINumber(number);
-    numberBox->setPositionAndSize(position, glm::vec2(parent->columnWidth, parent->textSize));
+    numberBox->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(width, parent->textSize));
+    numberBox->setNumDigits(numDigits);
     numberBox->setText(parent->textSize, *parent->font, RIGHT);
     numberBox->surface->diffuseMap = parent->texture;
     addComponent(numberBox);
+
+    xpos += width + parent->border;
 }

@@ -2,10 +2,11 @@
 #define UI_BONE_PANEL_H
 
 #include <UIPanel.h>
+#include <UIActionListener.h>
 
 class UIBoneInformation;
 
-class UIBonePanel : public UIPanel
+class UIBonePanel : public UIPanel, UIActionListener
 {
 public:
     UIBonePanel(UIBoneInformation* parent, Surface* infoSurface, unsigned int index);
@@ -15,9 +16,11 @@ public:
 
     bool isHighlighted();
 
+    void actionPerformed(UIComponent* component);
+
 private:
     UIBoneInformation* parent;
-    BindBone& bone;
+    Bone& bone;
     unsigned int index;
 
     float xpos, ypos;

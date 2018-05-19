@@ -8,8 +8,9 @@
 struct Bone
 {
     glm::mat4 relative;
-    int parent = -1;
     glm::mat4 absolute;
+    glm::mat4 inverseBind;
+    int parent = -1;
 
     Bone(glm::mat4 relative, int parent)
     {
@@ -18,18 +19,10 @@ struct Bone
     }
 };
 
-struct BindBone: Bone
-{
-    glm::mat4 inverseBind;
-
-    BindBone(): Bone(glm::mat4(), -1) {}
-    BindBone(glm::mat4 relative, int parent): Bone(relative, parent) {}
-};
-
 class Surface
 {
 public:
-    std::vector<BindBone> bones;
+    std::vector<Bone> bones;
 
     int verticesSize = 0;
     int textureCoordinatesSize = 0;
@@ -85,8 +78,11 @@ public:
     std::vector<glm::vec3>& getVertices();
     std::vector<glm::vec2>& getTextureCoordinates();
     std::vector<glm::vec3>& getNormals();
+    std::vector<glm::vec3>& getTangents();
+    std::vector<glm::vec3>& getBitangents();
     std::vector<unsigned int>& getIndices();
-    std::vector<BindBone>& getBones();
+    std::vector<glm::vec4>& getBoneIndicesAndWeights();
+    std::vector<Bone>& getBones();
 
 private:
     std::vector<glm::vec3> vertices;

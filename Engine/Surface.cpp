@@ -36,7 +36,7 @@ void Surface::loadFromFile(const char* objFilePath, float scale)
 
 	for (unsigned int i = 0; i < bones.size(); i++)
 	{
-		BindBone& bone = bones[i];
+		Bone& bone = bones[i];
 		bone.relative[3][0] *= scale;
 		bone.relative[3][1] *= scale;
 		bone.relative[3][2] *= scale;
@@ -49,13 +49,12 @@ void Surface::loadFromFile(const char* objFilePath)
 	std::vector<int> boneParents;
 	loadObj(objFilePath, boneRelatives, boneParents);
 
-	for (unsigned int i = 0; i < boneRelatives.size(); i++)
+	for (unsigned int i=0; i<boneRelatives.size(); i++)
 	{
-		const glm::mat4 &boneRelative = boneRelatives[i];
+		const glm::mat4 boneRelative = boneRelatives[i];
 		int boneParent = boneParents[i];
 
-		BindBone bone(boneRelative, boneParent);
-		bones.push_back(bone);
+		bones.push_back(Bone(boneRelative, boneParent));
 	}
 
 	calculateSizesAndLength();
@@ -248,7 +247,7 @@ void Surface::prepareBones()
 	//All the bones are in their bind position, work out their absolute position from their relative positions, and calculate the inverse of this.
 	for (unsigned int i = 0; i < bones.size(); i++)
 	{
-		BindBone &bone = bones[i];
+		Bone& bone = bones[i];
 		int index = bone.parent;
 		if (index == -1)
 		{
@@ -270,7 +269,7 @@ void Surface::recalculateModelBoneMatrices()
 {
 	for (unsigned int i = 0; i < bones.size(); i++)
 	{
-		Bone &bone = bones[i];
+		Bone& bone = bones[i];
 		int index = bone.parent;
 		if (index == -1)
 		{
@@ -280,7 +279,7 @@ void Surface::recalculateModelBoneMatrices()
 		{
 			bone.absolute = bones[index].absolute * bone.relative;
 		}
-		boneMatricesPointer[i] = bone.absolute * bones[i].inverseBind;
+		boneMatricesPointer[i] = bone.absolute * bone.inverseBind;
 	}
 }
 
@@ -296,11 +295,23 @@ std::vector<glm::vec3>& Surface::getNormals()
 {
     return normals;
 }
+std::vector<glm::vec3>& Surface::getTangents()
+{
+    return tangents;
+}
+std::vector<glm::vec3>& Surface::getBitangents()
+{
+    return bitangents;
+}
 std::vector<unsigned int>& Surface::getIndices()
 {
     return indices;
 }
-std::vector<BindBone>& Surface::getBones()
+std::vector<glm::vec4>& Surface::getBoneIndicesAndWeights()
+{
+    return boneIndicesAndWeights;
+}
+std::vector<Bone>& Surface::getBones()
 {
     return bones;
 }

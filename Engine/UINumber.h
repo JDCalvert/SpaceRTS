@@ -10,6 +10,7 @@ public:
 
     void preRender() override;
     void setText(float size, Font font, Alignment alignment);
+    void setNumDigits(int numDigits);
 
     void processTextEvent(TextEvent event) override;
 
@@ -18,6 +19,8 @@ private:
 
     float& value;
     float previousValue;
+
+    int numDigits;
 
     bool isAcceptableChar(char newChar);
     void recalculateSurface();

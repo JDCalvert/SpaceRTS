@@ -2,6 +2,7 @@
 
 #include <OpenGLContext.h>
 
+#include "UserInterfaceModeller.h"
 #include "UIBonePanel.h"
 
 UIBoneInformation::UIBoneInformation(Surface* infoSurface) : UIInformation(infoSurface)
@@ -49,4 +50,13 @@ std::vector<UIBonePanel*>& UIBoneInformation::getBonePanels()
 int UIBoneInformation::getNumItemsTotal()
 {
     return infoSurface->getBones().size();
+}
+
+void UIBoneInformation::actionPerformed(UIComponent* component)
+{
+    if (std::find(bonePanels.begin(), bonePanels.end(), component) != bonePanels.end())
+    {
+        UIBonePanel* panel = static_cast<UIBonePanel*>(component);
+        UserInterfaceModeller::getInstance()->recalculateVertexPositions();
+    }
 }
