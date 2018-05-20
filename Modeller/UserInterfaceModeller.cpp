@@ -96,35 +96,53 @@ void UserInterfaceModeller::recalculateVertexPositions()
         glm::mat4 transformMatrix = bone.absolute * bone.inverseBind;
         glm::mat3 transposeMatrix = glm::transpose(glm::mat3(transformMatrix));
 
+        bone.inverseBind = glm::inverse(bone.absolute);
+
         transformMatrices.push_back(transformMatrix);
         transposeMatrices.push_back(transposeMatrix);
     }
 
-    //Update all the vertices depending on those
-    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
-    std::vector<glm::vec3>& normals = infoSurface->getNormals();
-    std::vector<glm::vec3>& tangents = infoSurface->getTangents();
-    std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
-    std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
-    for (int i=0; i<vertices.size(); i++)
+    if (boneInformation->updateVertices)
     {
-        glm::vec3& vertex = vertices[i];
-        
-        int parentIndex[2] {boneIndices[i][0], boneIndices[i][2]};
-
-        glm::mat4 transformMatrix[2];
-        glm::mat3 transposeMatrix[2];
-
-        for (unsigned int j=0; j<2; j++)
+        //Update all the vertices depending on those
+        std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+        std::vector<glm::vec3>& normals = infoSurface->getNormals();
+        std::vector<glm::vec3>& tangents = infoSurface->getTangents();
+        std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
+        std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
+        for (int i=0; i<vertices.size(); i++)
         {
-            if (parentIndex[j])
+            glm::vec3& vertex = vertices[i];
+            glm::vec3& normal = normals[i];
+            glm::vec3& tangent = tangents[i];
+            glm::vec3& bitangent = bitangents[i];
+        
+            glm::vec3 newVertex;
+            glm::vec3 newNormal;
+            glm::vec3 newTangent;
+            glm::vec3 newBitangent;
+
+            for (unsigned int j=0; j<2; j++)
             {
-                transformMatrix[j] = transformMatrices[parentIndex[j]];
-                transposeMatrix[j] = transposeMatrices[parentIndex[j]];
+                int parentIndex = boneIndices[i][j*2];
+                float weight = boneIndices[i][j*2+1];
+            
+                if (parentIndex > -1)
+                {
+                    glm::mat4 transformMatrix = transformMatrices[parentIndex];
+                    glm::mat3 transposeMatrix = transposeMatrices[parentIndex];
+
+                    newVertex += glm::vec3((transformMatrix * glm::vec4(vertex, 1.0f)) * weight);
+                    newNormal += (transposeMatrix * normal) * weight;
+                    newTangent += (transposeMatrix * tangent) * weight;
+                    newBitangent += (transposeMatrix * bitangent) * weight;
+                }
             }
+
+            vertex = newVertex;
+            normal = newNormal;
+            tangent = newTangent;
+            bitangent = newBitangent;
         }
-
-        vertex = 
     }
-
 }

@@ -10,6 +10,9 @@ class UIBoneInformation : public UIInformation, UIActionListener
 public:
     float indexWidth;
     float columnWidth;
+    float buttonSize;
+    
+    bool updateVertices = false;
 
     UIBoneInformation(Surface* infoSurface);
 

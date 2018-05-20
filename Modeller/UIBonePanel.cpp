@@ -91,5 +91,6 @@ void UIBonePanel::addNumber(float& value)
     uiNumber->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(parent->columnWidth, parent->textSize));
     uiNumber->setText(parent->textSize, *parent->font, RIGHT);
     uiNumber->surface->diffuseMap = parent->texture;
+    uiNumber->setActionListener(this);
     addComponent(uiNumber);
 }

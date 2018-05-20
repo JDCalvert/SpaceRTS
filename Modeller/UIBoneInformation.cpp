@@ -1,6 +1,7 @@
 #include "UIBoneInformation.h"
 
 #include <OpenGLContext.h>
+#include <UIToggleButton.h>
 
 #include "UserInterfaceModeller.h"
 #include "UIBonePanel.h"
@@ -9,18 +10,23 @@ UIBoneInformation::UIBoneInformation(Surface* infoSurface) : UIInformation(infoS
 {
     indexWidth = 0.03f;
     columnWidth = 0.075f;
+    buttonSize = 0.02f;
 
     numItemsDisplay = 3;
 }
 
 void UIBoneInformation::build()
 {
-    setPosition(0.01f, 0.14f);
-
     bonePanels.clear();
     clearComponents();
 
-    ypos = border;
+    UIToggleButton* button = new UIToggleButton(updateVertices);
+    button->setPosition(border, border);
+    button->setSize(buttonSize, buttonSize);
+    button->surface->diffuseMap = texture;
+    addComponent(button);
+
+    ypos = buttonSize + border * 2;
 
     addPanels();
 }

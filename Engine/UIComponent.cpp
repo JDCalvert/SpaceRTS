@@ -111,6 +111,8 @@ void UIComponent::becomeInactive()
 {
     UserInterface* ui = UserInterface::getInstance();
     ui->clearActiveComponent(this);
+
+    if (actionListener) actionListener->actionPerformed(this);
 }
 
 bool UIComponent::isChild(UIComponent* component)
@@ -137,6 +139,11 @@ void UIComponent::processNotActive()
 bool UIComponent::shouldRemainActive()
 {
     return false;
+}
+
+void UIComponent::setActionListener(UIActionListener* actionListener)
+{
+    this->actionListener = actionListener;
 }
 
 void UIComponent::addComponent(UIComponent* component)

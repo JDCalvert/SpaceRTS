@@ -1,7 +1,7 @@
 #ifndef UI_ACTION_LISTENER_H
 #define UI_ACTION_LISTENER_H
 
-#include "UIComponent.h"
+class UIComponent;
 
 class UIActionListener
 {

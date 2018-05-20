@@ -3,6 +3,7 @@
 
 #include "UIPanel.h"
 #include "UILabel.h"
+#include "UIActionListener.h"
 
 class UITextBox : public UIPanel
 {

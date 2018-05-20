@@ -7,6 +7,7 @@
 
 #include "Event.h"
 #include "Surface.h"
+#include "UIActionListener.h"
 
 class UIComponent
 {
@@ -22,6 +23,7 @@ public:
     void setNoHover();
 
     void addComponent(UIComponent* component);
+    void setActionListener(UIActionListener* actionListener);
 
     glm::vec2 getPosition();
     glm::vec2 getSize();
@@ -61,6 +63,8 @@ protected:
     virtual EventStatus processMouseScroll(MouseScrollEvent mouseEvent);
 
 private:
+    UIActionListener* actionListener;
+
     bool isPointOnMe(glm::vec2 point);
 };
 

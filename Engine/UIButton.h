@@ -2,6 +2,7 @@
 #define UI_BUTTON_H
 
 #include "UIActionListener.h"
+#include "UIComponent.h"
 
 class UIButton : public UIComponent
 {

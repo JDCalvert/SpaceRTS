@@ -19,7 +19,6 @@ void UITextBox::setSize(glm::vec2 size)
 {
     UIComponent::setSize(size);
     label->setSize(size.x - 0.004f, size.y);
-    constructSurface();
 }
 
 bool UITextBox::shouldCheckMouseClickEventForChildren()
