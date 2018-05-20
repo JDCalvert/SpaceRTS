@@ -10,8 +10,12 @@ UIInformation::UIInformation(Surface* infoSurface)
 
     border = 0.01f;
     textSize = 0.025f;
+    newButtonSize = 0.02f;
+    newButtonXpos = border;
 
     currentItem = 0;
+
+    shouldRebuild = false;
 
     font = &Font::getFont("Calibri");
     texture = Texture::getTexture("Blank");
@@ -32,9 +36,21 @@ void UIInformation::addPanels()
         width = std::max(width, panelSize.x);
     }
 
-    setSize(width + border * 2, ypos + border - 0.002f);
-    constructSurface();
+    addNewButton();
+
+    setSize(width + border * 2, ypos);
     surface->diffuseMap = texture;
+}
+
+void UIInformation::addNewButton()
+{
+    newButton = new UIButton(this);
+    newButton->setPosition(newButtonXpos, ypos);
+    newButton->setSize(newButtonSize, newButtonSize);
+    newButton->surface->diffuseMap = texture;
+    addComponent(newButton);
+
+    ypos += newButtonSize + border;
 }
 
 EventStatus UIInformation::processMouseScroll(MouseScrollEvent mouseEvent)

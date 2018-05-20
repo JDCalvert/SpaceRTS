@@ -26,6 +26,8 @@ public:
     void preRender();
 
     std::vector<UIVertexPanel*>& getVertexPanels();
+
+    void actionPerformed(UIComponent* component);
     
 protected:
     UIComponent* addPanel(unsigned int i) override;

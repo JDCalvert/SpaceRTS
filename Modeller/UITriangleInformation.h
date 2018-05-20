@@ -14,9 +14,12 @@ public:
     UITriangleInformation(Surface* surface);
     
     void build() override;
+    void preRender() override;
 
     std::vector<UITrianglePanel*>& getTrianglePanels();
     int getNumItemsTotal() override;
+
+    void actionPerformed(UIComponent* component);
 
 private:
     std::vector<UITrianglePanel*> trianglePanels;

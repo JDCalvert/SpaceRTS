@@ -21,6 +21,7 @@ UIVertexInformation::UIVertexInformation(Surface* infoSurface) : UIInformation(i
     indexWidth = 0.03f;
     columnWidth = 0.075f;
     buttonSize = 0.02f;
+    newButtonXpos = border * 2 + indexWidth;
 
     numItemsDisplay = 12;
 }
@@ -30,17 +31,20 @@ void UIVertexInformation::preRender()
     if (showVertices != previousShowVertices
         || showTextureCoordinates != previousShowTextureCoordinates
         || showNormals != previousShowNormals
-        || showBones != previousShowBones)
+        || showBones != previousShowBones
+        || shouldRebuild)
     {
         build();
+
+        previousShowVertices = showVertices;
+        previousShowTextureCoordinates = showTextureCoordinates;
+        previousShowNormals = showNormals;
+        previousShowBones = showBones;
+
+        shouldRebuild = false;
     }
 
     setPosition(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 0.01f);
-
-    previousShowVertices = showVertices;
-    previousShowTextureCoordinates = showTextureCoordinates;
-    previousShowNormals = showNormals;
-    previousShowBones = showBones;
 }
 
 void UIVertexInformation::build()
@@ -68,9 +72,8 @@ void UIVertexInformation::build()
         addSubHeader('i', indexWidth);
         addSubHeader('v', columnWidth);
     }
-    
-    ypos = border + textSize * 2;
 
+    ypos = border + textSize * 2;
     addPanels();
 }
 
@@ -141,3 +144,22 @@ int UIVertexInformation::getNumItemsTotal()
 {
     return infoSurface->getVertices().size();
 }
+
+void UIVertexInformation::actionPerformed(UIComponent* component)
+{
+    if (component == newButton)
+    {
+        infoSurface->getVertices().push_back(glm::vec3());
+        infoSurface->getTextureCoordinates().push_back(glm::vec2());
+        infoSurface->getNormals().push_back(glm::vec3());
+        infoSurface->getTangents().push_back(glm::vec3());
+        infoSurface->getBitangents().push_back(glm::vec3());
+        infoSurface->getBoneIndicesAndWeights().push_back(glm::vec4(0, 1.0f, -1, 0.0f));
+
+        infoSurface->calculateSizesAndLength();
+
+        currentItem = std::max(0, numItemsTotal - numItemsDisplay + 1);
+        shouldRebuild = true;
+    }
+}
+

@@ -12,6 +12,8 @@ UIBoneInformation::UIBoneInformation(Surface* infoSurface) : UIInformation(infoS
     columnWidth = 0.075f;
     buttonSize = 0.02f;
 
+    newButtonXpos = border * 3 + indexWidth * 2;
+
     numItemsDisplay = 3;
 }
 
@@ -34,6 +36,12 @@ void UIBoneInformation::build()
 void UIBoneInformation::preRender()
 {
     setPosition(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 1 - (size.y + 0.01f));
+
+    if (shouldRebuild)
+    {
+        build();
+        shouldRebuild = false;
+    }
 }
 
 UIComponent* UIBoneInformation::addPanel(unsigned int i)
@@ -64,5 +72,13 @@ void UIBoneInformation::actionPerformed(UIComponent* component)
     {
         UIBonePanel* panel = static_cast<UIBonePanel*>(component);
         UserInterfaceModeller::getInstance()->recalculateVertexPositions();
+    }
+    else if (component == newButton)
+    {
+        std::vector<Bone>& bones = infoSurface->getBones();
+        bones.push_back(Bone(glm::mat4(), -1));
+
+        infoSurface->prepareBones();
+        shouldRebuild = true;
     }
 }

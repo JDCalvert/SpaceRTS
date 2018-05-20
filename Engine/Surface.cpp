@@ -49,6 +49,8 @@ void Surface::loadFromFile(const char* objFilePath)
 	std::vector<int> boneParents;
 	loadObj(objFilePath, boneRelatives, boneParents);
 
+    bones.clear();
+
 	for (unsigned int i=0; i<boneRelatives.size(); i++)
 	{
 		const glm::mat4 boneRelative = boneRelatives[i];

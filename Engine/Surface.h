@@ -73,6 +73,7 @@ public:
     void setUpColourPointers();
     void calculateSizesAndLength();
     void recalculateModelBoneMatrices();
+    void prepareBones();
 
     //The actual parts of the surface
     std::vector<glm::vec3>& getVertices();
@@ -99,7 +100,6 @@ private:
     glm::vec4 diffuseColour;
 
     void loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents);
-    void prepareBones();
 };
 
 #endif

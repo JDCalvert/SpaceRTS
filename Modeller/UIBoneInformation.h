@@ -5,7 +5,7 @@
 #include "UIActionListener.h"
 #include "UIBonePanel.h"
 
-class UIBoneInformation : public UIInformation, UIActionListener
+class UIBoneInformation : public UIInformation
 {
 public:
     float indexWidth;
@@ -16,7 +16,7 @@ public:
 
     UIBoneInformation(Surface* infoSurface);
 
-    void build();
+    void build() override;
     void preRender() override;
 
     std::vector<UIBonePanel*>& getBonePanels();
