@@ -54,10 +54,10 @@ void UIVertexInformation::build()
     clearComponents();
 
     xpos = border;
-    addToggleButton(showVertices);
-    addToggleButton(showTextureCoordinates);
-    addToggleButton(showNormals);
-    addToggleButton(showBones);
+    addToggleButton(showVertices, "V");
+    addToggleButton(showTextureCoordinates, "T");
+    addToggleButton(showNormals, "N");
+    addToggleButton(showBones, "B");
 
     xpos = border + indexWidth + border;
 
@@ -126,14 +126,15 @@ void UIVertexInformation::addSubHeader(std::string subHeader, float width)
     xpos += width + border;
 }
 
-void UIVertexInformation::addToggleButton(bool& toggle)
+void UIVertexInformation::addToggleButton(bool& toggle, std::string text)
 {
     UIToggleButton* button = new UIToggleButton(toggle);
     button->setPositionAndSize(glm::vec2(xpos, 0.01f), glm::vec2(buttonSize, buttonSize));
+    button->setText(text, buttonSize, *font, CENTRE);
     button->surface->diffuseMap = texture;
     addComponent(button);
 
-    xpos += buttonSize + border;
+    xpos += buttonSize + 0.002f;
 }
 
 std::vector<UIVertexPanel*>& UIVertexInformation::getVertexPanels()

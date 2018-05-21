@@ -127,6 +127,8 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     //Clean up
     delete lengths;
     delete data;
+
+    return true;
 }
 
 void Surface::writeToFile(const char* fileName)
@@ -140,8 +142,8 @@ void Surface::writeToFile(const char* fileName)
     for (unsigned int i=0; i<numBones; i++)
     {
         Bone bone = bones[i];
-        boneRelatives.push_back(bone.relative);
-        boneParents.push_back(bone.parent);
+        boneRelatives[i]= bone.relative;
+        boneParents[i] = bone.parent;
     }
 
     std::vector<unsigned int> sizes = {vertices.size(), indices.size(), bones.size()};

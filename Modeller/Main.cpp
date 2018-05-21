@@ -36,8 +36,8 @@ int main()
     OpenGLContext* glContext = OpenGLContext::initialiseContext();
 
     //Use the basic renderer to draw to the screen and register it with our context
-    Renderer* renderer = Renderer::initialiseRenderer(new Renderer(2), glContext);
-    Renderer* uiRenderer = Renderer::initialiseRenderer(new Renderer(2), glContext);
+    Renderer* renderer = Renderer::initialiseRenderer(new Renderer(), glContext);
+    Renderer* uiRenderer = Renderer::initialiseRenderer(new Renderer(), glContext);
 
     Camera* camera = new Camera();
     Controller* controller = new Controller(camera);

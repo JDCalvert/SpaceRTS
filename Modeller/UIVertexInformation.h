@@ -42,7 +42,7 @@ private:
     void addSubHeader(char subHeader, float width);
     void addSubHeader(std::string subHeader, float width);
 
-    void addToggleButton(bool& toggle);
+    void addToggleButton(bool& toggle, std::string text);
 };
 
 #endif

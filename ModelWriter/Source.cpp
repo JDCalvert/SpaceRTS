@@ -283,7 +283,7 @@ std::string addCylinder(Surface& surface, int detail)
             Vertex topUp =
             {
                 glm::vec3(x, y, 1.0f),
-                glm::vec2((x+1)/2, (y+1/2)),
+                glm::vec2((x+1)/2, (y+1)/2),
                 glm::vec3(0.0f, 0.0f, 1.0f),
                 parentBoneDependency
             };
@@ -361,7 +361,7 @@ std::string addCylinder(Surface& surface, int detail)
         }
     }
 
-    return "Cylinder" + detail;
+    return "cylinder" + std::to_string(detail);
 }
 
 std::string addTriangle(Surface& surface, int parentBoneIndex, glm::vec3 position0, glm::vec3 position1, glm::vec3 position2,
@@ -420,31 +420,6 @@ std::string addCapitalShip(Surface& surface, int parentBoneIndex)
     addPanel(surface, backLeftTop, backLeftBottom, backRightTop, backRightBottom, glm::vec2(0.0, 0.0), glm::vec2(0.0, 1.0), glm::vec2(176, 0.0), glm::vec2(176, 1.0), backNormal, boneDependency);
 
     return "CapitalShip";
-}
-
-std::string addDualTurret(Surface& surface, int parentBoneIndex)
-{
-    //First, add a cylinder for the turrent to sit on
-    //addCylinder(surface, parentBoneIndex, 0.05f, 0.01f, 30);
-
-    //Add a bone for the body, sitting at the top and centre of the cylinder
-    Bone bodyBone = Bone{glm::translate(glm::vec3(0.0f, 0.01f, 1.0f)), parentBoneIndex};
-
-    glm::vec3 bodyRightTopFront = glm::vec3(-0.03f, 0.07f, 0.025f);
-    glm::vec3 bodyLeftTopFront = glm::vec3(0.03f, 0.07f, 0.025f);
-    glm::vec3 bodyLeftBottomFront = glm::vec3(0.03f, 0.01f, 0.035f);
-    glm::vec3 bodyRightBottomFront = glm::vec3(-0.03f, 0.01f, 0.035f);
-    glm::vec3 bodyRightTopBack = glm::vec3(-0.025f, 0.04f, -0.03f);
-    glm::vec3 bodyLeftTopBack = glm::vec3(0.025f, 0.04f, -0.03f);
-    glm::vec3 bodyLeftBottomBack = glm::vec3(0.025f, 0.01f, -0.03f);
-    glm::vec3 bodyRightBottomBack = glm::vec3(-0.025f, 0.01f, -0.03f);
-
-    glm::vec2 frontRightTexCoord = glm::vec2(1.0, 0.0);
-    glm::vec2 frontLeftTexCoord = glm::vec2(0.0, 0.0);
-    glm::vec2 backLeftTexCoord = glm::vec2(0.0, 1.0);
-    glm::vec2 backRightTexCoord = glm::vec2(1.0, 1.0);
-
-    return "Turret";
 }
 
 void writeToBinaryFile(Surface& surface, std::string fileName)
@@ -514,7 +489,7 @@ void writeToBinaryFile(Surface& surface, std::string fileName)
     memcpy(&data[bonesOffset], &bones[0], bonesSize);
     memcpy(&data[parentsOffset], &parents[0], parentsSize);
 
-    std::ofstream objFile(fileName.append(".objComplete"), std::ios::out | std::ios::binary);
+    std::ofstream objFile(fileName.append(".mesh"), std::ios::out | std::ios::binary);
     objFile.write(data, totalSize);
     objFile.close();
 }
