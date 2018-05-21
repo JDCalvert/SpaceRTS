@@ -146,3 +146,34 @@ void UserInterfaceModeller::recalculateVertexPositions()
         }
     }
 }
+
+void UserInterfaceModeller::newVertex()
+{
+    unsigned int activeBone = boneInformation->activeBone;
+    Bone& bone = infoSurface->getBones()[activeBone];
+    glm::mat4 transform = bone.absolute;
+    glm::mat3 transpose = glm::transpose(glm::mat3(transform));
+
+    glm::vec3 vertexPosition(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    glm::vec2 vertexTextureCoordinates(0.0f, 0.0f);
+    glm::vec3 vertexNormal(transpose * glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::vec4 boneIndexAndWeight(activeBone, 1.0f, -1, 0.0f);
+
+    infoSurface->getVertices().push_back(vertexPosition);
+    infoSurface->getTextureCoordinates().push_back(vertexTextureCoordinates);
+    infoSurface->getNormals().push_back(vertexNormal);
+    infoSurface->getBoneIndicesAndWeights().push_back(boneIndexAndWeight);
+
+    infoSurface->calculateTangents();
+    infoSurface->calculateSizesAndLength();
+}
+
+void UserInterfaceModeller::newBone()
+{
+    unsigned int activeBone = boneInformation->activeBone;
+    Bone newBone(glm::mat4(), activeBone);
+
+    infoSurface->getBones().push_back(newBone);
+
+    infoSurface->prepareBones();
+}

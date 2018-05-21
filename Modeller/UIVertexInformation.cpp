@@ -10,6 +10,7 @@
 #include "UILabel.h"
 #include "UINumber.h"
 #include "UIToggleButton.h"
+#include "UserInterfaceModeller.h"
 
 UIVertexInformation::UIVertexInformation(Surface* infoSurface) : UIInformation(infoSurface)
 {
@@ -149,17 +150,9 @@ void UIVertexInformation::actionPerformed(UIComponent* component)
 {
     if (component == newButton)
     {
-        infoSurface->getVertices().push_back(glm::vec3());
-        infoSurface->getTextureCoordinates().push_back(glm::vec2());
-        infoSurface->getNormals().push_back(glm::vec3());
-        infoSurface->getTangents().push_back(glm::vec3());
-        infoSurface->getBitangents().push_back(glm::vec3());
-        infoSurface->getBoneIndicesAndWeights().push_back(glm::vec4(0, 1.0f, -1, 0.0f));
-
-        infoSurface->calculateSizesAndLength();
+        UserInterfaceModeller::getInstance()->newVertex();
 
         currentItem = std::max(0, numItemsTotal - numItemsDisplay + 1);
         shouldRebuild = true;
     }
 }
-

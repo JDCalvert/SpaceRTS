@@ -10,7 +10,7 @@ UIInformation::UIInformation(Surface* infoSurface)
 
     border = 0.01f;
     textSize = 0.025f;
-    newButtonSize = 0.02f;
+    newButtonWidth = 0.05f;
     newButtonXpos = border;
 
     currentItem = 0;
@@ -46,11 +46,12 @@ void UIInformation::addNewButton()
 {
     newButton = new UIButton(this);
     newButton->setPosition(newButtonXpos, ypos);
-    newButton->setSize(newButtonSize, newButtonSize);
+    newButton->setSize(newButtonWidth, textSize);
+    newButton->setText("New", textSize, *font, CENTRE);
     newButton->surface->diffuseMap = texture;
     addComponent(newButton);
 
-    ypos += newButtonSize + border;
+    ypos += textSize + border;
 }
 
 EventStatus UIInformation::processMouseScroll(MouseScrollEvent mouseEvent)

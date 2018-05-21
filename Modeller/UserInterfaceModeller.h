@@ -32,6 +32,9 @@ public:
 
     void recalculateVertexPositions();
 
+    void newVertex();
+    void newBone();
+
 private:
     Surface* infoSurface;
 };

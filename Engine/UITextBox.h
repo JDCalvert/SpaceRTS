@@ -11,7 +11,7 @@ public:
     UITextBox();
 
     void setText(std::string text, float size, Font font, Alignment alignment);
-    void setSize(glm::vec2 size);
+    void setSize(glm::vec2 size) override;
 
     void processKeyEvent(KeyEvent event) override;
     void processTextEvent(TextEvent event) override;

@@ -34,13 +34,9 @@ void UISaveLoadPanel::build()
 
     loadButton = new UIButton(this);
     loadButton->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonWidth, textSize));
+    loadButton->setText("Load", textSize, *font, CENTRE);
     loadButton->surface->diffuseMap = blankTexture;
     addComponent(loadButton);
-
-    UILabel* loadLabel = new UILabel();
-    loadLabel->setPositionAndSize(glm::vec2(), glm::vec2(buttonWidth, textSize));
-    loadLabel->setText("Load", textSize, *font, CENTRE);
-    loadButton->addComponent(loadLabel);
 
     xpos = border;
     ypos += textSize + 0.002f;
@@ -55,13 +51,9 @@ void UISaveLoadPanel::build()
 
     saveButton = new UIButton(this);
     saveButton->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonWidth, textSize));
+    saveButton->setText("Save", textSize, *font, CENTRE);
     saveButton->surface->diffuseMap = blankTexture;
     addComponent(saveButton);
-
-    UILabel* saveLabel = new UILabel();
-    saveLabel->setPositionAndSize(glm::vec2(), glm::vec2(buttonWidth, textSize));
-    saveLabel->setText("Save", textSize, *font, CENTRE);
-    saveButton->addComponent(saveLabel);
 
     setSize(border * 3 + textBoxWidth + buttonWidth, border + textSize + 0.002f + textSize + border);
     constructSurface();

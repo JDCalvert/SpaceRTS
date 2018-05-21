@@ -16,7 +16,10 @@ public:
 
     bool isHighlighted();
 
-    void actionPerformed(UIComponent* component);
+    void actionPerformed(UIComponent* component) override;
+
+protected:
+    void processMouseClick(MouseClickEvent mouseEvent) override;
 
 private:
     UIBoneInformation* parent;

@@ -6,7 +6,7 @@
 #include <UIButton.h>
 #include <UIActionListener.h>
 
-class UIInformation : public UIPanel, UIActionListener
+class UIInformation : public UIPanel, public UIActionListener
 {
 public:
     Font* font;
@@ -15,7 +15,7 @@ public:
 
     bool shouldRebuild;
 
-    float newButtonSize;
+    float newButtonWidth;
     float newButtonXpos;
 
     GLuint texture;

@@ -57,9 +57,6 @@
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIRenderer.h">
-      <Filter>Header Files\UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface.h">
       <Filter>Header Files\UserInterface</Filter>
     </ClInclude>
@@ -136,9 +133,6 @@
     </ClCompile>
     <ClCompile Include="UIToggleButton.cpp">
       <Filter>Source Files\UserInterface\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UIRenderer.cpp">
-      <Filter>Source Files\UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface.cpp">
       <Filter>Source Files\UserInterface</Filter>

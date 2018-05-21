@@ -75,10 +75,9 @@ void UIBoneInformation::actionPerformed(UIComponent* component)
     }
     else if (component == newButton)
     {
-        std::vector<Bone>& bones = infoSurface->getBones();
-        bones.push_back(Bone(glm::mat4(), -1));
+        UserInterfaceModeller::getInstance()->newBone();
 
-        infoSurface->prepareBones();
+        currentItem = std::max(0, numItemsTotal - numItemsDisplay + 1);
         shouldRebuild = true;
     }
 }

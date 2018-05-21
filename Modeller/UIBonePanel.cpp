@@ -31,7 +31,7 @@ bool UIBonePanel::isHighlighted()
 void UIBonePanel::preRender()
 {
     UIComponent* component = UserInterface::getInstance()->getActiveComponent();
-    highlighted = hover || isChild(component);
+    highlighted = hover || isChild(component) || parent->activeBone == index;
     surface->diffuseMap = highlighted ? onMap : offMap;
 }
 
@@ -93,4 +93,9 @@ void UIBonePanel::addNumber(float& value)
     uiNumber->surface->diffuseMap = parent->texture;
     uiNumber->setActionListener(this);
     addComponent(uiNumber);
+}
+
+void UIBonePanel::processMouseClick(MouseClickEvent mouseEvent)
+{
+    parent->activeBone = index;
 }

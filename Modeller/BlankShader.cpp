@@ -147,6 +147,37 @@ void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMat
         }
     }
 
+    std::vector<glm::vec3> xLineVertices;
+    std::vector<glm::vec3> yLineVertices;
+    std::vector<glm::vec3> zLineVertices;
+    std::vector<unsigned int> newLineIndices;
+    for (unsigned int i=0; i<bones.size(); i++)
+    {
+        Bone& bone = bones[i];
+
+        glm::vec4 oPosition = bone.absolute * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec4 xPosition = bone.absolute * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec4 yPosition = bone.absolute * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+        glm::vec4 zPosition = bone.absolute * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+        xLineVertices.push_back(oPosition);
+        xLineVertices.push_back(xPosition);
+
+        yLineVertices.push_back(oPosition);
+        yLineVertices.push_back(yPosition);
+
+        zLineVertices.push_back(oPosition);
+        zLineVertices.push_back(zPosition);
+
+        unsigned int size = newLineIndices.size();
+        newLineIndices.push_back(size);
+        newLineIndices.push_back(size + 1);
+    }
+
+    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
     renderVertices(vertices, modelViewProjectionMatrix, glm::vec4(1.0f));
     renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f));
 }

@@ -36,7 +36,6 @@
     <ClInclude Include="UILabel.h" />
     <ClInclude Include="UINumber.h" />
     <ClInclude Include="UIPanel.h" />
-    <ClInclude Include="UIRenderer.h" />
     <ClInclude Include="UIShader.h" />
     <ClInclude Include="UITextBox.h" />
     <ClInclude Include="UIToggleButton.h" />
@@ -57,7 +56,6 @@
     <ClCompile Include="UILabel.cpp" />
     <ClCompile Include="UINumber.cpp" />
     <ClCompile Include="UIPanel.cpp" />
-    <ClCompile Include="UIRenderer.cpp" />
     <ClCompile Include="UIShader.cpp" />
     <ClCompile Include="UITextBox.cpp" />
     <ClCompile Include="UIToggleButton.cpp" />

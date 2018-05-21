@@ -2,6 +2,16 @@
 #include "ScreenShader.h"
 #include "OpenGLContext.h"
 
+Renderer::Renderer() : Renderer(2)
+{
+
+}
+
+Renderer::Renderer(int superSampleFactor)
+{
+    this->superSampleFactor = superSampleFactor;
+}
+
 void Renderer::initialise()
 {
     initialiseFrameBuffer();
@@ -37,15 +47,10 @@ void Renderer::initialiseScreenShader()
     screenShader->initialise();
 }
 
-int Renderer::getSuperSampleFactor()
-{
-    return 2;
-}
-
 void Renderer::resize(int width, int height)
 {
-    this->width = width * getSuperSampleFactor();
-    this->height = height * getSuperSampleFactor();
+    this->width = width * superSampleFactor;
+    this->height = height * superSampleFactor;
     
     recreateFramebuffer();
 }

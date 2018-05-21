@@ -14,6 +14,8 @@ public:
     
     bool updateVertices = false;
 
+    int activeBone = 0;
+
     UIBoneInformation(Surface* infoSurface);
 
     void build() override;

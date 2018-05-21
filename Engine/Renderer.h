@@ -18,6 +18,9 @@ public:
         return renderer;
     }
 
+    Renderer();
+    Renderer(int superSampleFactor);
+
     void initialise();
     void initialiseFrame();
     void renderFrame();
@@ -34,8 +37,7 @@ protected:
 
     int width;
     int height;
-
-    int getSuperSampleFactor();
+    int superSampleFactor;
 
     void initialiseFrameBuffer();
     void initialiseScreenShader();
