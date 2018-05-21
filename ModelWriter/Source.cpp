@@ -37,7 +37,7 @@ struct Surface
 std::string addTriangle(Surface& surface, int parentBoneIndex);
 std::string addCube(Surface& surface, int parentBoneIndex);
 std::string addSphere(Surface& surface, int parentBoneIndex, int detail);
-//std::string addCylinder(Surface& surface, int parentBoneIndex, double radius, double length, int detail);
+std::string addCylinder(Surface& surface, int detail);
 std::string addCapitalShip(Surface& surface, int parentBoneIndex);
 
 void writeToBinaryFile(Surface& surface, std::string fileName);
@@ -63,6 +63,10 @@ void main()
     Surface capitalShipSurface;
     fileNames.push_back(addCapitalShip(capitalShipSurface, 0));
     surfaces.push_back(&capitalShipSurface);
+
+    Surface cylinderSurface;
+    fileNames.push_back(addCylinder(cylinderSurface, 30));
+    surfaces.push_back(&cylinderSurface);
 
     for (unsigned int i = 0; i < surfaces.size(); i++)
     {
@@ -222,6 +226,142 @@ std::string addSphere(Surface& surface, int parentBoneIndex, int detail)
     }
 
     return "Sphere";
+}
+
+std::string addCylinder(Surface& surface, int detail)
+{
+    double PI = atan(1.0) * 4;
+
+    glm::vec4 parentBoneDependency(0, 1.0f, -1, -1);
+
+    int numVertices = 1 + detail + (detail+1) + (detail+1) + detail + 1;
+    surface.vertices.resize(numVertices);
+
+    int numTriangles = detail * 4;
+    surface.indices.resize(numTriangles * 3);
+
+    unsigned int topMidOffset = 0;
+    unsigned int topUpOffset = topMidOffset + 1;
+    unsigned int bottomMidOffset = topUpOffset + detail;
+    unsigned int bottomDownOffset = bottomMidOffset + 1;
+    unsigned int outOffset = bottomDownOffset + detail;
+
+    unsigned int topIndicesOffset = 0;
+    unsigned int bottomIndicesOffset = topIndicesOffset + detail * 3;
+    unsigned int outIndicesOffset = bottomIndicesOffset + detail * 3;
+
+    Vertex topMid =
+    {
+        glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec2(0.5f, 0.5f),
+        glm::vec3(0.0f, 0.0f, 1.0f),
+        parentBoneDependency
+    };
+
+    Vertex bottomMid = 
+    {
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec2(0.5f, 0.5f),
+        glm::vec3(0.0f, 0.0f, -1.0f),
+        parentBoneDependency
+    };
+
+    surface.vertices[topMidOffset] = topMid;
+    surface.vertices[bottomMidOffset] = bottomMid;
+
+    for (unsigned int i=0; i<=detail; i++)
+    {
+        double theta = -PI + i * (2 * PI / detail);
+
+        float x = cos(theta);
+        float y = sin(theta);
+
+        float u = (float)i / detail;
+
+        if (i < detail)
+        {
+            Vertex topUp =
+            {
+                glm::vec3(x, y, 1.0f),
+                glm::vec2((x+1)/2, (y+1/2)),
+                glm::vec3(0.0f, 0.0f, 1.0f),
+                parentBoneDependency
+            };
+
+            Vertex bottomDown =
+            {
+                glm::vec3(x, y, 0.0f),
+                glm::vec2((x+1)/2, (y+1)/2),
+                glm::vec3(0.0f, 0.0f, -1.0f),
+                parentBoneDependency
+            };
+
+            surface.vertices[topUpOffset + i] = topUp;
+            surface.vertices[bottomDownOffset + i] = bottomDown;
+
+            unsigned int topIndex0 = topMidOffset;
+            unsigned int topIndex1 = topUpOffset + i;
+            unsigned int topIndex2 = topUpOffset + i + 1;
+            if (topIndex2 == bottomMidOffset)
+            {
+                topIndex2 = topUpOffset;
+            }
+
+            surface.indices[topIndicesOffset + i*3] = topIndex0;
+            surface.indices[topIndicesOffset + i*3+1] = topIndex1;
+            surface.indices[topIndicesOffset + i*3+2] = topIndex2;
+
+            unsigned int bottomIndex0 = bottomMidOffset;
+            unsigned int bottomIndex1 = bottomDownOffset + i;
+            unsigned int bottomIndex2 = bottomDownOffset + i + 1;
+            if (bottomIndex2 == outOffset)
+            {
+                bottomIndex2 = bottomDownOffset;
+            }
+
+            surface.indices[bottomIndicesOffset + i*3] = bottomIndex0;
+            surface.indices[bottomIndicesOffset + i*3+1] = bottomIndex1;
+            surface.indices[bottomIndicesOffset + i*3+2] = bottomIndex2;
+        }
+
+        Vertex topOut = 
+        {
+            glm::vec3(x, y, 1.0f),
+            glm::vec2(u, 0.0f),
+            glm::vec3(x, y, 0.0f),
+            parentBoneDependency
+        };
+
+        Vertex bottomOut = 
+        {
+            glm::vec3(x, y, 0.0f),
+            glm::vec2(u, 1.0f),
+            glm::vec3(x, y, 0.0f),
+            parentBoneDependency
+        };
+
+        surface.vertices[outOffset + i*2] = topOut;
+        surface.vertices[outOffset + i*2 + 1] = bottomOut;
+
+        if (i < detail)
+        {
+            unsigned int quadTopLeft        = outOffset + i*2;
+            unsigned int quadBottomLeft     = outOffset + i*2 + 1;
+            unsigned int quadTopRight       = outOffset + i*2 + 2;
+            unsigned int quadBottomRight    = outOffset + i*2 + 3;
+
+            unsigned int indexOffset = outIndicesOffset + i*6;
+
+            surface.indices[indexOffset] = quadTopLeft;
+            surface.indices[indexOffset + 1] = quadBottomLeft;
+            surface.indices[indexOffset + 2] = quadTopRight;
+            surface.indices[indexOffset + 3] = quadTopRight;
+            surface.indices[indexOffset + 4] = quadBottomLeft;
+            surface.indices[indexOffset + 5] = quadBottomRight;
+        }
+    }
+
+    return "Cylinder" + detail;
 }
 
 std::string addTriangle(Surface& surface, int parentBoneIndex, glm::vec3 position0, glm::vec3 position1, glm::vec3 position2,

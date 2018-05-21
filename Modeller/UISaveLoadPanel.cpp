@@ -21,43 +21,37 @@ void UISaveLoadPanel::build()
 
     blankTexture = Texture::getTexture("Blank");
 
-    float xpos = border;
     float ypos = border;
 
-    loadBox = new UITextBox();
-    loadBox->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(textBoxWidth, textSize));
-    loadBox->setText("", textSize, *font, LEFT);
-    loadBox->surface->diffuseMap = blankTexture;
-    addComponent(loadBox);
+    addBoxAndButton(loadBox, loadButton, "Load", ypos);
+    addBoxAndButton(saveBox, saveButton, "Save", ypos);
+    addBoxAndButton(importBox, importButton, "Import", ypos);
 
-    xpos += textBoxWidth + border;
-
-    loadButton = new UIButton(this);
-    loadButton->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonWidth, textSize));
-    loadButton->setText("Load", textSize, *font, CENTRE);
-    loadButton->surface->diffuseMap = blankTexture;
-    addComponent(loadButton);
-
-    xpos = border;
-    ypos += textSize + 0.002f;
-
-    saveBox = new UITextBox();
-    saveBox->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(textBoxWidth, textSize));
-    saveBox->setText("", textSize, *font, LEFT);
-    saveBox->surface->diffuseMap = blankTexture;
-    addComponent(saveBox);
-
-    xpos += textBoxWidth + border;
-
-    saveButton = new UIButton(this);
-    saveButton->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonWidth, textSize));
-    saveButton->setText("Save", textSize, *font, CENTRE);
-    saveButton->surface->diffuseMap = blankTexture;
-    addComponent(saveButton);
-
-    setSize(border * 3 + textBoxWidth + buttonWidth, border + textSize + 0.002f + textSize + border);
+    setSize(border * 3 + textBoxWidth + buttonWidth, ypos + border - 0.002f);
     constructSurface();
     surface->diffuseMap = blankTexture;
+}
+
+void UISaveLoadPanel::addBoxAndButton(UITextBox*& textBox, UIButton*& button, std::string buttonText, float& ypos)
+{
+    float xpos = border;
+
+    textBox = new UITextBox();
+    textBox->setPosition(xpos, ypos);
+    textBox->setSize(textBoxWidth, textSize);
+    textBox->setText("", textSize, *font, LEFT);
+    textBox->surface->diffuseMap = blankTexture;
+    addComponent(textBox);
+
+    xpos += textBoxWidth + border;
+
+    button = new UIButton(this);
+    button->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonWidth, textSize));
+    button->setText(buttonText, textSize, *font, CENTRE);
+    button->surface->diffuseMap = blankTexture;
+    addComponent(button);
+
+    ypos += textSize + 0.002f;
 }
 
 void UISaveLoadPanel::actionPerformed(UIComponent* component)
@@ -71,5 +65,10 @@ void UISaveLoadPanel::actionPerformed(UIComponent* component)
     {
         std::string fileName = saveBox->getText();
         UserInterfaceModeller::getInstance()->saveSurface(&fileName[0]);
+    }
+    else if (component == importButton)
+    {
+        std::string fileName = importBox->getText();
+        UserInterfaceModeller::getInstance()->importSurface(&fileName[0]);
     }
 }

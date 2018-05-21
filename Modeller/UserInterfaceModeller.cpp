@@ -18,34 +18,137 @@ void UserInterfaceModeller::build()
     addComponent(renderOptions);
 
     vertexInformation = new UIVertexInformation(infoSurface);
-    vertexInformation->build();
     addComponent(vertexInformation);
 
     triangleInformation = new UITriangleInformation(infoSurface);
-    triangleInformation->build();
     addComponent(triangleInformation);
 
     boneInformation = new UIBoneInformation(infoSurface);
-    boneInformation->build();
     addComponent(boneInformation);
 
     saveLoadPanel = new UISaveLoadPanel();
     saveLoadPanel->build();
     addComponent(saveLoadPanel);
+
+    rebuildInformation();
 }
 
-void UserInterfaceModeller::loadSurface(const char* fileName)
+void UserInterfaceModeller::rebuildInformation()
 {
-    infoSurface->loadFromFile(fileName);
-
     vertexInformation->build();
     triangleInformation->build();
     boneInformation->build();
 }
 
+void UserInterfaceModeller::loadSurface(const char* fileName)
+{
+    infoSurface->loadFromFile(fileName);
+    rebuildInformation();
+}
+
 void UserInterfaceModeller::saveSurface(const char* fileName)
 {
     infoSurface->writeToFile(fileName);
+}
+
+void UserInterfaceModeller::importSurface(const char* fileName)
+{
+    //first, import the file as a new surface
+    Surface* importSurface = new Surface();
+    importSurface->loadFromFile(fileName);
+
+    int activeBone = boneInformation->activeBone;
+
+    std::vector<Bone>& infoBones = infoSurface->getBones();
+    int numBones = infoBones.size();
+
+    //Second, append the new surface's bones onto our surface
+    //Ignore the first bone, as we'll use our active bone as the base
+    std::vector<Bone>& importBones = importSurface->getBones();
+    for (unsigned int i=1; i<importBones.size(); i++)
+    {
+        Bone newBone = importBones[i];
+        int& parent = newBone.parent;
+
+        if (parent == 0)
+        {
+            //This bone originally depended on the base bone, which is now the active bone
+            parent = activeBone;
+        }
+        else
+        {
+            //The bone depended on another bone, which will be one that we added
+            //Minus one because we haven't added the base bone
+            parent += numBones - 1;
+        }
+
+        infoBones.push_back(newBone);
+    }
+
+    infoSurface->prepareBones();
+    
+    int newNumBones = infoBones.size();
+    std::vector<glm::mat3> transposeMatrices(newNumBones);
+    for (unsigned int i=0; i<newNumBones; i++)
+    {
+        transposeMatrices[i] = glm::transpose(glm::mat3(infoBones[i].absolute));
+    }
+
+    std::vector<glm::vec3>& infoVertices = infoSurface->getVertices();
+    std::vector<glm::vec2>& infoTextureCoordinates = infoSurface->getTextureCoordinates();
+    std::vector<glm::vec3>& infoNormals = infoSurface->getNormals();
+    std::vector<glm::vec4>& infoBoneIndices = infoSurface->getBoneIndicesAndWeights();
+    int numVertices = infoVertices.size();
+
+    //Third, add all the vertices, transformed by the active bone matrix
+    std::vector<glm::vec3>& importVertices = importSurface->getVertices();
+    std::vector<glm::vec2>& importTextureCoordinates = importSurface->getTextureCoordinates();
+    std::vector<glm::vec3>& importNormals = importSurface->getNormals();
+    std::vector<glm::vec4>& importBoneIndicesAndWeights = importSurface->getBoneIndicesAndWeights();
+    for (unsigned int i=0; i<importVertices.size(); i++)
+    {
+        glm::vec4 newVertex = infoBones[activeBone].absolute * glm::vec4(importVertices[i], 1.0f);
+        glm::vec2 newTextureCoordinate = importTextureCoordinates[i];
+        glm::vec3 newNormal = transposeMatrices[activeBone] * importNormals[i];
+        glm::vec4 newBoneIndices = importBoneIndicesAndWeights[i];
+
+        //As with the bones, if these depend on the base bone then use the active bone, otherwise
+        //use the new bone that was added from the import surface.
+        for (unsigned int j=0; j<4; j+=2)
+        {
+            if (newBoneIndices[j] == 0)
+            {
+                newBoneIndices[j] = activeBone;
+            }
+            else if (newBoneIndices[j] > 0)
+            {
+                newBoneIndices[j] += numBones - 1;
+            }
+        }
+
+        infoVertices.push_back(newVertex);
+        infoTextureCoordinates.push_back(newTextureCoordinate);
+        infoNormals.push_back(newNormal);
+        infoBoneIndices.push_back(newBoneIndices);
+    }
+
+    //Next, add all the triangles from the import surface to ours
+    std::vector<unsigned int>& importIndices = importSurface->getIndices();
+    std::vector<unsigned int>& infoIndices = infoSurface->getIndices();
+    for (unsigned int i=0; i<importIndices.size(); i++)
+    {
+        //Since we've added the imported vertices to our own, we need to shift the indices
+        unsigned int newIndex = importIndices[i] + numVertices;
+        infoIndices.push_back(newIndex);
+    }
+
+    //Finally, make the surface recalculate the remaining items
+    infoSurface->calculateTangents();
+    infoSurface->calculateSizesAndLength();
+
+    delete importSurface;
+
+    rebuildInformation();
 }
 
 std::vector<glm::vec3> UserInterfaceModeller::getHighlightVertices()

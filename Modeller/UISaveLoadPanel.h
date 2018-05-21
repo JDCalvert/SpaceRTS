@@ -21,14 +21,17 @@ public:
     GLuint blankTexture;
 
     void build();
+    void addBoxAndButton(UITextBox*& textBox, UIButton*& button, std::string buttonText, float& ypos);
 
     void actionPerformed(UIComponent* component);
 
 private:
     UITextBox* loadBox;
     UITextBox* saveBox;
+    UITextBox* importBox;
     UIButton* loadButton;
     UIButton* saveButton;
+    UIButton* importButton;
 };
 
 #endif

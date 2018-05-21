@@ -23,9 +23,11 @@ public:
     static UserInterfaceModeller* getInstance();
 
     void build();
+    void rebuildInformation();
 
     void loadSurface(const char* fileName);
     void saveSurface(const char* fileName);
+    void importSurface(const char* fileName);
 
     std::vector<glm::vec3> getHighlightVertices();
     std::vector<unsigned int> getHighlightIndices();

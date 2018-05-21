@@ -47,30 +47,33 @@ void Surface::loadFromFile(const char* objFilePath)
 {
 	std::vector<glm::mat4> boneRelatives;
 	std::vector<int> boneParents;
-	loadObj(objFilePath, boneRelatives, boneParents);
+	
+    bool success = loadObj(objFilePath, boneRelatives, boneParents);
+    if (success)
+    {
+        bones.clear();
 
-    bones.clear();
+	    for (unsigned int i=0; i<boneRelatives.size(); i++)
+	    {
+		    const glm::mat4 boneRelative = boneRelatives[i];
+		    int boneParent = boneParents[i];
 
-	for (unsigned int i=0; i<boneRelatives.size(); i++)
-	{
-		const glm::mat4 boneRelative = boneRelatives[i];
-		int boneParent = boneParents[i];
+		    bones.push_back(Bone(boneRelative, boneParent));
+	    }
 
-		bones.push_back(Bone(boneRelative, boneParent));
-	}
-
-	calculateSizesAndLength();
-	prepareBones();
+	    calculateSizesAndLength();
+	    prepareBones();
+    }
 }
 
-void Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents)
+bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents)
 {
     //Open the file as a binary, and start at the end so we can get the length, then go back to the beginning.
     std::ifstream in(path, std::ios::in | std::ios::binary | std::ios::ate);
     unsigned int fileSize = (unsigned int)in.tellg();
     in.seekg(0, std::ios::beg);
 
-    if (!in) return;
+    if (!in) return false;
 
     //Read in the file then close
     char* data = new char[fileSize];
