@@ -36,6 +36,8 @@ protected:
 private:
     std::vector<UIVertexPanel*> vertexPanels;
 
+    UIButton* recalculateNormalsButton;
+
     void addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders);
     void addHeader(std::string text, int numColumns);
     

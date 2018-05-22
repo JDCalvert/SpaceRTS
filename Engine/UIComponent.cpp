@@ -146,6 +146,11 @@ void UIComponent::setActionListener(UIActionListener* actionListener)
     this->actionListener = actionListener;
 }
 
+void UIComponent::invokeActionListener()
+{
+    if (actionListener) actionListener->actionPerformed(this);
+}
+
 void UIComponent::addComponent(UIComponent* component)
 {
     components.push_back(component);

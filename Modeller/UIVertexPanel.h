@@ -6,7 +6,7 @@
 
 class UIVertexInformation;
 
-class UIVertexPanel : public UIPanel
+class UIVertexPanel : public UIPanel, UIActionListener
 {
 public:
     glm::vec3& vertexPosition;
@@ -16,10 +16,12 @@ public:
 
     UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, unsigned int index);
 
-    void preRender();
+    void preRender() override;
     void buildPanel();
 
     bool isHighlighted();
+
+    void actionPerformed(UIComponent* component) override;
 
 private:
     UIVertexInformation* parent;

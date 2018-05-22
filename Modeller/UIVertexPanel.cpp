@@ -95,7 +95,13 @@ void UIVertexPanel::addNumber(float& number, int numDigits, float width)
     numberBox->setNumDigits(numDigits);
     numberBox->setText(parent->textSize, *parent->font, RIGHT);
     numberBox->surface->diffuseMap = parent->texture;
+    numberBox->setActionListener(this);
     addComponent(numberBox);
 
     xpos += width + parent->border;
+}
+
+void UIVertexPanel::actionPerformed(UIComponent* uiComponent)
+{
+    
 }

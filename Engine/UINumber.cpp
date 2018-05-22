@@ -55,6 +55,7 @@ void UINumber::processNotActive()
     catch (std::out_of_range e) {}
 
     recalculateSurface();
+    invokeActionListener();
 }
 
 void UINumber::setText(float size, Font font, Alignment alignment)
