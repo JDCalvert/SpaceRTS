@@ -1,18 +1,20 @@
 #ifndef UI_VERTEX_PANEL_H
 #define UI_VERTEX_PANEL_H
 
-#include "UIPanel.h"
-#include "UIActionListener.h"
+#include <UIPanel.h>
+#include <UINumber.h>
+#include <UIActionListener.h>
 
 class UIVertexInformation;
 
 class UIVertexPanel : public UIPanel, UIActionListener
 {
 public:
-    glm::vec3& vertexPosition;
-    glm::vec2& vertexTextureCoordinate;
-    glm::vec3& vertexNormal;
-    glm::vec4& vertexBoneIndices;
+    unsigned int index;
+    glm::vec3 vertexPosition;
+    glm::vec2 vertexTextureCoordinate;
+    glm::vec3 vertexNormal;
+    glm::vec4 vertexBoneIndices;
 
     UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, unsigned int index);
 
@@ -26,7 +28,8 @@ public:
 private:
     UIVertexInformation* parent;
 
-    unsigned int index;
+    std::vector<UINumber*> vertexNumbers;
+    std::vector<UINumber*> normalNumbers;
 
     float xpos;
 
@@ -35,8 +38,8 @@ private:
 
     void addIndexLabel();
     void addRowVec2(glm::vec2& row);
-    void addRowVec3(glm::vec3& row);
-    void addNumber(float& number, int numDigits, float width);
+    void addRowVec3(glm::vec3& row, std::vector<UINumber*>& numberPanels);
+    UINumber* addNumber(float& number, int numDigits, float width);
     void addBones();
 };
 

@@ -108,6 +108,47 @@ void BlankShader::renderVertices(Surface* surface, glm::mat4 modelViewProjection
     renderVertices(numVertices, verticesSize, verticesPointer, 5, modelViewProjectionMatrix, colour);
 }
 
+void BlankShader::renderVertices(Surface* surface, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
+{
+    unsigned int numIndices = indices.size();
+
+    std::vector<glm::vec3>& vertices = surface->getVertices();
+    std::vector<glm::vec3>& normals = surface->getNormals();
+    std::vector<glm::vec3>& tangents = surface->getTangents();
+    std::vector<glm::vec3>& bitangents = surface->getBitangents();
+
+    std::vector<glm::vec3> verticesToRender;
+    std::vector<glm::vec3> normalLineVertices;
+    std::vector<glm::vec3> tangentLineVertices;
+    std::vector<glm::vec3> bitangentLineVertices;
+    std::vector<unsigned int> normalLineIndices;
+
+    for (unsigned int i=0; i<indices.size(); i++)
+    {
+        unsigned int index = indices[i];
+
+        glm::vec3 vertexPosition = vertices[index];
+        verticesToRender.push_back(vertexPosition);
+
+        normalLineVertices.push_back(vertexPosition);
+        normalLineVertices.push_back(vertexPosition + normals[index]);
+
+        tangentLineVertices.push_back(vertexPosition);
+        tangentLineVertices.push_back(vertexPosition + tangents[index]);
+
+        bitangentLineVertices.push_back(vertexPosition);
+        bitangentLineVertices.push_back(vertexPosition + bitangents[index]);
+
+        normalLineIndices.push_back(i * 2);
+        normalLineIndices.push_back(i * 2 + 1);
+    }
+
+    renderVertices(verticesToRender, modelViewProjectionMatrix, colour);
+    renderLines(tangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(colour.r, 0.0f, 0.0f, colour.a));
+    renderLines(bitangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, colour.g, 0.0f, colour.a));
+    renderLines(normalLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, colour.b, colour.a));
+}
+
 void BlankShader::renderVertices(std::vector<glm::vec3>& vertices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
 {
     if (vertices.size() == 0) return;

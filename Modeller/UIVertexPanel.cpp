@@ -6,19 +6,18 @@
 #include <Texture.h>
 
 #include "UILabel.h"
-#include "UINumber.h"
 #include "UIVertexInformation.h"
-#include "UserInterface.h"
+#include "UserInterfaceModeller.h"
 
-UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, unsigned int index) :
-    vertexPosition(infoSurface->getVertices()[index]),
-    vertexTextureCoordinate(infoSurface->getTextureCoordinates()[index]),
-    vertexNormal(infoSurface->getNormals()[index]),
-    vertexBoneIndices(infoSurface->getBoneIndicesAndWeights()[index]),
-    UIPanel()
+UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, unsigned int index) : UIPanel()
 {
     this->parent = parent;
     this->index = index;
+
+    vertexPosition = infoSurface->getVertices()[index];
+    vertexTextureCoordinate = infoSurface->getTextureCoordinates()[index];
+    vertexNormal = infoSurface->getNormals()[index];
+    vertexBoneIndices = infoSurface->getBoneIndicesAndWeights()[index];
 
     onMap = Texture::getTexture("Blank");
     offMap = Texture::getTexture("BlankNothing");
@@ -41,9 +40,9 @@ void UIVertexPanel::preRender()
 void UIVertexPanel::buildPanel()
 {
     addIndexLabel();
-    if (parent->showVertices) addRowVec3(vertexPosition);
+    if (parent->showVertices) addRowVec3(vertexPosition, vertexNumbers);
     if (parent->showTextureCoordinates) addRowVec2(vertexTextureCoordinate);
-    if (parent->showNormals) addRowVec3(vertexNormal);
+    if (parent->showNormals) addRowVec3(vertexNormal, normalNumbers);
     if (parent->showBones) addBones();
 
     setSize(xpos - parent->border, parent->textSize);
@@ -72,11 +71,14 @@ void UIVertexPanel::addRowVec2(glm::vec2& row)
     }
 }
 
-void UIVertexPanel::addRowVec3(glm::vec3& row)
+void UIVertexPanel::addRowVec3(glm::vec3& row, std::vector<UINumber*>& numberPanels)
 {
+    numberPanels.resize(3);
+
     for (unsigned int i = 0; i < 3; i++)
     {
-        addNumber(row[i], 3, parent->columnWidth);
+        UINumber* uiNumber = addNumber(row[i], 3, parent->columnWidth);
+        numberPanels[i] = uiNumber;
     }
 }
 
@@ -88,7 +90,7 @@ void UIVertexPanel::addBones()
     addNumber(vertexBoneIndices[3], 3, parent->columnWidth);
 }
 
-void UIVertexPanel::addNumber(float& number, int numDigits, float width)
+UINumber* UIVertexPanel::addNumber(float& number, int numDigits, float width)
 {
     UINumber* numberBox = new UINumber(number);
     numberBox->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(width, parent->textSize));
@@ -99,9 +101,14 @@ void UIVertexPanel::addNumber(float& number, int numDigits, float width)
     addComponent(numberBox);
 
     xpos += width + parent->border;
+
+    return numberBox;
 }
 
 void UIVertexPanel::actionPerformed(UIComponent* uiComponent)
 {
-    
+    if (std::find(vertexNumbers.begin(), vertexNumbers.end(), uiComponent) != vertexNumbers.end())
+    {
+        UserInterfaceModeller::getInstance()->updateVertexPosition(index, vertexPosition);
+    }
 }

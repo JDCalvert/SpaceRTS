@@ -18,6 +18,8 @@ public:
     bool showNormals, previousShowNormals;
     bool showBones, previousShowBones;
 
+    bool updateSimilarVertices;
+
     float xpos;
 
     UIVertexInformation(Surface* infoSurface);
@@ -44,6 +46,7 @@ private:
     void addSubHeader(char subHeader, float width);
     void addSubHeader(std::string subHeader, float width);
 
+    void addButton(UIButton*& uiButton, std::string text, float width);
     void addToggleButton(bool& toggle, std::string text);
 };
 

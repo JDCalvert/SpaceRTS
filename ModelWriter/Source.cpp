@@ -15,7 +15,6 @@ struct Bone
         this->relative = relative;
         this->parent = parent;
     }
-
 };
 
 struct Vertex
@@ -182,7 +181,7 @@ std::string addCube(Surface &surface, int parentBoneIndex)
 
 std::string addSphere(Surface& surface, int parentBoneIndex, int detail)
 {
-    double PI = 3.14159;
+    double PI = 4 * atan(1.0);
 
     unsigned int nLatitude = detail;
     unsigned int nLongitude = detail * 2;
@@ -194,10 +193,10 @@ std::string addSphere(Surface& surface, int parentBoneIndex, int detail)
         double phi = PI / 2 - latitude * PI / nLatitude;
         for (unsigned int longitude = 0; longitude <= nLongitude; longitude++)
         {
-            double theta = (-PI + longitude * 2 * PI / nLongitude);
+            double theta = -PI + longitude * 2 * PI / nLongitude;
             double x = cos(theta) * cos(phi);
-            double y = sin(phi);
-            double z = sin(theta) * cos(phi);
+            double y = sin(theta) * cos(phi);
+            double z = sin(phi);
 
             float u = (float)longitude / nLongitude;
             float v = (float)latitude / nLatitude;
@@ -312,11 +311,11 @@ std::string addCylinder(Surface& surface, int detail)
             surface.indices[topIndicesOffset + i*3+2] = topIndex2;
 
             unsigned int bottomIndex0 = bottomMidOffset;
-            unsigned int bottomIndex1 = bottomDownOffset + i;
-            unsigned int bottomIndex2 = bottomDownOffset + i + 1;
-            if (bottomIndex2 == outOffset)
+            unsigned int bottomIndex1 = bottomDownOffset + i + 1;
+            unsigned int bottomIndex2 = bottomDownOffset + i;
+            if (bottomIndex1 == outOffset)
             {
-                bottomIndex2 = bottomDownOffset;
+                bottomIndex1 = bottomDownOffset;
             }
 
             surface.indices[bottomIndicesOffset + i*3] = bottomIndex0;
@@ -437,7 +436,7 @@ void writeToBinaryFile(Surface& surface, std::string fileName)
 
         vertices.push_back(vertex.vertex);
         textureCoordinates.push_back(vertex.textureCoordinate);
-        normals.push_back(vertex.normal);
+        normals.push_back(glm::normalize(vertex.normal));
         boneIndices.push_back(vertex.boneIndices);
     }
 
@@ -528,5 +527,11 @@ void calculateTangents(Surface& surface, std::vector<glm::vec3>& tangents, std::
         bitangents[index0] += bitangent;
         bitangents[index1] += bitangent;
         bitangents[index2] += bitangent;
+    }
+
+    for (unsigned int i=0; i<tangents.size(); i++)
+    {
+        tangents[i] = glm::normalize(tangents[i]);
+        bitangents[i] = glm::normalize(bitangents[i]);
     }
 }

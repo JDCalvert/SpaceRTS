@@ -151,20 +151,20 @@ void UserInterfaceModeller::importSurface(const char* fileName)
     rebuildInformation();
 }
 
-std::vector<glm::vec3> UserInterfaceModeller::getHighlightVertices()
+std::vector<unsigned int> UserInterfaceModeller::getHighlightVertexIndices()
 {
-    std::vector<glm::vec3> highlights;
+    std::vector<unsigned int> highlights;
     std::vector<UIVertexPanel*>& vertexPanels = vertexInformation->getVertexPanels();
     for (auto i = vertexPanels.begin(); i != vertexPanels.end(); i++)
     {
         UIVertexPanel* vertexPanel = *i;
-        if (vertexPanel->isHighlighted()) highlights.push_back(vertexPanel->vertexPosition);
+        if (vertexPanel->isHighlighted()) highlights.push_back(vertexPanel->index);
     }
 
     return highlights;
 }
 
-std::vector<unsigned int> UserInterfaceModeller::getHighlightIndices()
+std::vector<unsigned int> UserInterfaceModeller::getHighlightTriangleIndices()
 {
     std::vector<unsigned int> highlights;
     std::vector<UITrianglePanel*>& trianglePanels = triangleInformation->getTrianglePanels();
@@ -197,7 +197,7 @@ void UserInterfaceModeller::recalculateVertexPositions()
         }
 
         glm::mat4 transformMatrix = bone.absolute * bone.inverseBind;
-        glm::mat3 transposeMatrix = glm::transpose(glm::mat3(transformMatrix));
+        glm::mat3 transposeMatrix = glm::transpose(glm::inverse(glm::mat3(transformMatrix)));
 
         bone.inverseBind = glm::inverse(bone.absolute);
 
@@ -236,9 +236,9 @@ void UserInterfaceModeller::recalculateVertexPositions()
                     glm::mat3 transposeMatrix = transposeMatrices[parentIndex];
 
                     newVertex += glm::vec3((transformMatrix * glm::vec4(vertex, 1.0f)) * weight);
-                    newNormal += (transposeMatrix * normal) * weight;
-                    newTangent += (transposeMatrix * tangent) * weight;
-                    newBitangent += (transposeMatrix * bitangent) * weight;
+                    newNormal += glm::normalize((transposeMatrix * normal) * weight);
+                    newTangent += glm::normalize((glm::mat3(transformMatrix) * tangent) * weight);
+                    newBitangent += glm::normalize((transposeMatrix * bitangent) * weight);
                 }
             }
 
@@ -279,4 +279,27 @@ void UserInterfaceModeller::newBone()
     infoSurface->getBones().push_back(newBone);
 
     infoSurface->prepareBones();
+}
+
+void UserInterfaceModeller::updateVertexPosition(int index, glm::vec3 newVertexPosition)
+{
+    //First, get the old vertex
+    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+    glm::vec3 updateVertex = vertices[index];
+
+    if (vertexInformation->updateSimilarVertices)
+    {
+        for (auto i=vertices.begin(); i!=vertices.end(); i++)
+        {
+            glm::vec3& vertexPosition = *i;
+            if (vertexPosition == updateVertex)
+            {
+                vertexPosition = newVertexPosition;
+            }
+        }
+    }
+    else
+    {
+        vertices[index] = newVertexPosition;
+    }
 }
