@@ -29,7 +29,7 @@ void UISaveLoadPanel::build()
 
     setSize(border * 3 + textBoxWidth + buttonWidth, ypos + border - 0.002f);
     constructSurface();
-    surface->diffuseMap = blankTexture;
+    surface.diffuseMap = blankTexture;
 }
 
 void UISaveLoadPanel::addBoxAndButton(UITextBox*& textBox, UIButton*& button, std::string buttonText, float& ypos)
@@ -40,7 +40,7 @@ void UISaveLoadPanel::addBoxAndButton(UITextBox*& textBox, UIButton*& button, st
     textBox->setPosition(xpos, ypos);
     textBox->setSize(textBoxWidth, textSize);
     textBox->setText("", textSize, *font, LEFT);
-    textBox->surface->diffuseMap = blankTexture;
+    textBox->surface.diffuseMap = blankTexture;
     addComponent(textBox);
 
     xpos += textBoxWidth + border;
@@ -48,7 +48,7 @@ void UISaveLoadPanel::addBoxAndButton(UITextBox*& textBox, UIButton*& button, st
     button = new UIButton(this);
     button->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonWidth, textSize));
     button->setText(buttonText, textSize, *font, CENTRE);
-    button->surface->diffuseMap = blankTexture;
+    button->surface.diffuseMap = blankTexture;
     addComponent(button);
 
     ypos += textSize + 0.002f;

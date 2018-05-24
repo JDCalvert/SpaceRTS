@@ -19,13 +19,13 @@ void UIRenderOptions::build()
 
     setSize(0.45f, 0.12f);
     constructSurface();
-    surface->diffuseMap = blankTexture;
+    surface.diffuseMap = blankTexture;
 }
 
 void UIRenderOptions::addToggleButton(bool& toggle, glm::vec2 position, GLuint texture)
 {
     UIToggleButton* button = new UIToggleButton(toggle);
     button->setPositionAndSize(position, glm::vec2(buttonSize, buttonSize));
-    button->surface->diffuseMap = texture;
+    button->surface.diffuseMap = texture;
     addComponent(button);
 }

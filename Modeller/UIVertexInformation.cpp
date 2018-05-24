@@ -47,7 +47,7 @@ void UIVertexInformation::preRender()
         shouldRebuild = false;
     }
 
-    setPosition(OpenGLContext::currentContext()->getAspectRatio() - (size.x + 0.01f), 0.01f);
+    setPosition(OpenGLContext::currentContext()->getAspectRatio() - (size.x + border), border);
 }
 
 void UIVertexInformation::build()
@@ -140,7 +140,7 @@ void UIVertexInformation::addToggleButton(bool& toggle, std::string text)
     UIToggleButton* button = new UIToggleButton(toggle);
     button->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonSize, buttonSize));
     button->setText(text, buttonSize, *font, CENTRE);
-    button->surface->diffuseMap = texture;
+    button->surface.diffuseMap = texture;
     addComponent(button);
 
     xpos += buttonSize + 0.002f;
@@ -152,7 +152,7 @@ void UIVertexInformation::addButton(UIButton*& uiButton, std::string text, float
     uiButton->setPosition(xpos, ypos);
     uiButton->setSize(width, buttonSize);
     uiButton->setText(text, buttonSize, *font, CENTRE);
-    uiButton->surface->diffuseMap = texture;
+    uiButton->surface.diffuseMap = texture;
     addComponent(uiButton);
 }
 

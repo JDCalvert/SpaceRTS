@@ -40,7 +40,7 @@ void UITrianglePanel::preRender()
 {
     UIComponent* component = UserInterface::getInstance()->getActiveComponent();
     highlighted = hover || isChild(component);
-    surface->diffuseMap = highlighted ? onMap : offMap;
+    surface.diffuseMap = highlighted ? onMap : offMap;
 }
 
 void UITrianglePanel::addNumber(unsigned int& index)
@@ -48,7 +48,7 @@ void UITrianglePanel::addNumber(unsigned int& index)
     UIUnsignedInteger* uiInteger = new UIUnsignedInteger(index);
     uiInteger->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
     uiInteger->setText(parent->textSize, *parent->font, RIGHT);
-    uiInteger->surface->diffuseMap = parent->texture;
+    uiInteger->surface.diffuseMap = parent->texture;
     addComponent(uiInteger);
 
     xpos += parent->indexWidth + parent->border;

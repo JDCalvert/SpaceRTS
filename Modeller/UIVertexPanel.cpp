@@ -33,7 +33,7 @@ void UIVertexPanel::preRender()
 {
     UIComponent* component = UserInterface::getInstance()->getActiveComponent();
     highlighted = hover || isChild(component);
-    surface->diffuseMap = highlighted ? onMap : offMap;
+    surface.diffuseMap = highlighted ? onMap : offMap;
 }
 
 void UIVertexPanel::buildPanel()
@@ -97,7 +97,7 @@ UINumber* UIVertexPanel::addNumber(float& number, int numDigits, float width)
     numberBox->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(width, parent->textSize));
     numberBox->setNumDigits(numDigits);
     numberBox->setText(parent->textSize, *parent->font, RIGHT);
-    numberBox->surface->diffuseMap = parent->texture;
+    numberBox->surface.diffuseMap = parent->texture;
     numberBox->setActionListener(this);
     addComponent(numberBox);
 
@@ -112,7 +112,7 @@ void UIVertexPanel::addRemoveButton()
     removeButton->setPosition(xpos, 0.0f);
     removeButton->setSize(parent->textSize, parent->textSize);
     removeButton->setText("R", parent->textSize, *parent->font, CENTRE);
-    removeButton->surface->diffuseMap = parent->texture;
+    removeButton->surface.diffuseMap = parent->texture;
     addComponent(removeButton);
 
     xpos += parent->textSize + parent->border;

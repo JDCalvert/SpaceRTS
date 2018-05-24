@@ -7,6 +7,7 @@
 #include "UIVertexInformation.h"
 #include "UITriangleInformation.h"
 #include "UIBoneInformation.h"
+#include "UITextureInformation.h"
 #include "UISaveLoadPanel.h"
 
 class UserInterfaceModeller : public UserInterface
@@ -16,6 +17,7 @@ public:
     UIVertexInformation* vertexInformation;
     UITriangleInformation* triangleInformation;
     UIBoneInformation* boneInformation;
+    UITextureInformation* textureInformation;
     UISaveLoadPanel* saveLoadPanel;
 
     UserInterfaceModeller(Surface* infoSurface);
@@ -40,7 +42,7 @@ public:
     void updateVertexPosition(int index, glm::vec3 newVertexPosition);
 
     void removeVertices(int index);
-    void removeVertex(int index);
+    void removeVertex(unsigned int index);
 
 private:
     Surface* infoSurface;

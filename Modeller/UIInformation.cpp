@@ -26,7 +26,7 @@ void UIInformation::addPanels()
     float width = 0.0f;
 
     numItemsTotal = getNumItemsTotal();
-    int maxItem = std::min(currentItem + numItemsDisplay, numItemsTotal);
+    unsigned int maxItem = std::min(currentItem + numItemsDisplay, numItemsTotal);
     for (unsigned int i=currentItem; i<maxItem; i++)
     {
         UIComponent* panel = addPanel(i);
@@ -39,7 +39,7 @@ void UIInformation::addPanels()
     addNewButton();
 
     setSize(width + border * 2, ypos);
-    surface->diffuseMap = texture;
+    surface.diffuseMap = texture;
 }
 
 void UIInformation::addNewButton()
@@ -48,7 +48,7 @@ void UIInformation::addNewButton()
     newButton->setPosition(newButtonXpos, ypos);
     newButton->setSize(newButtonWidth, textSize);
     newButton->setText("New", textSize, *font, CENTRE);
-    newButton->surface->diffuseMap = texture;
+    newButton->surface.diffuseMap = texture;
     addComponent(newButton);
 
     ypos += textSize + border;

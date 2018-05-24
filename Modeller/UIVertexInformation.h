@@ -25,7 +25,7 @@ public:
     UIVertexInformation(Surface* infoSurface);
 
     void build() override;
-    void preRender();
+    void preRender() override;
 
     std::vector<UIVertexPanel*>& getVertexPanels();
 
