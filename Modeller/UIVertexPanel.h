@@ -3,6 +3,7 @@
 
 #include <UIPanel.h>
 #include <UINumber.h>
+#include <UIButton.h>
 #include <UIActionListener.h>
 
 class UIVertexInformation;
@@ -30,6 +31,7 @@ private:
 
     std::vector<UINumber*> vertexNumbers;
     std::vector<UINumber*> normalNumbers;
+    UIButton* removeButton;
 
     float xpos;
 
@@ -41,6 +43,8 @@ private:
     void addRowVec3(glm::vec3& row, std::vector<UINumber*>& numberPanels);
     UINumber* addNumber(float& number, int numDigits, float width);
     void addBones();
+
+    void addRemoveButton();
 };
 
 #endif

@@ -39,6 +39,9 @@ public:
 
     void updateVertexPosition(int index, glm::vec3 newVertexPosition);
 
+    void removeVertices(int index);
+    void removeVertex(int index);
+
 private:
     Surface* infoSurface;
 };

@@ -4,8 +4,7 @@
 #include <iomanip>
 
 #include <Texture.h>
-
-#include "UILabel.h"
+#include <UILabel.h>
 #include "UIVertexInformation.h"
 #include "UserInterfaceModeller.h"
 
@@ -44,6 +43,8 @@ void UIVertexPanel::buildPanel()
     if (parent->showTextureCoordinates) addRowVec2(vertexTextureCoordinate);
     if (parent->showNormals) addRowVec3(vertexNormal, normalNumbers);
     if (parent->showBones) addBones();
+
+    addRemoveButton();
 
     setSize(xpos - parent->border, parent->textSize);
     constructSurface();
@@ -105,10 +106,26 @@ UINumber* UIVertexPanel::addNumber(float& number, int numDigits, float width)
     return numberBox;
 }
 
+void UIVertexPanel::addRemoveButton()
+{
+    removeButton = new UIButton(this);
+    removeButton->setPosition(xpos, 0.0f);
+    removeButton->setSize(parent->textSize, parent->textSize);
+    removeButton->setText("R", parent->textSize, *parent->font, CENTRE);
+    removeButton->surface->diffuseMap = parent->texture;
+    addComponent(removeButton);
+
+    xpos += parent->textSize + parent->border;
+}
+
 void UIVertexPanel::actionPerformed(UIComponent* uiComponent)
 {
     if (std::find(vertexNumbers.begin(), vertexNumbers.end(), uiComponent) != vertexNumbers.end())
     {
         UserInterfaceModeller::getInstance()->updateVertexPosition(index, vertexPosition);
+    }
+    else if (uiComponent == removeButton)
+    {
+        UserInterfaceModeller::getInstance()->removeVertices(index);
     }
 }
