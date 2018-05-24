@@ -49,30 +49,30 @@ void UIShader::renderUiComponent(UIComponent* component, glm::vec2 basePosition)
 {
     component->preRender();
 
-    Surface* surface = component->surface;
+    Surface& surface = component->surface;
 
     glm::vec2 componentPosition = component->getPosition();
 
     glm::vec2 absolutePosition = componentPosition + basePosition;
     glUniform2f(basePositionId, absolutePosition.x, absolutePosition.y);
 
-    int verticesSize = surface->verticesSize;
-    glm::vec3* verticesPointer = surface->verticesPointer;
+    int verticesSize = surface.verticesSize;
+    glm::vec3* verticesPointer = surface.verticesPointer;
     bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
 
-    int textureCoordinatesSize = surface->textureCoordinatesSize;
-    glm::vec2* textureCoordinatesPointer = surface->textureCoordinatesPointer;
+    int textureCoordinatesSize = surface.textureCoordinatesSize;
+    glm::vec2* textureCoordinatesPointer = surface.textureCoordinatesPointer;
     bindArrayBufferData(vertexTextureCoordinateBufferId, textureCoordinatesSize, textureCoordinatesPointer);
 
-    int indicesSize = surface->indicesSize;
-    unsigned int* indicesPointer = surface->indicesPointer;
+    int indicesSize = surface.indicesSize;
+    unsigned int* indicesPointer = surface.indicesPointer;
     bindElementArrayBufferData(indicesBufferId, indicesSize, indicesPointer);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, surface->diffuseMap);
+    glBindTexture(GL_TEXTURE_2D, surface.diffuseMap);
     glUniform1i(textureMapId, 0);
 
-    unsigned int length = surface->length;
+    unsigned int length = surface.length;
     GLenum renderMode = component->getRenderMode();
     glDrawElements(renderMode, length, GL_UNSIGNED_INT, 0);
 

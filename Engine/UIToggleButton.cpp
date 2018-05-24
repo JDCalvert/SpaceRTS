@@ -14,7 +14,7 @@ void UIToggleButton::processMouseClick(MouseClickEvent mouseEvent)
 
 void UIToggleButton::preRender()
 {
-    surface->diffuseMap = toggle ? onMap : offMap;
+    surface.diffuseMap = toggle ? onMap : offMap;
 }
 
 bool UIToggleButton::shouldCheckMouseClickEventForChildren()

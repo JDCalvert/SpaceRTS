@@ -1,5 +1,4 @@
 #include "UserInterfaceModeller.h"
-#include "UIVertexPanel.h"
 
 UserInterfaceModeller::UserInterfaceModeller(Surface* infoSurface)
 {
@@ -26,6 +25,10 @@ void UserInterfaceModeller::build()
     boneInformation = new UIBoneInformation(infoSurface);
     addComponent(boneInformation);
 
+    textureInformation = new UITextureInformation(infoSurface);
+    textureInformation->build();
+    addComponent(textureInformation);
+
     saveLoadPanel = new UISaveLoadPanel();
     saveLoadPanel->build();
     addComponent(saveLoadPanel);
@@ -36,7 +39,7 @@ void UserInterfaceModeller::build()
 void UserInterfaceModeller::rebuildInformation()
 {
     vertexInformation->shouldRebuild = true;
-    triangleInformation->shouldRebuild = true;;
+    triangleInformation->shouldRebuild = true;
     boneInformation->shouldRebuild = true;
 }
 
@@ -87,7 +90,7 @@ void UserInterfaceModeller::importSurface(const char* fileName)
 
     infoSurface->prepareBones();
     
-    int newNumBones = infoBones.size();
+    unsigned int newNumBones = infoBones.size();
     std::vector<glm::mat3> transposeMatrices(newNumBones);
     for (unsigned int i=0; i<newNumBones; i++)
     {
@@ -183,7 +186,7 @@ void UserInterfaceModeller::recalculateVertexPositions()
     std::vector<Bone>& bones = infoSurface->getBones();
     std::vector<glm::mat4> transformMatrices;
     std::vector<glm::mat3> transposeMatrices;
-    for (int i=0; i<bones.size(); i++)
+    for (unsigned int i=0; i<bones.size(); i++)
     {
         Bone& bone = bones[i];
         int parent = bone.parent;
@@ -213,7 +216,7 @@ void UserInterfaceModeller::recalculateVertexPositions()
         std::vector<glm::vec3>& tangents = infoSurface->getTangents();
         std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
         std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
-        for (int i=0; i<vertices.size(); i++)
+        for (unsigned int i=0; i<vertices.size(); i++)
         {
             glm::vec3& vertex = vertices[i];
             glm::vec3& normal = normals[i];
@@ -332,7 +335,7 @@ void UserInterfaceModeller::removeVertices(int index)
     rebuildInformation();
 }
 
-void UserInterfaceModeller::removeVertex(int index)
+void UserInterfaceModeller::removeVertex(unsigned int index)
 {
     std::vector<glm::vec3>& vertices = infoSurface->getVertices();
     std::vector<glm::vec2>& textureCoordinates = infoSurface->getTextureCoordinates();

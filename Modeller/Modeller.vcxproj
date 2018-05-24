@@ -134,6 +134,8 @@
     <ClCompile Include="UIInformation.cpp" />
     <ClCompile Include="UIRenderOptions.cpp" />
     <ClCompile Include="UISaveLoadPanel.cpp" />
+    <ClCompile Include="UITextureInformation.cpp" />
+    <ClCompile Include="UITexturePanel.cpp" />
     <ClCompile Include="UITriangleInformation.cpp" />
     <ClCompile Include="UITrianglePanel.cpp" />
     <ClCompile Include="UIVertexInformation.cpp" />
@@ -143,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="UITextureInformation.h" />
     <ClInclude Include="UIBoneInformation.h" />
     <ClInclude Include="UIBonePanel.h" />
     <ClInclude Include="UIInformation.h" />
@@ -150,6 +153,7 @@
     <ClInclude Include="UIRenderOptions.h" />
     <ClInclude Include="BlankShader.h" />
     <ClInclude Include="SimpleShader.h" />
+    <ClInclude Include="UITexturePanel.h" />
     <ClInclude Include="UITriangleInformation.h" />
     <ClInclude Include="UIVertexInformation.h" />
     <ClInclude Include="UIVertexPanel.h" />

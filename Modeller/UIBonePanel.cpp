@@ -32,7 +32,7 @@ void UIBonePanel::preRender()
 {
     UIComponent* component = UserInterface::getInstance()->getActiveComponent();
     highlighted = hover || isChild(component) || parent->activeBone == index;
-    surface->diffuseMap = highlighted ? onMap : offMap;
+    surface.diffuseMap = highlighted ? onMap : offMap;
 }
 
 void UIBonePanel::actionPerformed(UIComponent* component)
@@ -79,7 +79,7 @@ void UIBonePanel::addParentNumber()
     UIInteger* uiInteger = new UIInteger(bone.parent);
     uiInteger->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
     uiInteger->setText(parent->textSize, *parent->font, RIGHT);
-    uiInteger->surface->diffuseMap = parent->texture;
+    uiInteger->surface.diffuseMap = parent->texture;
     addComponent(uiInteger);
 
     xpos += parent->indexWidth + parent->border;
@@ -90,7 +90,7 @@ void UIBonePanel::addNumber(float& value)
     UINumber* uiNumber = new UINumber(value);
     uiNumber->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(parent->columnWidth, parent->textSize));
     uiNumber->setText(parent->textSize, *parent->font, RIGHT);
-    uiNumber->surface->diffuseMap = parent->texture;
+    uiNumber->surface.diffuseMap = parent->texture;
     uiNumber->setActionListener(this);
     addComponent(uiNumber);
 }

@@ -25,7 +25,7 @@ void UIBoneInformation::build()
     UIToggleButton* button = new UIToggleButton(updateVertices);
     button->setPosition(border, border);
     button->setSize(buttonSize, buttonSize);
-    button->surface->diffuseMap = texture;
+    button->surface.diffuseMap = texture;
     addComponent(button);
 
     ypos = buttonSize + border * 2;

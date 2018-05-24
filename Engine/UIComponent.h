@@ -16,7 +16,7 @@ public:
 
     std::vector<UIComponent*> components;
 
-    Surface* surface;
+    Surface surface;
     
     bool hover = false;
     void checkHover(glm::vec2 mousePosition);
