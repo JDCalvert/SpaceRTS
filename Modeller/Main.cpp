@@ -93,10 +93,10 @@ int main()
         uiRenderer->initialiseFrame();
         ui->render();
 
-        std::vector<glm::vec3> highlightVertices = ui->getHighlightVertices();
-        blankShader->renderVertices(highlightVertices, viewProjectionMatrix, glm::vec4(1.0f));
+        std::vector<unsigned int> highlightVertices = ui->getHighlightVertexIndices();
+        blankShader->renderVertices(surface, highlightVertices, viewProjectionMatrix, glm::vec4(1.0f));
 
-        std::vector<unsigned int> highlightIndices = ui->getHighlightIndices();
+        std::vector<unsigned int> highlightIndices = ui->getHighlightTriangleIndices();
         blankShader->renderTriangles(surface, viewProjectionMatrix, highlightIndices, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
 
         //Now we've drawn everything to the renderer, draw to the window

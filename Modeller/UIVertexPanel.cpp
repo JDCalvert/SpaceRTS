@@ -4,21 +4,19 @@
 #include <iomanip>
 
 #include <Texture.h>
-
-#include "UILabel.h"
-#include "UINumber.h"
+#include <UILabel.h>
 #include "UIVertexInformation.h"
-#include "UserInterface.h"
+#include "UserInterfaceModeller.h"
 
-UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, unsigned int index) :
-    vertexPosition(infoSurface->getVertices()[index]),
-    vertexTextureCoordinate(infoSurface->getTextureCoordinates()[index]),
-    vertexNormal(infoSurface->getNormals()[index]),
-    vertexBoneIndices(infoSurface->getBoneIndicesAndWeights()[index]),
-    UIPanel()
+UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, unsigned int index) : UIPanel()
 {
     this->parent = parent;
     this->index = index;
+
+    vertexPosition = infoSurface->getVertices()[index];
+    vertexTextureCoordinate = infoSurface->getTextureCoordinates()[index];
+    vertexNormal = infoSurface->getNormals()[index];
+    vertexBoneIndices = infoSurface->getBoneIndicesAndWeights()[index];
 
     onMap = Texture::getTexture("Blank");
     offMap = Texture::getTexture("BlankNothing");
@@ -41,10 +39,12 @@ void UIVertexPanel::preRender()
 void UIVertexPanel::buildPanel()
 {
     addIndexLabel();
-    if (parent->showVertices) addRowVec3(vertexPosition);
+    if (parent->showVertices) addRowVec3(vertexPosition, vertexNumbers);
     if (parent->showTextureCoordinates) addRowVec2(vertexTextureCoordinate);
-    if (parent->showNormals) addRowVec3(vertexNormal);
+    if (parent->showNormals) addRowVec3(vertexNormal, normalNumbers);
     if (parent->showBones) addBones();
+
+    addRemoveButton();
 
     setSize(xpos - parent->border, parent->textSize);
     constructSurface();
@@ -72,11 +72,14 @@ void UIVertexPanel::addRowVec2(glm::vec2& row)
     }
 }
 
-void UIVertexPanel::addRowVec3(glm::vec3& row)
+void UIVertexPanel::addRowVec3(glm::vec3& row, std::vector<UINumber*>& numberPanels)
 {
+    numberPanels.resize(3);
+
     for (unsigned int i = 0; i < 3; i++)
     {
-        addNumber(row[i], 3, parent->columnWidth);
+        UINumber* uiNumber = addNumber(row[i], 3, parent->columnWidth);
+        numberPanels[i] = uiNumber;
     }
 }
 
@@ -88,14 +91,41 @@ void UIVertexPanel::addBones()
     addNumber(vertexBoneIndices[3], 3, parent->columnWidth);
 }
 
-void UIVertexPanel::addNumber(float& number, int numDigits, float width)
+UINumber* UIVertexPanel::addNumber(float& number, int numDigits, float width)
 {
     UINumber* numberBox = new UINumber(number);
     numberBox->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(width, parent->textSize));
     numberBox->setNumDigits(numDigits);
     numberBox->setText(parent->textSize, *parent->font, RIGHT);
     numberBox->surface->diffuseMap = parent->texture;
+    numberBox->setActionListener(this);
     addComponent(numberBox);
 
     xpos += width + parent->border;
+
+    return numberBox;
+}
+
+void UIVertexPanel::addRemoveButton()
+{
+    removeButton = new UIButton(this);
+    removeButton->setPosition(xpos, 0.0f);
+    removeButton->setSize(parent->textSize, parent->textSize);
+    removeButton->setText("R", parent->textSize, *parent->font, CENTRE);
+    removeButton->surface->diffuseMap = parent->texture;
+    addComponent(removeButton);
+
+    xpos += parent->textSize + parent->border;
+}
+
+void UIVertexPanel::actionPerformed(UIComponent* uiComponent)
+{
+    if (std::find(vertexNumbers.begin(), vertexNumbers.end(), uiComponent) != vertexNumbers.end())
+    {
+        UserInterfaceModeller::getInstance()->updateVertexPosition(index, vertexPosition);
+    }
+    else if (uiComponent == removeButton)
+    {
+        UserInterfaceModeller::getInstance()->removeVertices(index);
+    }
 }

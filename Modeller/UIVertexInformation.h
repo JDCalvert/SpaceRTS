@@ -18,6 +18,8 @@ public:
     bool showNormals, previousShowNormals;
     bool showBones, previousShowBones;
 
+    bool updateSimilarVertices;
+
     float xpos;
 
     UIVertexInformation(Surface* infoSurface);
@@ -36,12 +38,15 @@ protected:
 private:
     std::vector<UIVertexPanel*> vertexPanels;
 
+    UIButton* recalculateNormalsButton;
+
     void addHeaderAndSubHeaders(bool shouldAdd, std::string header, char firstSubHeader, int numSubHeaders);
     void addHeader(std::string text, int numColumns);
     
     void addSubHeader(char subHeader, float width);
     void addSubHeader(std::string subHeader, float width);
 
+    void addButton(UIButton*& uiButton, std::string text, float width);
     void addToggleButton(bool& toggle, std::string text);
 };
 

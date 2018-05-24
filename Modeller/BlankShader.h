@@ -14,6 +14,7 @@ public:
     void renderCommon(glm::mat4 modelViewProjectionMatrix, glm::vec4 colour);
 
     void renderVertices(Surface* surface, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour);
+    void renderVertices(Surface* surface, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour);
     void renderVertices(std::vector<glm::vec3>& vertices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour);
     void renderVertices(int numVertices, int verticesSize, glm::vec3* verticesPointer, int pointSize, glm::mat4 mvp, glm::vec4 colour);
 

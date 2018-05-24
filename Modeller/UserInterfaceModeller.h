@@ -29,13 +29,18 @@ public:
     void saveSurface(const char* fileName);
     void importSurface(const char* fileName);
 
-    std::vector<glm::vec3> getHighlightVertices();
-    std::vector<unsigned int> getHighlightIndices();
+    std::vector<unsigned int> getHighlightVertexIndices();
+    std::vector<unsigned int> getHighlightTriangleIndices();
 
     void recalculateVertexPositions();
 
     void newVertex();
     void newBone();
+
+    void updateVertexPosition(int index, glm::vec3 newVertexPosition);
+
+    void removeVertices(int index);
+    void removeVertex(int index);
 
 private:
     Surface* infoSurface;

@@ -54,6 +54,7 @@ protected:
 
     void constructSurface();
     void clearComponents();
+    void invokeActionListener();
 
     bool isChild(UIComponent* component);
 

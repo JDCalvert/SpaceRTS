@@ -19,6 +19,8 @@ UIVertexInformation::UIVertexInformation(Surface* infoSurface) : UIInformation(i
     showNormals = false;
     showBones = false;
 
+    updateSimilarVertices = true;
+
     indexWidth = 0.03f;
     columnWidth = 0.075f;
     buttonSize = 0.02f;
@@ -54,10 +56,17 @@ void UIVertexInformation::build()
     clearComponents();
 
     xpos = border;
+    ypos = border;
+
     addToggleButton(showVertices, "V");
     addToggleButton(showTextureCoordinates, "T");
     addToggleButton(showNormals, "N");
     addToggleButton(showBones, "B");
+
+    xpos = border;
+    ypos += buttonSize + 0.002f;
+    addToggleButton(updateSimilarVertices, "U");
+    addButton(recalculateNormalsButton, "C", buttonSize);
 
     xpos = border + indexWidth + border;
 
@@ -129,12 +138,22 @@ void UIVertexInformation::addSubHeader(std::string subHeader, float width)
 void UIVertexInformation::addToggleButton(bool& toggle, std::string text)
 {
     UIToggleButton* button = new UIToggleButton(toggle);
-    button->setPositionAndSize(glm::vec2(xpos, 0.01f), glm::vec2(buttonSize, buttonSize));
+    button->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(buttonSize, buttonSize));
     button->setText(text, buttonSize, *font, CENTRE);
     button->surface->diffuseMap = texture;
     addComponent(button);
 
     xpos += buttonSize + 0.002f;
+}
+
+void UIVertexInformation::addButton(UIButton*& uiButton, std::string text, float width)
+{
+    uiButton = new UIButton(this);
+    uiButton->setPosition(xpos, ypos);
+    uiButton->setSize(width, buttonSize);
+    uiButton->setText(text, buttonSize, *font, CENTRE);
+    uiButton->surface->diffuseMap = texture;
+    addComponent(uiButton);
 }
 
 std::vector<UIVertexPanel*>& UIVertexInformation::getVertexPanels()
@@ -154,6 +173,11 @@ void UIVertexInformation::actionPerformed(UIComponent* component)
         UserInterfaceModeller::getInstance()->newVertex();
 
         currentItem = std::max(0, numItemsTotal - numItemsDisplay + 1);
+        shouldRebuild = true;
+    }
+    else if (component == recalculateNormalsButton)
+    {
+        infoSurface->calculateNormals();
         shouldRebuild = true;
     }
 }

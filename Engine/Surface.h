@@ -62,6 +62,7 @@ public:
 
     //Write to file
     void writeToFile(const char* objFilePath);
+    void calculateNormals();
     void calculateTangents();
     
     //Set specific things about the texture

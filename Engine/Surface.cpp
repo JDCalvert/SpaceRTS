@@ -180,6 +180,44 @@ void Surface::writeToFile(const char* fileName)
     objFile.close();
 }
 
+void Surface::calculateNormals()
+{
+    //Reset to zero
+    unsigned int numVertices = vertices.size();
+    normals.resize(numVertices);
+    std::fill(normals.begin(), normals.end(), glm::vec3());
+
+    //Loop through the triangles, work out the normal, and ADD this to the three vertices
+    //If a vertex is in more than one triangle, the normals will be added together
+    for (unsigned int i=0; i<indices.size(); i+=3)
+    {
+        int index0 = indices[i];
+        int index1 = indices[i+1];
+        int index2 = indices[i+2];
+
+        glm::vec3 vertex0 = vertices[index0];
+        glm::vec3 vertex1 = vertices[index1];
+        glm::vec3 vertex2 = vertices[index2];
+
+        glm::vec3 deltaPos1 = vertex1 - vertex0;
+        glm::vec3 deltaPos2 = vertex2 - vertex0;
+
+        glm::vec3 normal = glm::cross(deltaPos1, deltaPos2);
+        normal /= glm::length(normal);
+
+        normals[index0] += normal;
+        normals[index1] += normal;
+        normals[index2] += normal;
+    }
+
+    //Now, normalise to length 1
+    for (unsigned int i=0; i<numVertices; i++)
+    {
+        glm::vec3& normal = normals[i];
+        normal /= glm::length(normal);
+    }
+}
+
 void Surface::calculateTangents()
 {
     tangents.clear();
@@ -189,7 +227,7 @@ void Surface::calculateTangents()
     tangents.resize(numVertices);
     bitangents.resize(numVertices);
 
-    for (unsigned int i = 0; i<indices.size(); i += 3)
+    for (unsigned int i=0; i<indices.size(); i+=3)
     {
         int index0 = indices[i];
         int index1 = indices[i + 1];
@@ -219,6 +257,12 @@ void Surface::calculateTangents()
         bitangents[index0] += bitangent;
         bitangents[index1] += bitangent;
         bitangents[index2] += bitangent;
+    }
+
+    for (unsigned int i=0; i<tangents.size(); i++)
+    {
+        tangents[i] = glm::normalize(tangents[i]);
+        bitangents[i] = glm::normalize(bitangents[i]);
     }
 }
 

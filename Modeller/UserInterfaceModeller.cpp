@@ -35,9 +35,9 @@ void UserInterfaceModeller::build()
 
 void UserInterfaceModeller::rebuildInformation()
 {
-    vertexInformation->build();
-    triangleInformation->build();
-    boneInformation->build();
+    vertexInformation->shouldRebuild = true;
+    triangleInformation->shouldRebuild = true;;
+    boneInformation->shouldRebuild = true;
 }
 
 void UserInterfaceModeller::loadSurface(const char* fileName)
@@ -151,20 +151,20 @@ void UserInterfaceModeller::importSurface(const char* fileName)
     rebuildInformation();
 }
 
-std::vector<glm::vec3> UserInterfaceModeller::getHighlightVertices()
+std::vector<unsigned int> UserInterfaceModeller::getHighlightVertexIndices()
 {
-    std::vector<glm::vec3> highlights;
+    std::vector<unsigned int> highlights;
     std::vector<UIVertexPanel*>& vertexPanels = vertexInformation->getVertexPanels();
     for (auto i = vertexPanels.begin(); i != vertexPanels.end(); i++)
     {
         UIVertexPanel* vertexPanel = *i;
-        if (vertexPanel->isHighlighted()) highlights.push_back(vertexPanel->vertexPosition);
+        if (vertexPanel->isHighlighted()) highlights.push_back(vertexPanel->index);
     }
 
     return highlights;
 }
 
-std::vector<unsigned int> UserInterfaceModeller::getHighlightIndices()
+std::vector<unsigned int> UserInterfaceModeller::getHighlightTriangleIndices()
 {
     std::vector<unsigned int> highlights;
     std::vector<UITrianglePanel*>& trianglePanels = triangleInformation->getTrianglePanels();
@@ -197,7 +197,7 @@ void UserInterfaceModeller::recalculateVertexPositions()
         }
 
         glm::mat4 transformMatrix = bone.absolute * bone.inverseBind;
-        glm::mat3 transposeMatrix = glm::transpose(glm::mat3(transformMatrix));
+        glm::mat3 transposeMatrix = glm::transpose(glm::inverse(glm::mat3(transformMatrix)));
 
         bone.inverseBind = glm::inverse(bone.absolute);
 
@@ -237,15 +237,15 @@ void UserInterfaceModeller::recalculateVertexPositions()
 
                     newVertex += glm::vec3((transformMatrix * glm::vec4(vertex, 1.0f)) * weight);
                     newNormal += (transposeMatrix * normal) * weight;
-                    newTangent += (transposeMatrix * tangent) * weight;
-                    newBitangent += (transposeMatrix * bitangent) * weight;
+                    newTangent += (glm::mat3(transformMatrix) * tangent) * weight;
+                    newBitangent += (glm::mat3(transformMatrix) * bitangent) * weight;
                 }
             }
 
             vertex = newVertex;
-            normal = newNormal;
-            tangent = newTangent;
-            bitangent = newBitangent;
+            normal = glm::normalize(newNormal);
+            tangent = glm::normalize(newTangent);
+            bitangent = glm::normalize(newBitangent);
         }
     }
 }
@@ -279,4 +279,92 @@ void UserInterfaceModeller::newBone()
     infoSurface->getBones().push_back(newBone);
 
     infoSurface->prepareBones();
+}
+
+void UserInterfaceModeller::updateVertexPosition(int index, glm::vec3 newVertexPosition)
+{
+    //First, get the old vertex
+    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+    glm::vec3 updateVertex = vertices[index];
+
+    if (vertexInformation->updateSimilarVertices)
+    {
+        for (auto i=vertices.begin(); i!=vertices.end(); i++)
+        {
+            glm::vec3& vertexPosition = *i;
+            if (vertexPosition == updateVertex)
+            {
+                vertexPosition = newVertexPosition;
+            }
+        }
+    }
+    else
+    {
+        vertices[index] = newVertexPosition;
+    }
+}
+
+void UserInterfaceModeller::removeVertices(int index)
+{
+    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+
+    glm::vec3 updateVertex = vertices[index];
+    if (vertexInformation->updateSimilarVertices)
+    {
+        for (unsigned int i=0; i<vertices.size();)
+        {
+            if (vertices[i] == updateVertex)
+            {
+                removeVertex(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
+    }
+    else
+    {
+        removeVertex(index);
+    }
+
+    infoSurface->calculateSizesAndLength();
+    rebuildInformation();
+}
+
+void UserInterfaceModeller::removeVertex(int index)
+{
+    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+    std::vector<glm::vec2>& textureCoordinates = infoSurface->getTextureCoordinates();
+    std::vector<glm::vec3>& normals = infoSurface->getNormals();
+    std::vector<glm::vec3>& tangents = infoSurface->getTangents();
+    std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
+    std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
+
+    vertices.erase(vertices.begin() + index);
+    textureCoordinates.erase(textureCoordinates.begin() + index);
+    normals.erase(normals.begin() + index);
+    tangents.erase(tangents.begin() + index);
+    bitangents.erase(bitangents.begin() + index);
+    boneIndices.erase(boneIndices.begin() + index);
+
+    //Remove any triangles that have this vertex
+    std::vector<unsigned int>& indices = infoSurface->getIndices();
+    for (unsigned int i=0; i<indices.size();)
+    {
+        if (std::find(indices.begin() + i, indices.begin() + i + 3, index) != indices.begin() + i + 3)
+        {
+            indices.erase(indices.begin() + i, indices.begin() + i + 3);
+        }
+        else
+        {
+            i+=3;
+        }
+    }
+
+    //Update remaining indices greater than the removed vertex
+    for (unsigned int i=0; i<indices.size(); i++)
+    {
+        if (indices[i] > index) indices[i]--;
+    }
 }
