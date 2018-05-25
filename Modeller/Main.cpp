@@ -48,7 +48,7 @@ int main()
     UIShader* uiShader = Shader::loadShader(new UIShader(), "UI");
 
     Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
-    Texture::loadDDS("Graphics/blank.dds", "Blank");
+    Texture::loadDDS("Graphics/blank3.dds", "Blank");
     Texture::loadDDS("Graphics/blankDark.dds", "BlankDark");
     Texture::loadDDS("Graphics/blankNothing.dds", "BlankNothing");
 
@@ -96,7 +96,7 @@ int main()
         blankShader->renderTriangles(surface, viewProjectionMatrix, highlightIndices, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
 
         //Draw the UI
-        uiRenderer->initialiseFrame();
+        //uiRenderer->initialiseFrame();
         ui->render();
 
         //Now we've drawn everything to the renderer, draw to the window
@@ -105,7 +105,7 @@ int main()
 
         //Draw the renderers onto the context
         renderer->renderFrame();
-        uiRenderer->renderFrame();
+        //uiRenderer->renderFrame();
 
         glContext->flip();
     }
