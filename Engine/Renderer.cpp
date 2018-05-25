@@ -37,8 +37,6 @@ void Renderer::initialiseFrameBuffer()
     {
         printf("Failed to generate framebuffer");
     }
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::initialiseScreenShader()

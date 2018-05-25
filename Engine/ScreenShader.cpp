@@ -48,7 +48,7 @@ void ScreenShader::render(GLuint renderedTexture)
     glBindTexture(GL_TEXTURE_2D, renderedTexture);
     glUniform1i(textureId, 0);
 
-    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
+    OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_FALSE);
 
     //Draw the vertices as a triangle strip, so we only have to pass them up once
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
