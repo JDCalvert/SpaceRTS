@@ -3,6 +3,7 @@
 
 #include <gl\glew.h>
 #include <glfw/glfw3.h>
+#include <glm/glm.hpp>
 
 class ScreenShader;
 class OpenGLContext;
@@ -28,6 +29,8 @@ public:
     void resize(int width, int height);
     void recreateFramebuffer();
 
+    void setClearColour(glm::vec4 colour);
+
 protected:
     ScreenShader* screenShader;
 
@@ -38,6 +41,8 @@ protected:
     int width;
     int height;
     int superSampleFactor;
+
+    glm::vec4 clearColour;
 
     void initialiseFrameBuffer();
     void initialiseScreenShader();
