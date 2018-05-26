@@ -215,9 +215,9 @@ void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMat
         newLineIndices.push_back(size + 1);
     }
 
-    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
+    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
 
     renderVertices(vertices, modelViewProjectionMatrix, glm::vec4(1.0f));
     renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f));

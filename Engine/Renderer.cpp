@@ -75,11 +75,16 @@ void Renderer::initialiseFrame()
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
     glViewport(0, 0, width, height);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(clearColour.r, clearColour.g, clearColour.b, clearColour.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::renderFrame()
 {
     screenShader->render(frameTexture);
+}
+
+void Renderer::setClearColour(glm::vec4 colour)
+{
+    clearColour = colour;
 }

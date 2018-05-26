@@ -40,7 +40,7 @@ void UIShader::renderUiComponent(UIComponent* component)
     OpenGLContext::currentContext()->setEnabled(GL_BLEND, GL_TRUE);
 
     float aspectRatio = OpenGLContext::currentContext()->getAspectRatio();
-    glUniform1f(aspectRatioId, aspectRatio);    
+    glUniform1f(aspectRatioId, aspectRatio);
 
     renderUiComponent(component, glm::vec2(0.0f, 0.0f));
 }

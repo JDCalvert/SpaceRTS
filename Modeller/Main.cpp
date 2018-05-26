@@ -38,6 +38,8 @@ int main()
     //Use the basic renderer to draw to the screen and register it with our context
     Renderer* renderer = Renderer::initialiseRenderer(new Renderer(), glContext);
     Renderer* uiRenderer = Renderer::initialiseRenderer(new Renderer(), glContext);
+    
+    renderer->setClearColour(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
     Camera* camera = new Camera();
     Controller* controller = new Controller(camera);
@@ -48,7 +50,7 @@ int main()
     UIShader* uiShader = Shader::loadShader(new UIShader(), "UI");
 
     Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
-    Texture::loadDDS("Graphics/blank3.dds", "Blank");
+    Texture::loadDDS("Graphics/blank.dds", "Blank");
     Texture::loadDDS("Graphics/blankDark.dds", "BlankDark");
     Texture::loadDDS("Graphics/blankNothing.dds", "BlankNothing");
 
@@ -60,6 +62,8 @@ int main()
     Surface* surface = new Surface();
     surface->loadFromFile("Models/cube.mesh");
     surface->diffuseMap = Texture::getTexture("Metal");
+
+    glLineWidth(2);
 
     UserInterfaceModeller* ui = UserInterface::initialise(new UserInterfaceModeller(surface));
     ui->build();
@@ -83,7 +87,7 @@ int main()
         surface->recalculateModelBoneMatrices();
 
         //Draw our cube
-        glm::vec4 colour(1.0f, 1.0f, 1.0f, 0.75f);
+        glm::vec4 colour(1.0f, 1.0f, 1.0f, 0.5f);
         if (ui->renderOptions->renderSurface) simpleShader->renderSurface(surface, viewProjectionMatrix);
         if (ui->renderOptions->renderLines) blankShader->renderLines(surface, viewProjectionMatrix, colour);
         if (ui->renderOptions->renderPoints) blankShader->renderVertices(surface, viewProjectionMatrix, colour);
@@ -96,7 +100,7 @@ int main()
         blankShader->renderTriangles(surface, viewProjectionMatrix, highlightIndices, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
 
         //Draw the UI
-        //uiRenderer->initialiseFrame();
+        uiRenderer->initialiseFrame();
         ui->render();
 
         //Now we've drawn everything to the renderer, draw to the window
@@ -105,7 +109,7 @@ int main()
 
         //Draw the renderers onto the context
         renderer->renderFrame();
-        //uiRenderer->renderFrame();
+        uiRenderer->renderFrame();
 
         glContext->flip();
     }
