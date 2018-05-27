@@ -2,9 +2,11 @@
 
 #include <algorithm>
 
+#include <OpenGLContext.h>
 #include <Texture.h>
 
 #include "UserInterfaceModeller.h"
+#include "BlankShader.h"
 
 UITextureInformation::UITextureInformation(Surface* infoSurface) : UIPanel()
 {
@@ -22,14 +24,19 @@ UITextureInformation::UITextureInformation(Surface* infoSurface) : UIPanel()
 
 void UITextureInformation::build()
 {
+    textureCoordinateRenderer = Renderer::initialiseRenderer(new TextureRenderer(0.2f), OpenGLContext::currentContext());
+    textureCoordinateRenderer->setClearColour(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    
+    GLuint textureCoordinateId = textureCoordinateRenderer->getTexture();
+
     xpos = textureSize - 0.032f;
 
     addToggleButton(showSpecularButton, showSpecular, "S");
     addToggleButton(showNormalButton, showNormal, "N");
 
-    addTexturePanel(diffusePanel, infoSurface->diffuseMap, "Diffuse");
-    addTexturePanel(specularPanel, infoSurface->specularMap, "Specular");
-    addTexturePanel(normalPanel, infoSurface->normalMap, "Normal");
+    addTexturePanel(diffusePanel, infoSurface->diffuseMap, textureCoordinateId, "Diffuse");
+    addTexturePanel(specularPanel, infoSurface->specularMap, textureCoordinateId, "Specular");
+    addTexturePanel(normalPanel, infoSurface->normalMap, textureCoordinateId, "Normal");
 
     setSize(xpos, height);
 
@@ -51,6 +58,20 @@ void UITextureInformation::rebuildPanel()
     setSize(xpos, height);
 }
 
+void UITextureInformation::renderTextureCoordinates()
+{
+    textureCoordinateRenderer->initialiseFrame();
+
+    std::vector<unsigned int> highlightVertices = UserInterfaceModeller::getInstance()->getHighlightVertexIndices();
+    std::vector<unsigned int> highlightIndices = UserInterfaceModeller::getInstance()->getHighlightTriangleIndices();
+
+    glm::vec4 textureCoordinateColour(1.0f, 0.0f, 0.0f, 1.0f);
+
+    BlankShader* blankShader = static_cast<BlankShader*>(Shader::getShader("Blank"));
+    blankShader->renderTextureCoordinateVertices(infoSurface, highlightVertices, textureCoordinateColour);
+    blankShader->renderTextureCoordinateLines(infoSurface, highlightIndices, textureCoordinateColour);
+}
+
 void UITextureInformation::preRender()
 {
     if (showSpecular != previousShowSpecular
@@ -67,9 +88,9 @@ void UITextureInformation::preRender()
     setPosition(xpos, ypos);
 }
 
-void UITextureInformation::addTexturePanel(UITexturePanel*& texturePanel, GLuint& textureId, std::string textureName)
+void UITextureInformation::addTexturePanel(UITexturePanel*& texturePanel, GLuint& textureId, GLuint textureCoordinateId, std::string textureName)
 {
-    texturePanel = new UITexturePanel(this, textureId, textureName);
+    texturePanel = new UITexturePanel(this, textureId, textureCoordinateId, textureName);
     texturePanel->build();
     height = std::max(height, texturePanel->getSize().y + 0.02f);
 }

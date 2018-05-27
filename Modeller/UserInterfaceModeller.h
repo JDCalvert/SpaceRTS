@@ -2,6 +2,7 @@
 #define USER_INTERFACE_MODELLER_H
 
 #include <UserInterface.h>
+#include <TextureRenderer.h>
 
 #include "UIRenderOptions.h"
 #include "UIVertexInformation.h"
@@ -43,6 +44,8 @@ public:
 
     void removeVertices(int index);
     void removeVertex(unsigned int index);
+
+    void renderTextureCoordinates();
 
 private:
     Surface* infoSurface;

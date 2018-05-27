@@ -13,10 +13,11 @@ public:
     float loadButtonWidth;
 
     GLuint& textureId;
+    GLuint textureCoordinateId;
 
     bool shouldRebuild;
 
-    UITexturePanel(UITextureInformation* parent, GLuint& textureId, std::string label);
+    UITexturePanel(UITextureInformation* parent, GLuint& textureId, GLuint textureCoordinateId, std::string label);
 
     void build();
     void preRender() override;
@@ -31,6 +32,7 @@ private:
     UITextBox* diffuseTextureBox;
     UIButton* diffuseTextureLoadButton;
     UIPanel* texturePanel;
+    UIPanel* textureCoordinatePanel;
 
     float textSize;
     float border;

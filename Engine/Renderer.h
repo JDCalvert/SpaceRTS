@@ -20,16 +20,18 @@ public:
     }
 
     Renderer();
-    Renderer(int superSampleFactor);
+    Renderer(float superSampleFactor);
 
     void initialise();
     void initialiseFrame();
     void renderFrame();
 
-    void resize(int width, int height);
+    virtual void resize(int width, int height);
     void recreateFramebuffer();
 
     void setClearColour(glm::vec4 colour);
+
+    GLuint getTexture();
 
 protected:
     ScreenShader* screenShader;
@@ -40,7 +42,7 @@ protected:
 
     int width;
     int height;
-    int superSampleFactor;
+    float superSampleFactor;
 
     glm::vec4 clearColour;
 

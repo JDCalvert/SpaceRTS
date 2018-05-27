@@ -14,6 +14,7 @@
 
 #include <OpenGLContext.h>
 #include <Renderer.h>
+#include <TextureRenderer.h>
 
 #include <Font.h>
 
@@ -98,6 +99,8 @@ int main()
 
         std::vector<unsigned int> highlightIndices = ui->getHighlightTriangleIndices();
         blankShader->renderTriangles(surface, viewProjectionMatrix, highlightIndices, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
+
+        ui->renderTextureCoordinates();
 
         //Draw the UI
         uiRenderer->initialiseFrame();
