@@ -5,6 +5,7 @@
 
 #include "UIInformation.h"
 #include "UITexturePanel.h"
+#include "TextureRenderer.h"
 
 class UITextureInformation : public UIPanel
 {
@@ -16,8 +17,12 @@ public:
     void build();
     void preRender() override;
 
+    void renderTextureCoordinates();
+
 private:
     Surface* infoSurface;
+
+    TextureRenderer* textureCoordinateRenderer;
 
     bool showSpecular, previousShowSpecular;
     bool showNormal, previousShowNormal;
@@ -27,7 +32,7 @@ private:
     UITexturePanel* specularPanel;
     UITexturePanel* normalPanel;
 
-    void addTexturePanel(UITexturePanel*& panel, GLuint& textureId, std::string textureName);
+    void addTexturePanel(UITexturePanel*& panel, GLuint& textureId, GLuint textureCoordinateTextureId, std::string textureName);
     void addToggleButton(UIToggleButton*& toggleButton, bool& toggle, std::string buttonText);
 
     void rebuildPanel();

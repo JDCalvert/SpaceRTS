@@ -4,10 +4,9 @@
 
 Renderer::Renderer() : Renderer(2)
 {
-
 }
 
-Renderer::Renderer(int superSampleFactor)
+Renderer::Renderer(float superSampleFactor)
 {
     this->superSampleFactor = superSampleFactor;
 }
@@ -87,4 +86,9 @@ void Renderer::renderFrame()
 void Renderer::setClearColour(glm::vec4 colour)
 {
     clearColour = colour;
+}
+
+GLuint Renderer::getTexture()
+{
+    return frameTexture;
 }

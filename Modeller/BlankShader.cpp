@@ -222,3 +222,49 @@ void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMat
     renderVertices(vertices, modelViewProjectionMatrix, glm::vec4(1.0f));
     renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f));
 }
+
+void BlankShader::renderTextureCoordinateVertices(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour)
+{
+    std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
+
+    glm::vec2 minus1(-1.0f, -1.0f);
+
+    std::vector<glm::vec3> vertices;
+    for (unsigned int i=0; i<indices.size(); i++)
+    {
+        unsigned int index = indices[i];
+        vertices.push_back(glm::vec3(textureCoordinates[index] * 2.0f + minus1, 0.0f));
+    }
+
+    renderVertices(vertices, glm::mat4(), colour);
+}
+
+void BlankShader::renderTextureCoordinateLines(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour)
+{
+    std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
+
+    std::vector<glm::vec3> vertices;
+    std::vector<unsigned int> newLineIndices;
+    for (unsigned int i=0; i<indices.size(); i+=3)
+    {
+        unsigned int index0 = indices[i];
+        unsigned int index1 = indices[i+1];
+        unsigned int index2 = indices[i+2];
+
+        int baseIndex = vertices.size();
+        glm::vec2 minus1(-1.0f, -1.0f);
+
+        vertices.push_back(glm::vec3(textureCoordinates[index0] * 2.0f + minus1, 0.0f));
+        vertices.push_back(glm::vec3(textureCoordinates[index1] * 2.0f + minus1, 0.0f));
+        vertices.push_back(glm::vec3(textureCoordinates[index2] * 2.0f + minus1, 0.0f));
+
+        newLineIndices.push_back(baseIndex);
+        newLineIndices.push_back(baseIndex + 1);
+        newLineIndices.push_back(baseIndex + 1);
+        newLineIndices.push_back(baseIndex + 2);
+        newLineIndices.push_back(baseIndex + 2);
+        newLineIndices.push_back(baseIndex);
+    }
+
+    renderLines(vertices, newLineIndices, glm::mat4(), colour);
+}

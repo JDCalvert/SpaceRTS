@@ -1,5 +1,9 @@
 #include "UserInterfaceModeller.h"
 
+#include <OpenGLContext.h>
+
+#include "BlankShader.h"
+
 UserInterfaceModeller::UserInterfaceModeller(Surface* infoSurface)
 {
     this->infoSurface = infoSurface;
@@ -370,4 +374,9 @@ void UserInterfaceModeller::removeVertex(unsigned int index)
     {
         if (indices[i] > index) indices[i]--;
     }
+}
+
+void UserInterfaceModeller::renderTextureCoordinates()
+{
+    textureInformation->renderTextureCoordinates();
 }

@@ -5,12 +5,13 @@
 #include "UserInterfaceModeller.h"
 #include "UITextureInformation.h"
 
-UITexturePanel::UITexturePanel(UITextureInformation* parent, GLuint& textureId, std::string labelText) :
+UITexturePanel::UITexturePanel(UITextureInformation* parent, GLuint& textureId, GLuint textureCoordinateId, std::string labelText) :
     UIPanel(),
     textureId(textureId)
 {
     this->parent = parent;
     this->labelText = labelText;
+    this->textureCoordinateId = textureCoordinateId;
 
     loadButtonWidth = 0.05f;
 
@@ -70,6 +71,12 @@ void UITexturePanel::build()
     texturePanel->setSize(parent->textureSize, parent->textureSize);
     texturePanel->surface.diffuseMap = textureId;
     addComponent(texturePanel);
+
+    textureCoordinatePanel = new UIPanel();
+    textureCoordinatePanel->setPosition(xpos, ypos);
+    textureCoordinatePanel->setSize(parent->textureSize, parent->textureSize);
+    textureCoordinatePanel->surface.diffuseMap = textureCoordinateId;
+    addComponent(textureCoordinatePanel);
 
     xpos += parent->textureSize;
     ypos += parent->textureSize;

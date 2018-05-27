@@ -25,6 +25,9 @@ public:
 
     void renderBones(Surface* surface, glm::mat4 modelViewProjectionMatrix);
 
+    void renderTextureCoordinateVertices(Surface* surface, std::vector<unsigned int>& vertices, glm::vec4 colour);
+    void renderTextureCoordinateLines(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour);
+
 private:
     GLuint vertexArrayId;
 
