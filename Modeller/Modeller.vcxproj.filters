@@ -90,6 +90,9 @@
     <ClCompile Include="UITextureInformation.cpp">
       <Filter>Source Files\UserInterface\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="UIImportPanel.cpp">
+      <Filter>Source Files\UserInterface\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleShader.h">
@@ -135,6 +138,9 @@
       <Filter>Header Files\UserInterface\Panels</Filter>
     </ClInclude>
     <ClInclude Include="UITextureInformation.h">
+      <Filter>Header Files\UserInterface\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImportPanel.h">
       <Filter>Header Files\UserInterface\Panels</Filter>
     </ClInclude>
   </ItemGroup>

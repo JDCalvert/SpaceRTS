@@ -28,10 +28,8 @@ public:
 private:
     UITextBox* loadBox;
     UITextBox* saveBox;
-    UITextBox* importBox;
     UIButton* loadButton;
     UIButton* saveButton;
-    UIButton* importButton;
 };
 
 #endif

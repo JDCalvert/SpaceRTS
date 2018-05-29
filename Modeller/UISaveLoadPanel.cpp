@@ -11,8 +11,6 @@
 
 void UISaveLoadPanel::build()
 {
-    setPosition(0.01f, 0.14f);
-
     font = &Font::getFont("Calibri");
     textSize = 0.025f;
     textBoxWidth = 0.2f;
@@ -21,14 +19,14 @@ void UISaveLoadPanel::build()
 
     blankTexture = Texture::getTexture("Blank");
 
+    setPosition(0.01f, 0.14f);
+
     float ypos = border;
 
     addBoxAndButton(loadBox, loadButton, "Load", ypos);
     addBoxAndButton(saveBox, saveButton, "Save", ypos);
-    addBoxAndButton(importBox, importButton, "Import", ypos);
 
     setSize(border * 3 + textBoxWidth + buttonWidth, ypos + border - 0.002f);
-    constructSurface();
     surface.diffuseMap = blankTexture;
 }
 
@@ -65,10 +63,5 @@ void UISaveLoadPanel::actionPerformed(UIComponent* component)
     {
         std::string fileName = saveBox->getText();
         UserInterfaceModeller::getInstance()->saveSurface(&fileName[0]);
-    }
-    else if (component == importButton)
-    {
-        std::string fileName = importBox->getText();
-        UserInterfaceModeller::getInstance()->importSurface(&fileName[0]);
     }
 }

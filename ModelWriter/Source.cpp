@@ -251,17 +251,17 @@ std::string addCylinder(Surface& surface, int detail)
 
     Vertex topMid =
     {
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec2(0.5f, 0.5f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec3(0.00f, 0.00f, 1.00f),
+        glm::vec2(0.25f, 0.25f),
+        glm::vec3(0.00f, 0.00f, 1.00f),
         parentBoneDependency
     };
 
     Vertex bottomMid = 
     {
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec2(0.5f, 0.5f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.00f, 0.00f, 0.00f),
+        glm::vec2(0.75f, 0.25f),
+        glm::vec3(0.00f, 0.00f,-1.00f),
         parentBoneDependency
     };
 
@@ -282,7 +282,7 @@ std::string addCylinder(Surface& surface, int detail)
             Vertex topUp =
             {
                 glm::vec3(x, y, 1.0f),
-                glm::vec2((x+1)/2, (y+1)/2),
+                glm::vec2((x+1)/4, (y+1)/4),
                 glm::vec3(0.0f, 0.0f, 1.0f),
                 parentBoneDependency
             };
@@ -290,7 +290,7 @@ std::string addCylinder(Surface& surface, int detail)
             Vertex bottomDown =
             {
                 glm::vec3(x, y, 0.0f),
-                glm::vec2((x+1)/2, (y+1)/2),
+                glm::vec2((x+3)/4, (y+1)/4),
                 glm::vec3(0.0f, 0.0f, -1.0f),
                 parentBoneDependency
             };
@@ -326,7 +326,7 @@ std::string addCylinder(Surface& surface, int detail)
         Vertex topOut = 
         {
             glm::vec3(x, y, 1.0f),
-            glm::vec2(u, 0.0f),
+            glm::vec2(u, 0.5f),
             glm::vec3(x, y, 0.0f),
             parentBoneDependency
         };
