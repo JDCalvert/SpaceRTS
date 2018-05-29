@@ -1,5 +1,15 @@
 #include "UILabel.h"
 
+UILabel* UILabel::addLabel(UIComponent* parent, float width, float height, std::string text, Font& font, Alignment alignment)
+{
+    UILabel* label = new UILabel();
+    label->setSize(width, height);
+    label->setText(text, height, font, alignment);
+    parent->addComponent(label);
+
+    return label;
+}
+
 void UILabel::setText(std::string text)
 {
     this->text = text;

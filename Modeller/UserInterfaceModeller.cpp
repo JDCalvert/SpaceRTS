@@ -20,6 +20,18 @@ void UserInterfaceModeller::build()
     renderOptions->build();
     addComponent(renderOptions);
 
+    textureInformation = new UITextureInformation(infoSurface);
+    textureInformation->build();
+    addComponent(textureInformation);
+
+    saveLoadPanel = new UISaveLoadPanel();
+    saveLoadPanel->build();
+    addComponent(saveLoadPanel);
+
+    importPanel = new UIImportPanel();
+    importPanel->build();
+    addComponent(importPanel);
+
     vertexInformation = new UIVertexInformation(infoSurface);
     addComponent(vertexInformation);
 
@@ -28,14 +40,6 @@ void UserInterfaceModeller::build()
 
     boneInformation = new UIBoneInformation(infoSurface);
     addComponent(boneInformation);
-
-    textureInformation = new UITextureInformation(infoSurface);
-    textureInformation->build();
-    addComponent(textureInformation);
-
-    saveLoadPanel = new UISaveLoadPanel();
-    saveLoadPanel->build();
-    addComponent(saveLoadPanel);
 
     rebuildInformation();
 }
@@ -107,6 +111,9 @@ void UserInterfaceModeller::importSurface(const char* fileName)
     std::vector<glm::vec4>& infoBoneIndices = infoSurface->getBoneIndicesAndWeights();
     int numVertices = infoVertices.size();
 
+    glm::vec2 baseTexCoord = importPanel->textureCoordinatesTopLeft;
+    glm::vec2 scaleTexCoord = importPanel->textureCoordinatesBottomRight - baseTexCoord;
+
     //Third, add all the vertices, transformed by the active bone matrix
     std::vector<glm::vec3>& importVertices = importSurface->getVertices();
     std::vector<glm::vec2>& importTextureCoordinates = importSurface->getTextureCoordinates();
@@ -115,9 +122,11 @@ void UserInterfaceModeller::importSurface(const char* fileName)
     for (unsigned int i=0; i<importVertices.size(); i++)
     {
         glm::vec4 newVertex = infoBones[activeBone].absolute * glm::vec4(importVertices[i], 1.0f);
-        glm::vec2 newTextureCoordinate = importTextureCoordinates[i];
         glm::vec3 newNormal = transposeMatrices[activeBone] * importNormals[i];
         glm::vec4 newBoneIndices = importBoneIndicesAndWeights[i];
+
+        glm::vec2 importTextureCoordinate = importTextureCoordinates[i];
+        glm::vec2 newTextureCoordinate = baseTexCoord + glm::matrixCompMult(importTextureCoordinate, scaleTexCoord);
 
         //As with the bones, if these depend on the base bone then use the active bone, otherwise
         //use the new bone that was added from the import surface.

@@ -131,6 +131,7 @@
     <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="UIBoneInformation.cpp" />
     <ClCompile Include="UIBonePanel.cpp" />
+    <ClCompile Include="UIImportPanel.cpp" />
     <ClCompile Include="UIInformation.cpp" />
     <ClCompile Include="UIRenderOptions.cpp" />
     <ClCompile Include="UISaveLoadPanel.cpp" />
@@ -145,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="UIImportPanel.h" />
     <ClInclude Include="UITextureInformation.h" />
     <ClInclude Include="UIBoneInformation.h" />
     <ClInclude Include="UIBonePanel.h" />
