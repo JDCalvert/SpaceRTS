@@ -10,9 +10,10 @@ public:
     float externalVerticalBorder;
     float internalHorizontalBorder;
 
-    UILayoutHorizontal();
+    UILayoutHorizontal(UIComponent* component);
 
-    void layout(UIComponent* uiComponent);
+    void layoutComponents();
+    void stretchComponents();
 };
 
 #endif

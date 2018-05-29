@@ -7,6 +7,7 @@
 
 #include "Event.h"
 #include "Surface.h"
+#include "UILayout.h"
 #include "UIActionListener.h"
 
 class UIComponent
@@ -17,6 +18,7 @@ public:
     std::vector<UIComponent*> components;
 
     Surface surface;
+    UILayout* layout;
     
     bool hover = false;
     void checkHover(glm::vec2 mousePosition);
@@ -55,6 +57,7 @@ protected:
     void constructSurface();
     void clearComponents();
     void invokeActionListener();
+    void recalculateLayout();
 
     bool isChild(UIComponent* component);
 

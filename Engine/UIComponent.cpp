@@ -238,3 +238,12 @@ glm::vec2 UIComponent::getSize()
 {
     return size;
 }
+
+void UIComponent::recalculateLayout()
+{
+    if (layout)
+    {
+        layout->layoutComponents();
+        layout->stretchComponents();
+    }
+}
