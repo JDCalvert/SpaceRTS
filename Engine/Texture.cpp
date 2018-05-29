@@ -13,6 +13,11 @@ std::unordered_map<std::string, GLuint> Texture::textures;
 
 GLuint Texture::getTexture(std::string textureName)
 {
+    if (textures.find(textureName) != textures.end())
+    {
+        loadDDS(&textureName[0], textureName);
+    }
+    
     return textures[textureName];
 }
 

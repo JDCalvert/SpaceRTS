@@ -22,6 +22,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="UILayout.h" />
     <ClInclude Include="OpenGLContext.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ScreenShader.h" />
@@ -33,6 +34,8 @@
     <ClInclude Include="UIActionListener.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIInteger.h" />
+    <ClInclude Include="UILayoutHorizontal.h" />
+    <ClInclude Include="UILayoutVertical.h" />
     <ClInclude Include="UIUnsignedInteger.h" />
     <ClInclude Include="UILabel.h" />
     <ClInclude Include="UINumber.h" />
@@ -54,6 +57,8 @@
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIInteger.cpp" />
+    <ClCompile Include="UILayoutHorizontal.cpp" />
+    <ClCompile Include="UILayoutVertical.cpp" />
     <ClCompile Include="UIUnsignedInteger.cpp" />
     <ClCompile Include="UILabel.cpp" />
     <ClCompile Include="UINumber.cpp" />

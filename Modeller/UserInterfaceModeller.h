@@ -10,6 +10,7 @@
 #include "UIBoneInformation.h"
 #include "UITextureInformation.h"
 #include "UISaveLoadPanel.h"
+#include "UIImportPanel.h"
 
 class UserInterfaceModeller : public UserInterface
 {
@@ -20,6 +21,7 @@ public:
     UIBoneInformation* boneInformation;
     UITextureInformation* textureInformation;
     UISaveLoadPanel* saveLoadPanel;
+    UIImportPanel* importPanel;
 
     UserInterfaceModeller(Surface* infoSurface);
 
