@@ -4,17 +4,15 @@
 
 #include "UIComponent.h"
 
-UILayoutVertical::UILayoutVertical()
+UILayoutVertical::UILayoutVertical(UIComponent* component) : UILayout(component)
 {
     externalHorizontalBorder = 0.01f;
     externalVerticalBorder = 0.01f;
 
     internalVerticalBorder = 0.002f;
-
-    horizontalStretch = true;
 }
 
-void UILayoutVertical::layout(UIComponent* uiComponent)
+void UILayoutVertical::layout()
 {
     float xpos = externalHorizontalBorder;
     float ypos = externalVerticalBorder;
@@ -27,8 +25,8 @@ void UILayoutVertical::layout(UIComponent* uiComponent)
     {
         UIComponent* component = *i;
 
-        //UILayout* componentLayout = component->layout;
-        //if (componentLayout) componentLayout->layout(component);
+        UILayout* componentLayout = component->layout;
+        if (componentLayout) componentLayout->layout(component);
 
         component->setPosition(xpos, ypos);
 

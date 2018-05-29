@@ -6,7 +6,13 @@ class UIComponent;
 class UILayout
 {
 public:
-    virtual void layout(UIComponent* uiComponent) = 0;
+    UILayout(UIComponent* component);
+
+    virtual void layoutComponents() = 0;
+    virtual void stretchComponents() = 0;
+
+protected:
+    UIComponent* component;
 };
 
 #endif

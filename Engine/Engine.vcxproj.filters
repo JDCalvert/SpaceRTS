@@ -182,6 +182,9 @@
     <ClCompile Include="UILayoutVertical.cpp">
       <Filter>Source Files\UserInterface\Layouts</Filter>
     </ClCompile>
+    <ClCompile Include="UILayout.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\ScreenShader.frag">

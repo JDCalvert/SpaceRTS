@@ -12,9 +12,10 @@ public:
 
     bool horizontalStretch;
 
-    UILayoutVertical();
+    UILayoutVertical(UIComponent* component);
 
-    void layout(UIComponent* uiComponent);
+    void layoutComponents() override;
+    void stretchComponents() override;
 };
 
 #endif
