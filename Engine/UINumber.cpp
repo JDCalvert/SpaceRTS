@@ -26,7 +26,7 @@ void UINumber::recalculateSurface()
     std::string str = ss.str();
 
     label->setText(str);
-    label->recalculateSurface();
+    label->constructSurface();
 }
 
 void UINumber::processTextEvent(TextEvent event)

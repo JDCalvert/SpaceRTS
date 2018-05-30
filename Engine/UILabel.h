@@ -17,7 +17,7 @@ public:
     void setFont(Font font);
     void setAlignment(Alignment alignment);
     
-    void recalculateSurface();
+    void constructSurface();
     GLenum getRenderMode() override;
 
     void addChar(char newChar);
