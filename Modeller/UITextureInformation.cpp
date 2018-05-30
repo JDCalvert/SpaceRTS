@@ -19,7 +19,7 @@ UITextureInformation::UITextureInformation(Surface* infoSurface) : UIPanel()
     textureSize = 0.2f;
     height = 0.0f;
 
-    surface.diffuseMap = Texture::getTexture("Blank");    
+    surface.diffuseMap = Texture::getTexture("Blank");
 }
 
 void UITextureInformation::build()
@@ -41,6 +41,8 @@ void UITextureInformation::build()
     setSize(xpos, height);
 
     rebuildPanel();
+
+    UserInterfaceModeller::getInstance()->textureInformation->rebuildImportTextureCoordinates();
 }
 
 void UITextureInformation::rebuildPanel()
@@ -70,6 +72,35 @@ void UITextureInformation::renderTextureCoordinates()
     BlankShader* blankShader = static_cast<BlankShader*>(Shader::getShader("Blank"));
     blankShader->renderTextureCoordinateVertices(infoSurface, highlightVertices, textureCoordinateColour);
     blankShader->renderTextureCoordinateLines(infoSurface, highlightIndices, textureCoordinateColour);
+
+    UIImportPanel* importPanel = UserInterfaceModeller::getInstance()->importPanel;
+    if (importPanel->hover)
+    {        
+        blankShader->renderLines(importVertices, importIndices, glm::mat4(), textureCoordinateColour);
+    }
+}
+
+void UITextureInformation::rebuildImportTextureCoordinates()
+{
+    UIImportPanel* importPanel = UserInterfaceModeller::getInstance()->importPanel;
+    glm::vec2 topLeft = importPanel->textureCoordinatesTopLeft * 2.0f - glm::vec2(1.0f, 1.0f);
+    glm::vec2 bottomRight = importPanel->textureCoordinatesBottomRight * 2.0f - glm::vec2(1.0f, 1.0f);
+
+    importVertices =
+    {
+        glm::vec3(topLeft, 0.0f),
+        glm::vec3(topLeft.x, bottomRight.y, 0.0f),
+        glm::vec3(bottomRight, 0.0f),
+        glm::vec3(bottomRight.x, topLeft.y, 0.0f),
+    };
+
+    importIndices =
+    {
+        0, 1,
+        1, 2,
+        2, 3,
+        3, 0
+    };
 }
 
 void UITextureInformation::preRender()

@@ -18,11 +18,15 @@ public:
     void preRender() override;
 
     void renderTextureCoordinates();
+    void rebuildImportTextureCoordinates();
 
 private:
     Surface* infoSurface;
 
     TextureRenderer* textureCoordinateRenderer;
+
+    float xpos, height;
+    float buttonSize;
 
     bool showSpecular, previousShowSpecular;
     bool showNormal, previousShowNormal;
@@ -32,14 +36,14 @@ private:
     UITexturePanel* specularPanel;
     UITexturePanel* normalPanel;
 
+    std::vector<glm::vec3> importVertices;
+    std::vector<unsigned int> importIndices;
+
     void addTexturePanel(UITexturePanel*& panel, GLuint& textureId, GLuint textureCoordinateTextureId, std::string textureName);
     void addToggleButton(UIToggleButton*& toggleButton, bool& toggle, std::string buttonText);
 
     void rebuildPanel();
     void replaceTexturePanel(UITexturePanel* panel);
-
-    float xpos, height;
-    float buttonSize;
 };
 
 #endif

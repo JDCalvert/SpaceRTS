@@ -14,6 +14,10 @@ void UIImportPanel::actionPerformed(UIComponent* component)
         std::string fileName = fileTextBox->getText();
         UserInterfaceModeller::getInstance()->importSurface(&fileName[0]);
     }
+    else if (std::find(numberPanels.begin(), numberPanels.end(), component) != numberPanels.end())
+    {
+        UserInterfaceModeller::getInstance()->textureInformation->rebuildImportTextureCoordinates();
+    }
 }
 
 void UIImportPanel::build()
@@ -75,4 +79,7 @@ void UIImportPanel::addNumber(UIPanel* panel, float& number)
     uiNumber->setText(textSize, *font, RIGHT);
     uiNumber->surface.diffuseMap = blankTexture;
     panel->addComponent(uiNumber);
+
+    uiNumber->setActionListener(this);
+    numberPanels.push_back(uiNumber);
 }
