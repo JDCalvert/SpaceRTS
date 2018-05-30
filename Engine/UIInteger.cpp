@@ -25,7 +25,7 @@ void UIInteger::recalculateSurface()
     std::string str = ss.str();
 
     label->setText(str);
-    label->recalculateSurface();
+    label->constructSurface();
 }
 
 void UIInteger::processTextEvent(TextEvent event)

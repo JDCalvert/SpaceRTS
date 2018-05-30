@@ -19,16 +19,12 @@ public:
 private:
     Font* font;
     float textSize;
-    float border;
-    float width;
 
     GLuint blankTexture;
 
     UITextBox* fileTextBox;
     UIButton* importButton;
 
-    void addHeader(std::string text);
-    void addTextBox(UITextBox*& textBox);
     void addNumber(UIPanel* panel, float& number);
 };
 
