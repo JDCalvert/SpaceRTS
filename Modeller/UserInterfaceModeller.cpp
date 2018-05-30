@@ -20,10 +20,6 @@ void UserInterfaceModeller::build()
     renderOptions->build();
     addComponent(renderOptions);
 
-    textureInformation = new UITextureInformation(infoSurface);
-    textureInformation->build();
-    addComponent(textureInformation);
-
     saveLoadPanel = new UISaveLoadPanel();
     saveLoadPanel->build();
     addComponent(saveLoadPanel);
@@ -31,6 +27,10 @@ void UserInterfaceModeller::build()
     importPanel = new UIImportPanel();
     importPanel->build();
     addComponent(importPanel);
+
+    textureInformation = new UITextureInformation(infoSurface);
+    textureInformation->build();
+    addComponent(textureInformation);
 
     vertexInformation = new UIVertexInformation(infoSurface);
     addComponent(vertexInformation);

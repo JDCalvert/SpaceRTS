@@ -7,11 +7,15 @@
 #include <UITextBox.h>
 #include <UIActionListener.h>
 
+class UINumber;
+
 class UIImportPanel : public UIPanel, public UIActionListener
 {
 public:
     glm::vec2 textureCoordinatesTopLeft;
     glm::vec2 textureCoordinatesBottomRight;
+
+    std::vector<UINumber*> numberPanels;
 
     void build();
     void actionPerformed(UIComponent* component);
