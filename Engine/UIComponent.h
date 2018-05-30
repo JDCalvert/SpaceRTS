@@ -54,10 +54,11 @@ protected:
     glm::vec2 position;
     glm::vec2 size;
 
-    void constructSurface();
+    virtual void constructSurface();
     void clearComponents();
     void invokeActionListener();
-    void recalculateLayout();
+
+    virtual void recalculateLayout() final;
 
     bool isChild(UIComponent* component);
 

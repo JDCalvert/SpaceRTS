@@ -12,6 +12,8 @@ public:
 
     bool horizontalStretch;
 
+    float widestComponent;
+
     UILayoutVertical(UIComponent* component);
 
     void layoutComponents() override;

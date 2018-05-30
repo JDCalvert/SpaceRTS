@@ -37,7 +37,7 @@ void UILabel::setText(std::string text, float height, Font& font, Alignment alig
     setFont(font);
     setAlignment(alignment);
 
-    recalculateSurface();
+    constructSurface();
 }
 
 std::string UILabel::getText()
@@ -48,16 +48,16 @@ std::string UILabel::getText()
 void UILabel::addChar(char newChar)
 {
     text += newChar;
-    recalculateSurface();
+    constructSurface();
 }
 
 void UILabel::removeLastChar()
 {
     text = text.substr(0, text.length() - 1);
-    recalculateSurface();
+    constructSurface();
 }
 
-void UILabel::recalculateSurface()
+void UILabel::constructSurface()
 {
     int numChars = text.length();
 

@@ -2,6 +2,8 @@
 
 #include <Texture.h>
 #include <UINumber.h>
+#include <UILayoutHorizontal.h>
+#include <UILayoutVertical.h>
 
 #include "UserInterfaceModeller.h"
 
@@ -18,32 +20,32 @@ void UIImportPanel::build()
 {
     font = &Font::getFont("Calibri");
     textSize = 0.025f;
-    width = 0.25f;
-    border = 0.01f;
 
     textureCoordinatesTopLeft = glm::vec2(0.0f);
     textureCoordinatesBottomRight = glm::vec2(1.0f);
 
     blankTexture = Texture::getTexture("Blank");
 
-    UILabel* fileLabel = new UILabel();
-    fileLabel->setSize(0.2f, textSize);
-    fileLabel->setText("File", textSize, *font, LEFT);
-    addComponent(fileLabel);
+    layout = new UILayoutVertical(this);
+
+    UILabel::addLabel(this, 0.2f, textSize, "File", *font, LEFT);
 
     fileTextBox = new UITextBox();
-    fileTextBox->setSize(width, textSize);
+    fileTextBox->setSize(0.0f, textSize);
     fileTextBox->setText("", textSize, *font, LEFT);
     fileTextBox->surface.diffuseMap = blankTexture;
     addComponent(fileTextBox);
 
-    UILabel* texCoordinateLabel = new UILabel();
-    texCoordinateLabel->setSize(0.2f, textSize);
-    texCoordinateLabel->setText("Texture Coordinates", textSize, *font, LEFT);
-    addComponent(texCoordinateLabel);
+    UILabel::addLabel(this, 0.2f, textSize, "Texture Coordinates", *font, LEFT);
 
     UIPanel* textureCoordinatesPanel = new UIPanel();
+    textureCoordinatesPanel->surface.diffuseMap = Texture::getTexture("BlankNothing");
+    addComponent(textureCoordinatesPanel);
 
+    UILayoutHorizontal* textureCoordinatesLayout = new UILayoutHorizontal(textureCoordinatesPanel);
+    textureCoordinatesLayout->externalHorizontalBorder = 0.0f;
+    textureCoordinatesLayout->externalVerticalBorder = 0.0f;
+    textureCoordinatesPanel->layout = textureCoordinatesLayout;
 
     addNumber(textureCoordinatesPanel, textureCoordinatesTopLeft.x);
     addNumber(textureCoordinatesPanel, textureCoordinatesTopLeft.y);
@@ -51,22 +53,19 @@ void UIImportPanel::build()
     addNumber(textureCoordinatesPanel, textureCoordinatesBottomRight.x);
     addNumber(textureCoordinatesPanel, textureCoordinatesBottomRight.y);
 
-    ypos += textSize + 0.002f;
-    xpos = border;
-
     importButton = new UIButton(this);
-    importButton->setPosition(xpos, ypos);
-    importButton->setSize(width, textSize);
+    importButton->setSize(0.0f, textSize);
     importButton->setText("Import", textSize, *font, CENTRE);
     importButton->surface.diffuseMap = blankTexture;
     addComponent(importButton);
 
-    ypos += textSize + 0.002f;
-    xpos += width + border;
+    UserInterfaceModeller* ui = UserInterfaceModeller::getInstance();
+    float ypos = ui->renderOptions->getSize().y + ui->saveLoadPanel->getSize().y + 0.03f;;
 
-    setPosition(border, 0.4f);
-    setSize(xpos + border - 0.002f, ypos + border - 0.002f);
+    setPosition(0.01f, ypos);
     surface.diffuseMap = blankTexture;
+
+    recalculateLayout();
 }
 
 void UIImportPanel::addNumber(UIPanel* panel, float& number)

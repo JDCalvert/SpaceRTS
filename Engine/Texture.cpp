@@ -13,7 +13,7 @@ std::unordered_map<std::string, GLuint> Texture::textures;
 
 GLuint Texture::getTexture(std::string textureName)
 {
-    if (textures.find(textureName) != textures.end())
+    if (textures.find(textureName) == textures.end())
     {
         loadDDS(&textureName[0], textureName);
     }
@@ -32,7 +32,7 @@ void Texture::loadDDS(const char* imagePath, std::string textureName)
     fopen_s(&file, imagePath, "rb");
     if (!file)
     {
-        printf("Failed to open DDS file");
+        printf("Failed to open DDS file %s\n", imagePath);
         return;
     }
 
