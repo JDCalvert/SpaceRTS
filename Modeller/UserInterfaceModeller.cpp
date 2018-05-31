@@ -366,15 +366,18 @@ void UserInterfaceModeller::removeVertex(unsigned int index)
 
     //Remove any triangles that have this vertex
     std::vector<unsigned int>& indices = infoSurface->getIndices();
-    for (unsigned int i=0; i<indices.size();)
+    unsigned int numTriangles = indices.size() / 3;
+    for (unsigned int i=0; i<numTriangles;)
     {
-        if (std::find(indices.begin() + i, indices.begin() + i + 3, index) != indices.begin() + i + 3)
+        auto firstIndex = indices.begin() + i * 3;
+        if (std::find(firstIndex, firstIndex + 3, index) != firstIndex + 3)
         {
-            indices.erase(indices.begin() + i, indices.begin() + i + 3);
+            removeTriangle(i);
+            numTriangles--;
         }
         else
         {
-            i+=3;
+            i++;
         }
     }
 
@@ -383,6 +386,59 @@ void UserInterfaceModeller::removeVertex(unsigned int index)
     {
         if (indices[i] > index) indices[i]--;
     }
+}
+
+void UserInterfaceModeller::removeTriangle(unsigned int triangleIndex)
+{
+    std::vector<unsigned int>& indices = infoSurface->getIndices();
+    auto firstIndexRemove = indices.begin() + triangleIndex * 3;
+    indices.erase(firstIndexRemove, firstIndexRemove + 3);
+
+    infoSurface->calculateSizesAndLength();
+    rebuildInformation();
+}
+
+void UserInterfaceModeller::removeBone(unsigned int index)
+{
+    std::vector<Bone>& bones = infoSurface->getBones();
+    std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
+
+    for (unsigned int i=0; i<boneIndices.size(); i++)
+    {
+        glm::vec4& boneIndex = boneIndices[i];
+        if (boneIndex[0] == index)
+        {
+            //If the vertex is partially dependent on another bone, shift the dependency entirely to that
+            if (boneIndex[2] > -1)
+            {
+                boneIndex[0] = boneIndex[2];
+                boneIndex[1] = 1.0f;
+                boneIndex[2] = -1;
+                boneIndex[3] = 0.0f;
+            }
+            //Otherwise remove the bone
+            else
+            {
+                removeVertex(i);
+                i--;
+            }
+        }
+        else if (boneIndex[2] == index)
+        {
+            //If the vertex is partially dependent on this bone then move the dependency entirely to the other one
+            boneIndex[1] = 1.0f;
+            boneIndex[2] = -1;
+            boneIndex[3] = 0.0f;
+        }
+
+        if (boneIndex[0] > index) boneIndex[0]--;
+        if (boneIndex[2] > index) boneIndex[2]--;
+    }
+
+    bones.erase(bones.begin() + index);
+
+    infoSurface->calculateSizesAndLength();
+    rebuildInformation();
 }
 
 void UserInterfaceModeller::renderTextureCoordinates()
