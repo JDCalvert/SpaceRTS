@@ -2,10 +2,10 @@
 
 #include <sstream>
 
-#include <UserInterface.h>
 #include <UIUnsignedInteger.h>
 #include <Texture.h>
 
+#include "UserInterfaceModeller.h"
 #include "UITriangleInformation.h"
 
 UITrianglePanel::UITrianglePanel(UITriangleInformation* parent, Surface* infoSurface, unsigned int index) :
@@ -14,6 +14,7 @@ UITrianglePanel::UITrianglePanel(UITriangleInformation* parent, Surface* infoSur
     index3(infoSurface->getIndices()[index*3 + 2])
 {
     this->parent = parent;
+    this->index = index;
 
     onMap = Texture::getTexture("Blank");
     offMap = Texture::getTexture("BlankNothing");
@@ -26,6 +27,7 @@ void UITrianglePanel::buildPanel()
     addNumber(index1);
     addNumber(index2);
     addNumber(index3);
+    addRemoveButton();
 
     setSize(xpos - parent->border, parent->textSize);
     constructSurface();
@@ -43,6 +45,14 @@ void UITrianglePanel::preRender()
     surface.diffuseMap = highlighted ? onMap : offMap;
 }
 
+void UITrianglePanel::actionPerformed(UIComponent* component)
+{
+    if (component == removeButton)
+    {
+        UserInterfaceModeller::getInstance()->removeTriangle(index);
+    }
+}
+
 void UITrianglePanel::addNumber(unsigned int& index)
 {
     UIUnsignedInteger* uiInteger = new UIUnsignedInteger(index);
@@ -52,6 +62,18 @@ void UITrianglePanel::addNumber(unsigned int& index)
     addComponent(uiInteger);
 
     xpos += parent->indexWidth + parent->border;
+}
+
+void UITrianglePanel::addRemoveButton()
+{
+    removeButton = new UIButton(this);
+    removeButton->setPosition(xpos, 0.0f);
+    removeButton->setSize(parent->textSize, parent->textSize);
+    removeButton->setText("R", parent->textSize, *parent->font, CENTRE);
+    removeButton->surface.diffuseMap = parent->texture;
+    addComponent(removeButton);
+
+    xpos += parent->textSize + parent->border;
 }
 
 void UITrianglePanel::addIndices(std::vector<unsigned int>& indices)

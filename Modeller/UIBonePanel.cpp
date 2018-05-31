@@ -9,6 +9,7 @@
 #include <Texture.h>
 
 #include "UIBoneInformation.h"
+#include "UserInterfaceModeller.h"
 
 UIBonePanel::UIBonePanel(UIBoneInformation* parent, Surface* infoSurface, unsigned int index) :
     bone(infoSurface->getBones()[index])
@@ -37,13 +38,21 @@ void UIBonePanel::preRender()
 
 void UIBonePanel::actionPerformed(UIComponent* component)
 {
-    parent->actionPerformed(this);
+    if (component == removeButton)
+    {
+        UserInterfaceModeller::getInstance()->removeBone(index);
+    }
+    else
+    {
+        UserInterfaceModeller::getInstance()->recalculateVertexPositions();
+    }
 }
 
 void UIBonePanel::buildPanel()
 {
     addIndexLabel();
     addParentNumber();
+    addRemoveButton();
 
     for (unsigned int i=0; i<4; i++)
     {
@@ -81,6 +90,18 @@ void UIBonePanel::addParentNumber()
     uiInteger->setText(parent->textSize, *parent->font, RIGHT);
     uiInteger->surface.diffuseMap = parent->texture;
     addComponent(uiInteger);
+
+    ypos += parent->textSize + 0.002f;
+}
+
+void UIBonePanel::addRemoveButton()
+{
+    removeButton = new UIButton(this);
+    removeButton->setPosition(xpos, ypos);
+    removeButton->setSize(parent->indexWidth, parent->indexWidth);
+    removeButton->setText("R", parent->indexWidth, *parent->font, CENTRE);
+    removeButton->surface.diffuseMap = parent->texture;
+    addComponent(removeButton);
 
     xpos += parent->indexWidth + parent->border;
 }

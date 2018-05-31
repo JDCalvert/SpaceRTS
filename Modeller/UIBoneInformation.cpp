@@ -68,12 +68,7 @@ int UIBoneInformation::getNumItemsTotal()
 
 void UIBoneInformation::actionPerformed(UIComponent* component)
 {
-    if (std::find(bonePanels.begin(), bonePanels.end(), component) != bonePanels.end())
-    {
-        UIBonePanel* panel = static_cast<UIBonePanel*>(component);
-        UserInterfaceModeller::getInstance()->recalculateVertexPositions();
-    }
-    else if (component == newButton)
+    if (component == newButton)
     {
         UserInterfaceModeller::getInstance()->newBone();
 

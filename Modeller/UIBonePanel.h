@@ -5,6 +5,7 @@
 #include <UIActionListener.h>
 
 class UIBoneInformation;
+class UIButton;
 
 class UIBonePanel : public UIPanel, UIActionListener
 {
@@ -23,6 +24,9 @@ protected:
 
 private:
     UIBoneInformation* parent;
+
+    UIButton* removeButton;
+
     Bone& bone;
     unsigned int index;
 
@@ -33,6 +37,7 @@ private:
     void addIndexLabel();
     void addParentNumber();
     void addNumber(float& value);
+    void addRemoveButton();
 };
 
 #endif
