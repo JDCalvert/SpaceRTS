@@ -15,21 +15,6 @@ class Renderer;
 
 class OpenGLContext
 {
-private:    
-    static std::unordered_map<GLFWwindow*, OpenGLContext*> contextsByWindow;
-    static OpenGLContext* currentGlContext;
-
-    std::unordered_map<GLenum, GLboolean> glCapabilities;
-    std::vector<Renderer*> renderers;
-
-    GLFWwindow* window;
-    GLsizei width, height;
-
-    glm::dvec2 mousePosition, deltaMousePosition;
-    std::queue<Event*> events;
-
-    double time, deltaTime;
-
 public:
     OpenGLContext();
 
@@ -52,6 +37,8 @@ public:
     bool keyPressed(int key);
 
     void setEnabled(GLenum glCapability, GLboolean enabled);
+    void setLineWidth(GLfloat lineWidth);
+    void setPointSize(GLfloat pointSize);
 
     void addRenderer(Renderer* renderer);
     
@@ -78,6 +65,24 @@ public:
 
     glm::dvec2 getMousePositionScreenSpace();
     glm::dvec2 getDeltaMousePosition();
+
+private:
+    static std::unordered_map<GLFWwindow*, OpenGLContext*> contextsByWindow;
+    static OpenGLContext* currentGlContext;
+
+    std::unordered_map<GLenum, GLboolean> glCapabilities;
+    std::vector<Renderer*> renderers;
+
+    GLfloat pointSize;
+    GLfloat lineWidth;
+
+    GLFWwindow* window;
+    GLsizei width, height;
+
+    glm::dvec2 mousePosition, deltaMousePosition;
+    std::queue<Event*> events;
+
+    double time, deltaTime;
 };
 
 #endif

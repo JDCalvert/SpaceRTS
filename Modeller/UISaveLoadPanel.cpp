@@ -56,12 +56,12 @@ void UISaveLoadPanel::actionPerformed(UIComponent* component)
 {
     if (component == loadButton)
     {
-        std::string fileName = loadBox->getText();
+        std::string fileName = "../Resources/Models/" + loadBox->getText() + ".mesh";
         UserInterfaceModeller::getInstance()->loadSurface(&fileName[0]);
     }
     else if (component == saveButton)
     {
-        std::string fileName = saveBox->getText();
+        std::string fileName = "../Resources/Models/" + saveBox->getText() + ".mesh";
         UserInterfaceModeller::getInstance()->saveSurface(&fileName[0]);
     }
 }

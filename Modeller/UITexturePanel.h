@@ -10,27 +10,32 @@ class UITextureInformation;
 class UITexturePanel : public UIPanel, UIActionListener
 {
 public:
+    const std::string texturePrefix = "../Resources/Graphics/";
+    const std::string textureSuffix = ".dds";
+
     float loadButtonWidth;
 
     GLuint& textureId;
-    GLuint textureCoordinateId;
+    std::string& textureName;
+
+    GLuint textureCoordinateId;    
 
     bool shouldRebuild;
 
-    UITexturePanel(UITextureInformation* parent, GLuint& textureId, GLuint textureCoordinateId, std::string label);
+    UITexturePanel(UITextureInformation* parent, GLuint& textureId, std::string& textureName, GLuint textureCoordinateId, std::string label);
 
     void build();
     void preRender() override;
 
-    void actionPerformed(UIComponent* component);
+    void actionPerformed(UIComponent* component) override;
 
-protected:
+    void updateTexture();
 
 private:
     UITextureInformation* parent;
 
-    UITextBox* diffuseTextureBox;
-    UIButton* diffuseTextureLoadButton;
+    UITextBox* textureNameBox;
+    UIButton* textureLoadButton;
     UIPanel* texturePanel;
     UIPanel* textureCoordinatePanel;
 
@@ -40,6 +45,8 @@ private:
     GLuint texture;
 
     std::string labelText;
+
+    std::string getShortTextureName();
 };
 
 #endif

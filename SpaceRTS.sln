@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceRTS", "SpaceRTS\SpaceRTS.vcxproj", "{3FD882B3-F68E-4C91-9395-68A8093F0200}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelWriter", "ModelWriter\ModelWriter.vcxproj", "{15ED95AC-C839-4C21-B6AC-1F9A114383A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{50F2C82D-817B-43CD-A273-64F45320A848} = {50F2C82D-817B-43CD-A273-64F45320A848}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Modeller", "Modeller\Modeller.vcxproj", "{3AF91AFC-07F6-4FF7-A972-E9DA31FFD317}"
 	ProjectSection(ProjectDependencies) = postProject

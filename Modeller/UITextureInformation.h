@@ -20,6 +20,8 @@ public:
     void renderTextureCoordinates();
     void rebuildImportTextureCoordinates();
 
+    void updateTextures();
+
 private:
     Surface* infoSurface;
 
@@ -38,8 +40,7 @@ private:
 
     std::vector<glm::vec3> importVertices;
     std::vector<unsigned int> importIndices;
-
-    void addTexturePanel(UITexturePanel*& panel, GLuint& textureId, GLuint textureCoordinateTextureId, std::string textureName);
+    void addTexturePanel(UITexturePanel*& panel, GLuint& textureId, std::string& textureName, GLuint textureCoordinateTextureId, std::string panelName);
     void addToggleButton(UIToggleButton*& toggleButton, bool& toggle, std::string buttonText);
 
     void rebuildPanel();

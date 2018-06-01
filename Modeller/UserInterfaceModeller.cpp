@@ -55,6 +55,8 @@ void UserInterfaceModeller::loadSurface(const char* fileName)
 {
     infoSurface->loadFromFile(fileName);
     rebuildInformation();
+
+    textureInformation->updateTextures();
 }
 
 void UserInterfaceModeller::saveSurface(const char* fileName)
