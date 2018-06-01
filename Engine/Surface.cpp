@@ -4,6 +4,8 @@
 
 #include <glm\gtx\transform.hpp>
 
+#include "Texture.h"
+
 Surface::Surface()
 {
 }
@@ -61,9 +63,17 @@ void Surface::loadFromFile(const char* objFilePath)
 		    bones.push_back(Bone(boneRelative, boneParent));
 	    }
 
+        loadTextures();
 	    calculateSizesAndLength();
 	    prepareBones();
     }
+}
+
+void Surface::loadTextures()
+{
+    diffuseMap = Texture::getTexture(diffuseTextureName);
+    specularMap = Texture::getTexture(specularTextureName);
+    normalMap = Texture::getTexture(normalTextureName);
 }
 
 bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents)
@@ -80,8 +90,8 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     in.read(data, fileSize);
     in.close();
 
-    int lengthsSize = 3 * sizeof(unsigned int);
-    unsigned int* lengths = new unsigned int[3];
+    int lengthsSize = 6 * sizeof(unsigned int);
+    unsigned int lengths[6];
     memcpy(lengths, data, lengthsSize);
 
     int verticesSize = lengths[0] * sizeof(glm::vec3);
@@ -93,6 +103,9 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     int indicesSize = lengths[1] * sizeof(unsigned int);
     int bonesSize = lengths[2] * sizeof(glm::mat4);
     int parentsSize = lengths[2] * sizeof(int);
+    int diffuseTextureSize = lengths[3] * sizeof(char);
+    int specularTextureSize = lengths[4] * sizeof(char);
+    int normalTextureSize = lengths[5] * sizeof(char);
 
     vertices.resize(lengths[0]);
     textureCoordinates.resize(lengths[0]);
@@ -103,6 +116,9 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     indices.resize(lengths[1]);
     bones.resize(lengths[2]);
     parents.resize(lengths[2]);
+    diffuseTextureName.resize(lengths[3]);
+    specularTextureName.resize(lengths[4]);
+    normalTextureName.resize(lengths[5]);
 
     int verticesOffset = lengthsSize;
     int textureCoordinatesOffset = verticesOffset + verticesSize;
@@ -113,6 +129,9 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     int indicesOffset = boneIndicesOffset + boneIndicesSize;
     int bonesOffset = indicesOffset + indicesSize;
     int parentsOffset = bonesOffset + bonesSize;
+    int diffuseTextureOffset = parentsOffset + parentsSize;
+    int specularTextureOffset = diffuseTextureOffset + diffuseTextureSize;
+    int normalTextureOffset = specularTextureOffset + specularTextureSize;
 
     memcpy(&vertices[0], data + verticesOffset, verticesSize);
     memcpy(&textureCoordinates[0], data + textureCoordinatesOffset, textureCoordinatesSize);
@@ -123,9 +142,11 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     memcpy(&indices[0], data + indicesOffset, indicesSize);
     memcpy(&bones[0], data + bonesOffset, bonesSize);
     memcpy(&parents[0], data + parentsOffset, parentsSize);
+    memcpy(&diffuseTextureName[0], data + diffuseTextureOffset, diffuseTextureSize);
+    memcpy(&specularTextureName[0], data + specularTextureOffset, specularTextureSize);
+    memcpy(&normalTextureName[0], data + normalTextureOffset, normalTextureSize);
 
     //Clean up
-    delete lengths;
     delete data;
 
     return true;
@@ -134,6 +155,7 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
 void Surface::writeToFile(const char* fileName)
 {
     calculateTangents();
+    calculateSizesAndLength();
 
     unsigned int numBones = bones.size();
 
@@ -146,11 +168,18 @@ void Surface::writeToFile(const char* fileName)
         boneParents[i] = bone.parent;
     }
 
-    std::vector<unsigned int> sizes = {vertices.size(), indices.size(), bones.size()};
+    std::vector<unsigned int> sizes =
+    {
+        vertices.size(), indices.size(), bones.size(),
+        diffuseTextureName.size(), specularTextureName.size(), normalTextureName.size()
+    };
 
     int sizesSize = sizes.size() * sizeof(unsigned int);
     int boneRelativesSize = bones.size() * sizeof(glm::mat4);
     int boneParentsSize = bones.size() * sizeof(int);
+    int diffuseTextureSize = diffuseTextureName.size() * sizeof(char);
+    int specularTextureSize = specularTextureName.size() * sizeof(char);
+    int normalTextureSize = normalTextureName.size() * sizeof(char);
 
     int verticesOffset = sizesSize;
     int textureCoordinatesOffset = verticesOffset + verticesSize;
@@ -161,7 +190,10 @@ void Surface::writeToFile(const char* fileName)
     int indicesOffset = boneIndicesOffset + boneIndicesSize;
     int bonesOffset = indicesOffset + indicesSize;
     int parentsOffset = bonesOffset + boneRelativesSize;
-    int totalSize = parentsOffset + boneParentsSize;
+    int diffuseTextureOffset = parentsOffset + boneParentsSize;
+    int specularTextureOffset = diffuseTextureOffset + diffuseTextureSize;
+    int normalTextureOffset = specularTextureOffset + specularTextureSize;
+    int totalSize = normalTextureOffset + normalTextureSize;
 
     char* data = new char[totalSize];
     memcpy(&data[0], &sizes[0], sizesSize);
@@ -174,6 +206,9 @@ void Surface::writeToFile(const char* fileName)
     memcpy(&data[indicesOffset], indicesPointer, indicesSize);
     memcpy(&data[bonesOffset], &boneRelatives[0], boneRelativesSize);
     memcpy(&data[parentsOffset], &boneParents[0], boneParentsSize);
+    memcpy(&data[diffuseTextureOffset], &diffuseTextureName[0], diffuseTextureSize);
+    memcpy(&data[specularTextureOffset], &specularTextureName[0], specularTextureSize);
+    memcpy(&data[normalTextureOffset], &normalTextureName[0], normalTextureSize);
 
     std::ofstream objFile(fileName, std::ios::out | std::ios::binary);
     objFile.write(data, totalSize);
@@ -365,4 +400,34 @@ std::vector<glm::vec4>& Surface::getBoneIndicesAndWeights()
 std::vector<Bone>& Surface::getBones()
 {
     return bones;
+}
+
+std::string& Surface::getDiffuseTextureName()
+{
+    return diffuseTextureName;
+}
+
+std::string& Surface::getSpecularTextureName()
+{
+    return specularTextureName;
+}
+
+std::string& Surface::getNormalTextureName()
+{
+    return normalTextureName;
+}
+
+void Surface::setDiffuseTextureName(std::string diffuseTextureName)
+{
+    this->diffuseTextureName = diffuseTextureName;
+}
+
+void Surface::setSpecularTextureName(std::string specularTextureName)
+{
+    this->specularTextureName = specularTextureName;
+}
+
+void Surface::setNormalTextureName(std::string normalTextureName)
+{
+    this->normalTextureName = normalTextureName;
 }

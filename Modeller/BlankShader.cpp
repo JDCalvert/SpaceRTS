@@ -81,7 +81,7 @@ void BlankShader::renderLines(Surface* surface, glm::mat4 modelViewProjectionMat
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void BlankShader::renderLines(std::vector<glm::vec3>& vertices, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
+void BlankShader::renderLines(std::vector<glm::vec3>& vertices, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour, GLfloat lineWidth)
 {
     if (indices.size() == 0) return;
 
@@ -96,6 +96,7 @@ void BlankShader::renderLines(std::vector<glm::vec3>& vertices, std::vector<unsi
     unsigned int* indicesPointer = &indices[0];
     bindElementArrayBufferData(indexBufferId, indicesSize, indicesPointer);
 
+    OpenGLContext::currentContext()->setLineWidth(lineWidth);
     glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, (void*)0);
 }
 
@@ -144,9 +145,9 @@ void BlankShader::renderVertices(Surface* surface, std::vector<unsigned int>& in
     }
 
     renderVertices(verticesToRender, modelViewProjectionMatrix, colour);
-    renderLines(tangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(colour.r, 0.0f, 0.0f, colour.a));
-    renderLines(bitangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, colour.g, 0.0f, colour.a));
-    renderLines(normalLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, colour.b, colour.a));
+    renderLines(tangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(colour.r, 0.0f, 0.0f, colour.a), 2);
+    renderLines(bitangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, colour.g, 0.0f, colour.a), 2);
+    renderLines(normalLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, colour.b, colour.a), 2);
 }
 
 void BlankShader::renderVertices(std::vector<glm::vec3>& vertices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
@@ -160,13 +161,13 @@ void BlankShader::renderVertices(std::vector<glm::vec3>& vertices, glm::mat4 mod
     renderVertices(numVertices, verticesSize, verticesPointer, 10, modelViewProjectionMatrix, colour);
 }
 
-void BlankShader::renderVertices(int numVertices, int verticesSize, glm::vec3* verticesPointer, int pointSize, glm::mat4 mvp, glm::vec4 colour)
+void BlankShader::renderVertices(int numVertices, int verticesSize, glm::vec3* verticesPointer, GLfloat pointSize, glm::mat4 mvp, glm::vec4 colour)
 {
     renderCommon(mvp, colour);
 
     bindArrayBufferData(vertexPositionBufferId, verticesSize, verticesPointer);
 
-    glPointSize(pointSize);
+    OpenGLContext::currentContext()->setPointSize(pointSize);
     glDrawArrays(GL_POINTS, 0, numVertices);
 }
 
@@ -215,12 +216,12 @@ void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMat
         newLineIndices.push_back(size + 1);
     }
 
-    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
-    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
+    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 2);
+    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 2);
+    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 2);
 
     renderVertices(vertices, modelViewProjectionMatrix, glm::vec4(1.0f));
-    renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f));
+    renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f), 2);
 }
 
 void BlankShader::renderTextureCoordinateVertices(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour)
@@ -266,5 +267,5 @@ void BlankShader::renderTextureCoordinateLines(Surface* surface, std::vector<uns
         newLineIndices.push_back(baseIndex);
     }
 
-    renderLines(vertices, newLineIndices, glm::mat4(), colour);
+    renderLines(vertices, newLineIndices, glm::mat4(), colour, 2);
 }

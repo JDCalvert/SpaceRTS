@@ -50,24 +50,20 @@ int main()
 
     UIShader* uiShader = Shader::loadShader(new UIShader(), "UI");
 
-    Texture::loadDDS("Graphics/metalTexture.dds", "Metal");
-    Texture::loadDDS("Graphics/blank.dds", "Blank");
-    Texture::loadDDS("Graphics/blankDark.dds", "BlankDark");
-    Texture::loadDDS("Graphics/blankNothing.dds", "BlankNothing");
+    Texture::loadDDS("../Resources/Graphics/blank.dds", "Blank");
+    Texture::loadDDS("../Resources/Graphics/blankDark.dds", "BlankDark");
+    Texture::loadDDS("../Resources/Graphics/blankNothing.dds", "BlankNothing");
 
-    Font::loadFont("Graphics/font.bff", "Default");
-    Font::loadFont("Graphics/calibri.bff", "Calibri");
+    Font::loadFont("../Resources/Graphics/font.bff", "Default");
+    Font::loadFont("../Resources/Graphics/calibri.bff", "Calibri");
 
     Font& calibri = Font::getFont("Calibri");
 
     Surface* surface = new Surface();
-    surface->loadFromFile("Models/cube.mesh");
-    surface->diffuseMap = Texture::getTexture("Metal");
-
-    glLineWidth(2);
 
     UserInterfaceModeller* ui = UserInterface::initialise(new UserInterfaceModeller(surface));
     ui->build();
+    ui->loadSurface("../Resources/Models/cube.mesh");
     
     while (!glContext->shouldClose())
     {

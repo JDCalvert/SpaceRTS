@@ -10,6 +10,12 @@ UITextBox::UITextBox()
     label->setPosition(0.002f, 0.0f);
 }
 
+void UITextBox::setText(std::string text)
+{
+    label->setText(text);
+    label->constructSurface();
+}
+
 void UITextBox::setText(std::string text, float size, Font font, Alignment alignment)
 {
     label->setText(text, size, font, alignment);

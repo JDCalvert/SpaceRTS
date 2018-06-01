@@ -144,6 +144,24 @@ void OpenGLContext::setEnabled(GLenum glCapability, GLboolean enabled)
     }
 }
 
+void OpenGLContext::setLineWidth(GLfloat newLineWidth)
+{
+    if (newLineWidth != lineWidth)
+    {
+        lineWidth = newLineWidth;
+        glLineWidth(lineWidth);
+    }   
+}
+
+void OpenGLContext::setPointSize(GLfloat newPointSize)
+{
+    if (newPointSize != pointSize)
+    {
+        pointSize = newPointSize;
+        glPointSize(pointSize);
+    }
+}
+
 void OpenGLContext::addRenderer(Renderer* renderer)
 {
     renderer->resize(width, height);

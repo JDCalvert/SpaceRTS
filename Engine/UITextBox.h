@@ -10,6 +10,7 @@ class UITextBox : public UIPanel
 public:
     UITextBox();
 
+    void setText(std::string text);
     void setText(std::string text, float size, Font font, Alignment alignment);
 
     using UIComponent::setSize;

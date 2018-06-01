@@ -5,9 +5,10 @@
 #include "UserInterfaceModeller.h"
 #include "UITextureInformation.h"
 
-UITexturePanel::UITexturePanel(UITextureInformation* parent, GLuint& textureId, GLuint textureCoordinateId, std::string labelText) :
+UITexturePanel::UITexturePanel(UITextureInformation* parent, GLuint& textureId, std::string& textureName, GLuint textureCoordinateId, std::string labelText) :
     UIPanel(),
-    textureId(textureId)
+    textureId(textureId),
+    textureName(textureName)
 {
     this->parent = parent;
     this->labelText = labelText;
@@ -47,21 +48,21 @@ void UITexturePanel::build()
 
     ypos += textSize;
 
-    diffuseTextureBox = new UITextBox();
-    diffuseTextureBox->setPosition(xpos, ypos);
-    diffuseTextureBox->setSize(textBoxWidth, textSize);
-    diffuseTextureBox->setText("", textSize, *font, LEFT);
-    diffuseTextureBox->surface.diffuseMap = texture;
-    addComponent(diffuseTextureBox);
+    textureNameBox = new UITextBox();
+    textureNameBox->setPosition(xpos, ypos);
+    textureNameBox->setSize(textBoxWidth, textSize);
+    textureNameBox->setText(getShortTextureName(), textSize, *font, LEFT);
+    textureNameBox->surface.diffuseMap = texture;
+    addComponent(textureNameBox);
 
     xpos += textBoxWidth + 0.002f;
 
-    diffuseTextureLoadButton = new UIButton(this);
-    diffuseTextureLoadButton->setPosition(xpos, ypos);
-    diffuseTextureLoadButton->setSize(loadButtonWidth, textSize);
-    diffuseTextureLoadButton->setText("Load", textSize, *font, CENTRE);
-    diffuseTextureLoadButton->surface.diffuseMap = texture;
-    addComponent(diffuseTextureLoadButton);
+    textureLoadButton = new UIButton(this);
+    textureLoadButton->setPosition(xpos, ypos);
+    textureLoadButton->setSize(loadButtonWidth, textSize);
+    textureLoadButton->setText("Load", textSize, *font, CENTRE);
+    textureLoadButton->surface.diffuseMap = texture;
+    addComponent(textureLoadButton);
 
     xpos = 0.0f;
     ypos += textSize + 0.002f;
@@ -86,14 +87,33 @@ void UITexturePanel::build()
 
 void UITexturePanel::actionPerformed(UIComponent* component)
 {
-    if (component == diffuseTextureLoadButton)
+    if (component == textureLoadButton)
     {
-        std::string textureStr = diffuseTextureBox->getText();
+        std::string textureStr = texturePrefix + textureNameBox->getText() + textureSuffix;
         GLuint newTexture = Texture::getTexture(textureStr);
         if (newTexture != -1)
         {
+            textureName = textureStr;
+
             textureId = newTexture;
             shouldRebuild = true;
         }
     }
+}
+
+std::string UITexturePanel::getShortTextureName()
+{
+    if (textureName.length() == 0)
+    {
+        return "";
+    }
+
+    unsigned int start = texturePrefix.length();
+    unsigned int end = textureName.find(textureSuffix);
+    return textureName.substr(start, end - start);
+}
+
+void UITexturePanel::updateTexture()
+{
+    textureNameBox->setText(getShortTextureName());
 }

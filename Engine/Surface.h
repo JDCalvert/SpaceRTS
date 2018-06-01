@@ -72,6 +72,7 @@ public:
 
     //Calculate things before the texture can be used
     void setUpColourPointers();
+    void loadTextures();
     void calculateSizesAndLength();
     void recalculateModelBoneMatrices();
     void prepareBones();
@@ -86,6 +87,14 @@ public:
     std::vector<glm::vec4>& getBoneIndicesAndWeights();
     std::vector<Bone>& getBones();
 
+    std::string& getDiffuseTextureName();
+    std::string& getSpecularTextureName();
+    std::string& getNormalTextureName();
+
+    void setDiffuseTextureName(std::string diffuseTextureName);
+    void setSpecularTextureName(std::string specularTextureName);
+    void setNormalTextureName(std::string normalTextureName);
+
 private:
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> textureCoordinates;
@@ -94,6 +103,10 @@ private:
     std::vector<glm::vec3> bitangents;
     std::vector<glm::vec4> boneIndicesAndWeights;
     std::vector<unsigned int> indices;
+
+    std::string diffuseTextureName;
+    std::string specularTextureName;
+    std::string normalTextureName;
 
     std::vector<glm::mat4> boneMatrices;
 

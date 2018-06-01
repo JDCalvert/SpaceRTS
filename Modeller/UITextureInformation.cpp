@@ -24,7 +24,7 @@ UITextureInformation::UITextureInformation(Surface* infoSurface) : UIPanel()
 
 void UITextureInformation::build()
 {
-    textureCoordinateRenderer = Renderer::initialiseRenderer(new TextureRenderer(0.2f), OpenGLContext::currentContext());
+    textureCoordinateRenderer = Renderer::initialiseRenderer(new TextureRenderer(textureSize * 2), OpenGLContext::currentContext());
     textureCoordinateRenderer->setClearColour(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
     
     GLuint textureCoordinateId = textureCoordinateRenderer->getTexture();
@@ -34,9 +34,9 @@ void UITextureInformation::build()
     addToggleButton(showSpecularButton, showSpecular, "S");
     addToggleButton(showNormalButton, showNormal, "N");
 
-    addTexturePanel(diffusePanel, infoSurface->diffuseMap, textureCoordinateId, "Diffuse");
-    addTexturePanel(specularPanel, infoSurface->specularMap, textureCoordinateId, "Specular");
-    addTexturePanel(normalPanel, infoSurface->normalMap, textureCoordinateId, "Normal");
+    addTexturePanel(diffusePanel, infoSurface->diffuseMap, infoSurface->getDiffuseTextureName(), textureCoordinateId, "Diffuse");
+    addTexturePanel(specularPanel, infoSurface->specularMap, infoSurface->getSpecularTextureName(), textureCoordinateId, "Specular");
+    addTexturePanel(normalPanel, infoSurface->normalMap, infoSurface->getNormalTextureName(), textureCoordinateId, "Normal");
 
     setSize(xpos, height);
 
@@ -76,7 +76,7 @@ void UITextureInformation::renderTextureCoordinates()
     UIImportPanel* importPanel = UserInterfaceModeller::getInstance()->importPanel;
     if (importPanel->hover)
     {        
-        blankShader->renderLines(importVertices, importIndices, glm::mat4(), textureCoordinateColour);
+        blankShader->renderLines(importVertices, importIndices, glm::mat4(), textureCoordinateColour, 1);
     }
 }
 
@@ -119,9 +119,9 @@ void UITextureInformation::preRender()
     setPosition(xpos, ypos);
 }
 
-void UITextureInformation::addTexturePanel(UITexturePanel*& texturePanel, GLuint& textureId, GLuint textureCoordinateId, std::string textureName)
+void UITextureInformation::addTexturePanel(UITexturePanel*& texturePanel, GLuint& textureId, std::string& textureName, GLuint textureCoordinateId, std::string panelName)
 {
-    texturePanel = new UITexturePanel(this, textureId, textureCoordinateId, textureName);
+    texturePanel = new UITexturePanel(this, textureId, textureName, textureCoordinateId, panelName);
     texturePanel->build();
     height = std::max(height, texturePanel->getSize().y + 0.02f);
 }
@@ -141,4 +141,11 @@ void UITextureInformation::replaceTexturePanel(UITexturePanel* texturePanel)
     texturePanel->setPosition(xpos, 0.01f);
     addComponent(texturePanel);
     xpos += textureSize + 0.01f;
+}
+
+void UITextureInformation::updateTextures()
+{
+    diffusePanel->updateTexture();
+    specularPanel->updateTexture();
+    normalPanel->updateTexture();
 }
