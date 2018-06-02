@@ -72,15 +72,14 @@ void UserInterfaceModeller::importSurface(const char* fileName)
 
     int activeBone = boneInformation->activeBone;
 
-    std::vector<Bone>& infoBones = infoSurface->getBones();
+    std::vector<Bone>& infoBones = infoSurface->bones;
     int numBones = infoBones.size();
 
     //Second, append the new surface's bones onto our surface
     //Ignore the first bone, as we'll use our active bone as the base
-    std::vector<Bone>& importBones = importSurface->getBones();
-    for (unsigned int i=1; i<importBones.size(); i++)
+    for (unsigned int i=1; i<importSurface->bones.size(); i++)
     {
-        Bone newBone = importBones[i];
+        Bone newBone = importSurface->bones[i];
         int& parent = newBone.parent;
 
         if (parent == 0)
@@ -107,27 +106,19 @@ void UserInterfaceModeller::importSurface(const char* fileName)
         transposeMatrices[i] = glm::transpose(glm::mat3(infoBones[i].absolute));
     }
 
-    std::vector<glm::vec3>& infoVertices = infoSurface->getVertices();
-    std::vector<glm::vec2>& infoTextureCoordinates = infoSurface->getTextureCoordinates();
-    std::vector<glm::vec3>& infoNormals = infoSurface->getNormals();
-    std::vector<glm::vec4>& infoBoneIndices = infoSurface->getBoneIndicesAndWeights();
-    int numVertices = infoVertices.size();
+    int numVertices = infoSurface->vertices.size();
 
     glm::vec2 baseTexCoord = importPanel->textureCoordinatesTopLeft;
     glm::vec2 scaleTexCoord = importPanel->textureCoordinatesBottomRight - baseTexCoord;
 
     //Third, add all the vertices, transformed by the active bone matrix
-    std::vector<glm::vec3>& importVertices = importSurface->getVertices();
-    std::vector<glm::vec2>& importTextureCoordinates = importSurface->getTextureCoordinates();
-    std::vector<glm::vec3>& importNormals = importSurface->getNormals();
-    std::vector<glm::vec4>& importBoneIndicesAndWeights = importSurface->getBoneIndicesAndWeights();
-    for (unsigned int i=0; i<importVertices.size(); i++)
+    for (unsigned int i=0; i<importSurface->vertices.size(); i++)
     {
-        glm::vec4 newVertex = infoBones[activeBone].absolute * glm::vec4(importVertices[i], 1.0f);
-        glm::vec3 newNormal = transposeMatrices[activeBone] * importNormals[i];
-        glm::vec4 newBoneIndices = importBoneIndicesAndWeights[i];
+        glm::vec4 newVertex = infoBones[activeBone].absolute * glm::vec4(importSurface->vertices[i], 1.0f);
+        glm::vec3 newNormal = transposeMatrices[activeBone] * importSurface->normals[i];
+        glm::vec4 newBoneIndices = importSurface->boneIndicesAndWeights[i];
 
-        glm::vec2 importTextureCoordinate = importTextureCoordinates[i];
+        glm::vec2 importTextureCoordinate = importSurface->textureCoordinates[i];
         glm::vec2 newTextureCoordinate = baseTexCoord + glm::matrixCompMult(importTextureCoordinate, scaleTexCoord);
 
         //As with the bones, if these depend on the base bone then use the active bone, otherwise
@@ -144,20 +135,18 @@ void UserInterfaceModeller::importSurface(const char* fileName)
             }
         }
 
-        infoVertices.push_back(newVertex);
-        infoTextureCoordinates.push_back(newTextureCoordinate);
-        infoNormals.push_back(newNormal);
-        infoBoneIndices.push_back(newBoneIndices);
+        infoSurface->vertices.push_back(newVertex);
+        infoSurface->textureCoordinates.push_back(newTextureCoordinate);
+        infoSurface->normals.push_back(newNormal);
+        infoSurface->boneIndicesAndWeights.push_back(newBoneIndices);
     }
 
     //Next, add all the triangles from the import surface to ours
-    std::vector<unsigned int>& importIndices = importSurface->getIndices();
-    std::vector<unsigned int>& infoIndices = infoSurface->getIndices();
-    for (unsigned int i=0; i<importIndices.size(); i++)
+    for (unsigned int i=0; i<importSurface->indices.size(); i++)
     {
         //Since we've added the imported vertices to our own, we need to shift the indices
-        unsigned int newIndex = importIndices[i] + numVertices;
-        infoIndices.push_back(newIndex);
+        unsigned int newIndex = importSurface->indices[i] + numVertices;
+        infoSurface->indices.push_back(newIndex);
     }
 
     //Finally, make the surface recalculate the remaining items
@@ -198,7 +187,7 @@ std::vector<unsigned int> UserInterfaceModeller::getHighlightTriangleIndices()
 void UserInterfaceModeller::recalculateVertexPositions()
 {
     //Update the absolute positions of all the bones
-    std::vector<Bone>& bones = infoSurface->getBones();
+    std::vector<Bone>& bones = infoSurface->bones;
     std::vector<glm::mat4> transformMatrices;
     std::vector<glm::mat3> transposeMatrices;
     for (unsigned int i=0; i<bones.size(); i++)
@@ -226,17 +215,12 @@ void UserInterfaceModeller::recalculateVertexPositions()
     if (boneInformation->updateVertices)
     {
         //Update all the vertices depending on those
-        std::vector<glm::vec3>& vertices = infoSurface->getVertices();
-        std::vector<glm::vec3>& normals = infoSurface->getNormals();
-        std::vector<glm::vec3>& tangents = infoSurface->getTangents();
-        std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
-        std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
-        for (unsigned int i=0; i<vertices.size(); i++)
+        for (unsigned int i=0; i<infoSurface->vertices.size(); i++)
         {
-            glm::vec3& vertex = vertices[i];
-            glm::vec3& normal = normals[i];
-            glm::vec3& tangent = tangents[i];
-            glm::vec3& bitangent = bitangents[i];
+            glm::vec3& vertex = infoSurface->vertices[i];
+            glm::vec3& normal = infoSurface->normals[i];
+            glm::vec3& tangent = infoSurface->tangents[i];
+            glm::vec3& bitangent = infoSurface->bitangents[i];
         
             glm::vec3 newVertex;
             glm::vec3 newNormal;
@@ -245,8 +229,9 @@ void UserInterfaceModeller::recalculateVertexPositions()
 
             for (unsigned int j=0; j<2; j++)
             {
-                int parentIndex = boneIndices[i][j*2];
-                float weight = boneIndices[i][j*2+1];
+                glm::vec4& boneIndicesAndWeights = infoSurface->boneIndicesAndWeights[i];
+                int parentIndex = boneIndicesAndWeights[j*2];
+                float weight = boneIndicesAndWeights[j*2+1];
             
                 if (parentIndex > -1)
                 {
@@ -271,7 +256,7 @@ void UserInterfaceModeller::recalculateVertexPositions()
 void UserInterfaceModeller::newVertex()
 {
     unsigned int activeBone = boneInformation->activeBone;
-    Bone& bone = infoSurface->getBones()[activeBone];
+    Bone& bone = infoSurface->bones[activeBone];
     glm::mat4 transform = bone.absolute;
     glm::mat3 transpose = glm::transpose(glm::mat3(transform));
 
@@ -280,10 +265,10 @@ void UserInterfaceModeller::newVertex()
     glm::vec3 vertexNormal(transpose * glm::vec3(0.0f, 0.0f, 1.0f));
     glm::vec4 boneIndexAndWeight(activeBone, 1.0f, -1, 0.0f);
 
-    infoSurface->getVertices().push_back(vertexPosition);
-    infoSurface->getTextureCoordinates().push_back(vertexTextureCoordinates);
-    infoSurface->getNormals().push_back(vertexNormal);
-    infoSurface->getBoneIndicesAndWeights().push_back(boneIndexAndWeight);
+    infoSurface->vertices.push_back(vertexPosition);
+    infoSurface->textureCoordinates.push_back(vertexTextureCoordinates);
+    infoSurface->normals.push_back(vertexNormal);
+    infoSurface->boneIndicesAndWeights.push_back(boneIndexAndWeight);
 
     infoSurface->calculateTangents();
     infoSurface->calculateSizesAndLength();
@@ -294,7 +279,7 @@ void UserInterfaceModeller::newBone()
     unsigned int activeBone = boneInformation->activeBone;
     Bone newBone(glm::mat4(), activeBone);
 
-    infoSurface->getBones().push_back(newBone);
+    infoSurface->bones.push_back(newBone);
 
     infoSurface->prepareBones();
 }
@@ -302,14 +287,12 @@ void UserInterfaceModeller::newBone()
 void UserInterfaceModeller::updateVertexPosition(int index, glm::vec3 newVertexPosition)
 {
     //First, get the old vertex
-    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
-    glm::vec3 updateVertex = vertices[index];
+    glm::vec3 updateVertex = infoSurface->vertices[index];
 
     if (vertexInformation->updateSimilarVertices)
     {
-        for (auto i=vertices.begin(); i!=vertices.end(); i++)
+        for (glm::vec3& vertexPosition : infoSurface->vertices)
         {
-            glm::vec3& vertexPosition = *i;
             if (vertexPosition == updateVertex)
             {
                 vertexPosition = newVertexPosition;
@@ -318,13 +301,13 @@ void UserInterfaceModeller::updateVertexPosition(int index, glm::vec3 newVertexP
     }
     else
     {
-        vertices[index] = newVertexPosition;
+        infoSurface->vertices[index] = newVertexPosition;
     }
 }
 
 void UserInterfaceModeller::removeVertices(int index)
 {
-    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
+    std::vector<glm::vec3>& vertices = infoSurface->vertices;
 
     glm::vec3 updateVertex = vertices[index];
     if (vertexInformation->updateSimilarVertices)
@@ -352,22 +335,15 @@ void UserInterfaceModeller::removeVertices(int index)
 
 void UserInterfaceModeller::removeVertex(unsigned int index)
 {
-    std::vector<glm::vec3>& vertices = infoSurface->getVertices();
-    std::vector<glm::vec2>& textureCoordinates = infoSurface->getTextureCoordinates();
-    std::vector<glm::vec3>& normals = infoSurface->getNormals();
-    std::vector<glm::vec3>& tangents = infoSurface->getTangents();
-    std::vector<glm::vec3>& bitangents = infoSurface->getBitangents();
-    std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
-
-    vertices.erase(vertices.begin() + index);
-    textureCoordinates.erase(textureCoordinates.begin() + index);
-    normals.erase(normals.begin() + index);
-    tangents.erase(tangents.begin() + index);
-    bitangents.erase(bitangents.begin() + index);
-    boneIndices.erase(boneIndices.begin() + index);
+    infoSurface->vertices.erase(infoSurface->vertices.begin() + index);
+    infoSurface->textureCoordinates.erase(infoSurface->textureCoordinates.begin() + index);
+    infoSurface->normals.erase(infoSurface->normals.begin() + index);
+    infoSurface->tangents.erase(infoSurface->tangents.begin() + index);
+    infoSurface->bitangents.erase(infoSurface->bitangents.begin() + index);
+    infoSurface->boneIndicesAndWeights.erase(infoSurface->boneIndicesAndWeights.begin() + index);
 
     //Remove any triangles that have this vertex
-    std::vector<unsigned int>& indices = infoSurface->getIndices();
+    std::vector<unsigned int>& indices = infoSurface->indices;
     unsigned int numTriangles = indices.size() / 3;
     for (unsigned int i=0; i<numTriangles;)
     {
@@ -392,7 +368,7 @@ void UserInterfaceModeller::removeVertex(unsigned int index)
 
 void UserInterfaceModeller::removeTriangle(unsigned int triangleIndex)
 {
-    std::vector<unsigned int>& indices = infoSurface->getIndices();
+    std::vector<unsigned int>& indices = infoSurface->indices;
     auto firstIndexRemove = indices.begin() + triangleIndex * 3;
     indices.erase(firstIndexRemove, firstIndexRemove + 3);
 
@@ -402,12 +378,9 @@ void UserInterfaceModeller::removeTriangle(unsigned int triangleIndex)
 
 void UserInterfaceModeller::removeBone(unsigned int index)
 {
-    std::vector<Bone>& bones = infoSurface->getBones();
-    std::vector<glm::vec4>& boneIndices = infoSurface->getBoneIndicesAndWeights();
-
-    for (unsigned int i=0; i<boneIndices.size(); i++)
+    for (unsigned int i=0; i<infoSurface->boneIndicesAndWeights.size(); i++)
     {
-        glm::vec4& boneIndex = boneIndices[i];
+        glm::vec4& boneIndex = infoSurface->boneIndicesAndWeights[i];
         if (boneIndex[0] == index)
         {
             //If the vertex is partially dependent on another bone, shift the dependency entirely to that
@@ -437,7 +410,7 @@ void UserInterfaceModeller::removeBone(unsigned int index)
         if (boneIndex[2] > index) boneIndex[2]--;
     }
 
-    bones.erase(bones.begin() + index);
+    infoSurface->bones.erase(infoSurface->bones.begin() + index);
 
     infoSurface->calculateSizesAndLength();
     rebuildInformation();

@@ -11,29 +11,21 @@ void Shape::buildAndWrite()
 {
     build();
 
-    std::vector<glm::vec3>& surfaceVertices = getVertices();
-    std::vector<glm::vec2>& textureCoordinates = getTextureCoordinates();
-    std::vector<glm::vec3>& normals = getNormals();
-    std::vector<glm::vec4>& boneIndicesAndWeights = getBoneIndicesAndWeights();
-
-    unsigned int numVertices = vertices.size();
-    surfaceVertices.resize(numVertices);
+    unsigned int numVertices = shapeVertices.size();
+    vertices.resize(numVertices);
     textureCoordinates.resize(numVertices);
     normals.resize(numVertices);
     boneIndicesAndWeights.resize(numVertices);
 
     for (unsigned int i=0; i<numVertices; i++)
     {
-        Vertex vertex = vertices[i];
+        Vertex vertex = shapeVertices[i];
 
-        surfaceVertices[i] = vertex.vertex;
+        vertices[i] = vertex.vertex;
         textureCoordinates[i] = vertex.textureCoordinate;
         normals[i] = vertex.normal;
         boneIndicesAndWeights[i] = vertex.boneIndicesAndWeights;
     }
-
-    getIndices() = indices;
-    getBones() = bones;
 
     calculateSizesAndLength();
 
@@ -45,13 +37,13 @@ void Shape::addTriangle(glm::vec3 vertexPosition0, glm::vec3 vertexPosition1, gl
                         glm::vec2 textureCoordinate0, glm::vec2 textureCoordinate1, glm::vec2 textureCoordinate2,
                         glm::vec4 boneDependency)
 {
-    unsigned int baseIndex = vertices.size();
+    unsigned int baseIndex = shapeVertices.size();
 
     glm::vec3 normal = glm::cross(vertexPosition1 - vertexPosition0, vertexPosition2 - vertexPosition0);
 
-    vertices.push_back(Vertex{vertexPosition0, textureCoordinate0, normal, boneDependency});
-    vertices.push_back(Vertex{vertexPosition1, textureCoordinate1, normal, boneDependency});
-    vertices.push_back(Vertex{vertexPosition2, textureCoordinate2, normal, boneDependency});
+    shapeVertices.push_back(Vertex{vertexPosition0, textureCoordinate0, normal, boneDependency});
+    shapeVertices.push_back(Vertex{vertexPosition1, textureCoordinate1, normal, boneDependency});
+    shapeVertices.push_back(Vertex{vertexPosition2, textureCoordinate2, normal, boneDependency});
 
     indices.push_back(baseIndex);
     indices.push_back(baseIndex + 1);
@@ -69,12 +61,12 @@ void Shape::addQuad(glm::vec3 topLeft, glm::vec3 bottomLeft, glm::vec3 bottomRig
                     glm::vec2 topLeftTexCoord, glm::vec2 bottomLeftTexCoord, glm::vec2 bottomRightTexCoord, glm::vec2 topRightTexCoord,
                     glm::vec3 normal, glm::vec4 boneDependency)
 {
-    unsigned int baseIndex = vertices.size();
+    unsigned int baseIndex = shapeVertices.size();
 
-    vertices.push_back(Vertex{topLeft,		topLeftTexCoord,	normal, boneDependency});
-    vertices.push_back(Vertex{bottomLeft,  	bottomLeftTexCoord,	normal, boneDependency});
-    vertices.push_back(Vertex{bottomRight,	bottomRightTexCoord,normal, boneDependency});
-    vertices.push_back(Vertex{topRight,     topRightTexCoord,	normal, boneDependency});
+    shapeVertices.push_back(Vertex{topLeft,		topLeftTexCoord,	normal, boneDependency});
+    shapeVertices.push_back(Vertex{bottomLeft,  	bottomLeftTexCoord,	normal, boneDependency});
+    shapeVertices.push_back(Vertex{bottomRight,	bottomRightTexCoord,normal, boneDependency});
+    shapeVertices.push_back(Vertex{topRight,     topRightTexCoord,	normal, boneDependency});
 
     indices.push_back(baseIndex + 0);
     indices.push_back(baseIndex + 1);

@@ -185,7 +185,7 @@ void UIComponent::setPositionAndSize(glm::vec2 position, glm::vec2 size)
 
 void UIComponent::constructSurface()
 {
-    surface.getVertices() = 
+    surface.vertices = 
     {
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(glm::vec2(0.0f, size.y), 0.0f),
@@ -193,7 +193,7 @@ void UIComponent::constructSurface()
         glm::vec3(size, 0.0f)
     };
 
-    surface.getTextureCoordinates() =
+    surface.textureCoordinates =
     {
         glm::vec2(0.0f, 0.0f),
         glm::vec2(0.0f, 1.0f),
@@ -201,7 +201,7 @@ void UIComponent::constructSurface()
         glm::vec2(1.0f, 1.0f)
     };
 
-    surface.getIndices() = {0, 1, 2, 3};
+    surface.indices = {0, 1, 2, 3};
 
     surface.calculateSizesAndLength();
 }

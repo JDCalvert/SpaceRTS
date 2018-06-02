@@ -31,7 +31,7 @@ void Sphere::build()
             float v = (float)latitude / nLatitude;
 
             Vertex vertex = Vertex{glm::vec3(x, y, z), glm::vec2(u, v), glm::vec3(x, y, z),  mainBoneDependency};
-            vertices.push_back(vertex);
+            shapeVertices.push_back(vertex);
         }
     }
 

@@ -17,7 +17,7 @@ void Cylinder::build()
     int numVertices = 1 + detail + (detail + 1) + (detail + 1) + detail + 1;
     int numTriangles = detail * 4;
     
-    vertices.resize(numVertices);
+    shapeVertices.resize(numVertices);
     indices.resize(numTriangles * 3);
 
     unsigned int topMidOffset = 0;
@@ -30,7 +30,7 @@ void Cylinder::build()
     unsigned int bottomIndicesOffset = topIndicesOffset + detail * 3;
     unsigned int outIndicesOffset = bottomIndicesOffset + detail * 3;
 
-    vertices[topMidOffset] =
+    shapeVertices[topMidOffset] =
     {
         glm::vec3(0.00f, 0.00f, 1.00f),
         glm::vec2(0.25f, 0.25f),
@@ -38,7 +38,7 @@ void Cylinder::build()
         mainBoneDependency
     };
 
-    vertices[bottomMidOffset] =
+    shapeVertices[bottomMidOffset] =
     {
         glm::vec3(0.00f, 0.00f, 0.00f),
         glm::vec2(0.75f, 0.25f),
@@ -57,7 +57,7 @@ void Cylinder::build()
 
         if (i < detail)
         {
-            vertices[topUpOffset + i] =
+            shapeVertices[topUpOffset + i] =
             {
                 glm::vec3(x, y, 1.0f),
                 glm::vec2((x + 1) / 4, (y + 1) / 4),
@@ -65,7 +65,7 @@ void Cylinder::build()
                 mainBoneDependency
             };
 
-            vertices[bottomDownOffset + i] =
+            shapeVertices[bottomDownOffset + i] =
             {
                 glm::vec3(x, y, 0.0f),
                 glm::vec2((x + 3) / 4, (y + 1) / 4),
@@ -98,7 +98,7 @@ void Cylinder::build()
             indices[bottomIndicesOffset + i * 3 + 2] = bottomIndex2;
         }
 
-        vertices[outOffset + i * 2] =
+        shapeVertices[outOffset + i * 2] =
         {
             glm::vec3(x, y, 1.0f),
             glm::vec2(u, 0.5f),
@@ -106,7 +106,7 @@ void Cylinder::build()
             mainBoneDependency
         };
 
-        vertices[outOffset + i * 2 + 1] =
+        shapeVertices[outOffset + i * 2 + 1] =
         {
             glm::vec3(x, y, 0.0f),
             glm::vec2(u, 1.0f),
@@ -132,5 +132,5 @@ void Cylinder::build()
         }
     }
 
-    setDiffuseTextureName("../Resources/Graphics/metal.dds");
+    diffuseTextureName = "../Resources/Graphics/metal.dds";
 }

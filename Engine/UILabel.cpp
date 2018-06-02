@@ -79,9 +79,9 @@ void UILabel::constructSurface()
         xpos = size.x - textWidth;
     }
 
-    std::vector<glm::vec3>& vertices = surface.getVertices();
-    std::vector<glm::vec2>& textureCoordinates = surface.getTextureCoordinates();
-    std::vector<unsigned int>& indices = surface.getIndices();
+    std::vector<glm::vec3>& vertices = surface.vertices;
+    std::vector<glm::vec2>& textureCoordinates = surface.textureCoordinates;
+    std::vector<unsigned int>& indices = surface.indices;
 
     vertices.resize(numChars * 4);
     textureCoordinates.resize(numChars * 4);

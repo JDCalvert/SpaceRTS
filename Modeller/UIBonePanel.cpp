@@ -12,7 +12,7 @@
 #include "UserInterfaceModeller.h"
 
 UIBonePanel::UIBonePanel(UIBoneInformation* parent, Surface* infoSurface, unsigned int index) :
-    bone(infoSurface->getBones()[index])
+    bone(infoSurface->bones[index])
 {
     this->parent = parent;
     this->index = index;

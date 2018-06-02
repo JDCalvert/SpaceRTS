@@ -17,16 +17,6 @@ void Surface::setTextures(GLuint diffuseMap, GLuint normalMap, GLuint specularMa
 	this->specularMap = specularMap;
 }
 
-void Surface::setAmbientColour(glm::vec4 ambientColour)
-{
-	this->ambientColour = ambientColour;
-}
-
-void Surface::setDiffuseColour(glm::vec4 diffuseColour)
-{
-	this->diffuseColour = diffuseColour;
-}
-
 void Surface::loadFromFile(const char* objFilePath, float scale)
 {
 	loadFromFile(objFilePath);
@@ -47,78 +37,58 @@ void Surface::loadFromFile(const char* objFilePath, float scale)
 
 void Surface::loadFromFile(const char* objFilePath)
 {
-	std::vector<glm::mat4> boneRelatives;
-	std::vector<int> boneParents;
-	
-    bool success = loadObj(objFilePath, boneRelatives, boneParents);
-    if (success)
-    {
-        bones.clear();
-
-	    for (unsigned int i=0; i<boneRelatives.size(); i++)
-	    {
-		    const glm::mat4 boneRelative = boneRelatives[i];
-		    int boneParent = boneParents[i];
-
-		    bones.push_back(Bone(boneRelative, boneParent));
-	    }
-
-        loadTextures();
-	    calculateSizesAndLength();
-	    prepareBones();
-    }
-}
-
-void Surface::loadTextures()
-{
-    diffuseMap = Texture::getTexture(diffuseTextureName);
-    specularMap = Texture::getTexture(specularTextureName);
-    normalMap = Texture::getTexture(normalTextureName);
-}
-
-bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents)
-{
     //Open the file as a binary, and start at the end so we can get the length, then go back to the beginning.
-    std::ifstream in(path, std::ios::in | std::ios::binary | std::ios::ate);
+    std::ifstream in(objFilePath, std::ios::in | std::ios::binary | std::ios::ate);
     unsigned int fileSize = (unsigned int)in.tellg();
     in.seekg(0, std::ios::beg);
 
-    if (!in) return false;
+    if (!in) return;
 
     //Read in the file then close
     char* data = new char[fileSize];
     in.read(data, fileSize);
     in.close();
 
+    //The first part of the data is the number of vertices, indices etc.
+    //From these we can set up our vectors ready to receive the data
     int lengthsSize = 6 * sizeof(unsigned int);
     unsigned int lengths[6];
     memcpy(lengths, data, lengthsSize);
 
-    int verticesSize = lengths[0] * sizeof(glm::vec3);
-    int textureCoordinatesSize = lengths[0] * sizeof(glm::vec2);
-    int normalsSize = lengths[0] * sizeof(glm::vec3);
-    int tangentsSize = lengths[0] * sizeof(glm::vec3);
-    int bitangentsSize = lengths[0] * sizeof(glm::vec3);
-    int boneIndicesSize = lengths[0] * sizeof(glm::vec4);
-    int indicesSize = lengths[1] * sizeof(unsigned int);
-    int bonesSize = lengths[2] * sizeof(glm::mat4);
-    int parentsSize = lengths[2] * sizeof(int);
-    int diffuseTextureSize = lengths[3] * sizeof(char);
-    int specularTextureSize = lengths[4] * sizeof(char);
-    int normalTextureSize = lengths[5] * sizeof(char);
+    unsigned int numVertices = lengths[0];
+    unsigned int numIndices = lengths[1];
+    unsigned int numBones = lengths[2];
+    unsigned int diffuseTextureLength = lengths[3];
+    unsigned int specularTextureLength = lengths[4];
+    unsigned int normalTextureLength = lengths[5];
 
-    vertices.resize(lengths[0]);
-    textureCoordinates.resize(lengths[0]);
-    normals.resize(lengths[0]);
-    tangents.resize(lengths[0]);
-    bitangents.resize(lengths[0]);
-    boneIndicesAndWeights.resize(lengths[0]);
-    indices.resize(lengths[1]);
-    bones.resize(lengths[2]);
-    parents.resize(lengths[2]);
-    diffuseTextureName.resize(lengths[3]);
-    specularTextureName.resize(lengths[4]);
-    normalTextureName.resize(lengths[5]);
+    int verticesSize = numVertices * sizeof(glm::vec3);
+    int textureCoordinatesSize = numVertices * sizeof(glm::vec2);
+    int normalsSize = numVertices * sizeof(glm::vec3);
+    int tangentsSize = numVertices * sizeof(glm::vec3);
+    int bitangentsSize = numVertices * sizeof(glm::vec3);
+    int boneIndicesSize = numVertices * sizeof(glm::vec4);
+    int indicesSize = numIndices * sizeof(unsigned int);
+    int bonesSize = numBones * sizeof(glm::mat4);
+    int parentsSize = numBones * sizeof(int);
+    int diffuseTextureSize = diffuseTextureLength * sizeof(char);
+    int specularTextureSize = specularTextureLength * sizeof(char);
+    int normalTextureSize = normalTextureLength * sizeof(char);
+
+    vertices.resize(numVertices);
+    textureCoordinates.resize(numVertices);
+    normals.resize(numVertices);
+    tangents.resize(numVertices);
+    bitangents.resize(numVertices);
+    boneIndicesAndWeights.resize(numVertices);
+    indices.resize(numIndices);
+    bones.resize(numBones, Bone(glm::mat4(), -1));
+    diffuseTextureName.resize(diffuseTextureLength);
+    specularTextureName.resize(specularTextureLength);
+    normalTextureName.resize(normalTextureLength);
+
+    std::vector<glm::mat4> boneRelatives(numBones);
+    std::vector<int> boneParents(numBones);
 
     int verticesOffset = lengthsSize;
     int textureCoordinatesOffset = verticesOffset + verticesSize;
@@ -133,6 +103,7 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     int specularTextureOffset = diffuseTextureOffset + diffuseTextureSize;
     int normalTextureOffset = specularTextureOffset + specularTextureSize;
 
+    //Copy the data directly from the file data into the vectors
     memcpy(&vertices[0], data + verticesOffset, verticesSize);
     memcpy(&textureCoordinates[0], data + textureCoordinatesOffset, textureCoordinatesSize);
     memcpy(&normals[0], data + normalsOffset, normalsSize);
@@ -140,16 +111,28 @@ bool Surface::loadObj(const char* path, std::vector<glm::mat4> &bones, std::vect
     memcpy(&bitangents[0], data + bitangentsOffset, bitangentsSize);
     memcpy(&boneIndicesAndWeights[0], data + boneIndicesOffset, boneIndicesSize);
     memcpy(&indices[0], data + indicesOffset, indicesSize);
-    memcpy(&bones[0], data + bonesOffset, bonesSize);
-    memcpy(&parents[0], data + parentsOffset, parentsSize);
+    memcpy(&boneRelatives[0], data + bonesOffset, bonesSize);
+    memcpy(&boneParents[0], data + parentsOffset, parentsSize);
     memcpy(&diffuseTextureName[0], data + diffuseTextureOffset, diffuseTextureSize);
     memcpy(&specularTextureName[0], data + specularTextureOffset, specularTextureSize);
     memcpy(&normalTextureName[0], data + normalTextureOffset, normalTextureSize);
 
-    //Clean up
+    //Clean up the data we read from the file
     delete data;
 
-    return true;
+    //We stored the bone matrix and parent data separately, so put it back together here
+	for (unsigned int i=0; i<boneRelatives.size(); i++)
+	{
+		const glm::mat4 boneRelative = boneRelatives[i];
+		int boneParent = boneParents[i];
+
+		bones[i] = Bone(boneRelative, boneParent);
+	}
+
+    //Finish calculating anything we need
+    loadTextures();
+	calculateSizesAndLength();
+	prepareBones();
 }
 
 void Surface::writeToFile(const char* fileName)
@@ -301,133 +284,62 @@ void Surface::calculateTangents()
     }
 }
 
-void Surface::setUpColourPointers()
+void Surface::loadTextures()
 {
-	ambientPointer = &ambientColour[0];
-	diffusePointer = &diffuseColour[0];
+    diffuseMap = Texture::getTexture(diffuseTextureName);
+    specularMap = Texture::getTexture(specularTextureName);
+    normalMap = Texture::getTexture(normalTextureName);
 }
 
 void Surface::calculateSizesAndLength()
 {
-	length = indices.size();
+    length = indices.size();
 
-	verticesSize = vertices.size() * sizeof(glm::vec3);
-	textureCoordinatesSize = textureCoordinates.size() * sizeof(glm::vec2);
-	normalsSize = normals.size() * sizeof(glm::vec3);
-	tangentsSize = tangents.size() * sizeof(glm::vec3);
-	bitangentsSize = bitangents.size() * sizeof(glm::vec3);
-	boneIndicesSize = boneIndicesAndWeights.size() * sizeof(glm::vec4);
-	indicesSize = length * sizeof(unsigned int);
+    verticesSize = vertices.size() * sizeof(glm::vec3);
+    textureCoordinatesSize = textureCoordinates.size() * sizeof(glm::vec2);
+    normalsSize = normals.size() * sizeof(glm::vec3);
+    tangentsSize = tangents.size() * sizeof(glm::vec3);
+    bitangentsSize = bitangents.size() * sizeof(glm::vec3);
+    boneIndicesSize = boneIndicesAndWeights.size() * sizeof(glm::vec4);
+    indicesSize = length * sizeof(unsigned int);
 
-	if (vertices.size() > 0) verticesPointer = &vertices[0];
-	if (textureCoordinates.size() > 0) textureCoordinatesPointer = &textureCoordinates[0];
-	if (normals.size() > 0) normalsPointer = &normals[0];
-	if (tangents.size() > 0) tangentsPointer = &tangents[0];
-	if (bitangents.size() > 0) bitangentsPointer = &bitangents[0];
-	if (indices.size() > 0) indicesPointer = &indices[0];
-	if (boneIndicesAndWeights.size() > 0) boneIndicesPointer = &boneIndicesAndWeights[0];
+    if (vertices.size() > 0) verticesPointer = &vertices[0];
+    if (textureCoordinates.size() > 0) textureCoordinatesPointer = &textureCoordinates[0];
+    if (normals.size() > 0) normalsPointer = &normals[0];
+    if (tangents.size() > 0) tangentsPointer = &tangents[0];
+    if (bitangents.size() > 0) bitangentsPointer = &bitangents[0];
+    if (indices.size() > 0) indicesPointer = &indices[0];
+    if (boneIndicesAndWeights.size() > 0) boneIndicesPointer = &boneIndicesAndWeights[0];
+
+    ambientPointer = &ambientColour[0];
+    diffusePointer = &diffuseColour[0];
 }
 
 void Surface::prepareBones()
 {
-	//All the bones are in their bind position, work out their absolute position from their relative positions, and calculate the inverse of this.
-	for (unsigned int i = 0; i < bones.size(); i++)
-	{
-		Bone& bone = bones[i];
-		int index = bone.parent;
-		if (index == -1)
-		{
-			bone.absolute = bone.relative;
-		}
-		else
-		{
-			bone.absolute = bones[index].absolute * bone.relative;
-		}
-		bone.inverseBind = glm::inverse(bone.absolute);
-		boneMatrices.push_back(bone.absolute * bone.inverseBind);
-	}
+    //All the bones are in their bind position, work out their absolute position from their relative positions, and calculate the inverse of this.
+    unsigned int numBones = bones.size();
+    boneMatrices.resize(numBones);
 
-	boneMatricesSize = bones.size() * sizeof(glm::mat4);
-	if (boneMatricesSize > 0) boneMatricesPointer = &boneMatrices[0];
+    for (unsigned int i = 0; i<numBones; i++)
+    {
+        Bone& bone = bones[i];
+        bone.calculateAbsolute(bones);
+        bone.inverseBind = glm::inverse(bone.absolute);
+
+        boneMatrices[i] = bone.absolute * bone.inverseBind;
+    }
+
+    boneMatricesSize = numBones * sizeof(glm::mat4);
+    if (boneMatricesSize > 0) boneMatricesPointer = &boneMatrices[0];
 }
 
 void Surface::recalculateModelBoneMatrices()
 {
-	for (unsigned int i = 0; i < bones.size(); i++)
+	for (unsigned int i=0; i<bones.size(); i++)
 	{
 		Bone& bone = bones[i];
-		int index = bone.parent;
-		if (index == -1)
-		{
-			bone.absolute = bone.relative;
-		}
-		else
-		{
-			bone.absolute = bones[index].absolute * bone.relative;
-		}
-		boneMatricesPointer[i] = bone.absolute * bone.inverseBind;
+		bone.calculateAbsolute(bones);
+        boneMatrices[i] = bone.absolute * bone.inverseBind;
 	}
-}
-
-std::vector<glm::vec3>& Surface::getVertices()
-{
-    return vertices;
-}
-std::vector<glm::vec2>& Surface::getTextureCoordinates()
-{
-    return textureCoordinates;
-}
-std::vector<glm::vec3>& Surface::getNormals()
-{
-    return normals;
-}
-std::vector<glm::vec3>& Surface::getTangents()
-{
-    return tangents;
-}
-std::vector<glm::vec3>& Surface::getBitangents()
-{
-    return bitangents;
-}
-std::vector<unsigned int>& Surface::getIndices()
-{
-    return indices;
-}
-std::vector<glm::vec4>& Surface::getBoneIndicesAndWeights()
-{
-    return boneIndicesAndWeights;
-}
-std::vector<Bone>& Surface::getBones()
-{
-    return bones;
-}
-
-std::string& Surface::getDiffuseTextureName()
-{
-    return diffuseTextureName;
-}
-
-std::string& Surface::getSpecularTextureName()
-{
-    return specularTextureName;
-}
-
-std::string& Surface::getNormalTextureName()
-{
-    return normalTextureName;
-}
-
-void Surface::setDiffuseTextureName(std::string diffuseTextureName)
-{
-    this->diffuseTextureName = diffuseTextureName;
-}
-
-void Surface::setSpecularTextureName(std::string specularTextureName)
-{
-    this->specularTextureName = specularTextureName;
-}
-
-void Surface::setNormalTextureName(std::string normalTextureName)
-{
-    this->normalTextureName = normalTextureName;
 }

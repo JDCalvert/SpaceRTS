@@ -9,9 +9,9 @@
 #include "UITriangleInformation.h"
 
 UITrianglePanel::UITrianglePanel(UITriangleInformation* parent, Surface* infoSurface, unsigned int index) :
-    index1(infoSurface->getIndices()[index*3]),
-    index2(infoSurface->getIndices()[index*3 + 1]),
-    index3(infoSurface->getIndices()[index*3 + 2])
+    index1(infoSurface->indices[index*3]),
+    index2(infoSurface->indices[index*3 + 1]),
+    index3(infoSurface->indices[index*3 + 2])
 {
     this->parent = parent;
     this->index = index;
