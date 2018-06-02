@@ -63,7 +63,7 @@ std::vector<UIBonePanel*>& UIBoneInformation::getBonePanels()
 
 int UIBoneInformation::getNumItemsTotal()
 {
-    return infoSurface->getBones().size();
+    return infoSurface->bones.size();
 }
 
 void UIBoneInformation::actionPerformed(UIComponent* component)

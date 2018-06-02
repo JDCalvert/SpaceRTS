@@ -36,5 +36,5 @@ void Cube::build()
     addQuad(rightFrontTop, rightFrontBottom, leftFrontBottom, leftFrontTop, topLeftTexCoord, bottomLeftTexCoord, bottomRightTexCoord, topRightTexCoord, normalFront, mainBoneDependency);
     addQuad(rightBackTop, leftBackTop, leftBackBottom, rightBackBottom, topRightTexCoord, topLeftTexCoord, bottomLeftTexCoord, bottomRightTexCoord, normalBack, mainBoneDependency);
 
-    setDiffuseTextureName("../Resources/Graphics/metal.dds");
+    diffuseTextureName = "../Resources/Graphics/metal.dds";
 }

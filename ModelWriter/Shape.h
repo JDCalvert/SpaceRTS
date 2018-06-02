@@ -21,7 +21,7 @@ public:
     virtual void buildAndWrite() final;
 
 protected:
-    std::vector<Vertex> vertices;
+    std::vector<Vertex> shapeVertices;
     std::vector<unsigned int> indices;
     std::vector<Bone> bones;
 

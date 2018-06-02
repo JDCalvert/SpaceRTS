@@ -102,7 +102,7 @@ void BlankShader::renderLines(std::vector<glm::vec3>& vertices, std::vector<unsi
 
 void BlankShader::renderVertices(Surface* surface, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
 {
-    int numVertices = surface->getVertices().size();
+    int numVertices = surface->vertices.size();
     int verticesSize = surface->verticesSize;
     glm::vec3* verticesPointer = surface->verticesPointer;
 
@@ -113,10 +113,10 @@ void BlankShader::renderVertices(Surface* surface, std::vector<unsigned int>& in
 {
     unsigned int numIndices = indices.size();
 
-    std::vector<glm::vec3>& vertices = surface->getVertices();
-    std::vector<glm::vec3>& normals = surface->getNormals();
-    std::vector<glm::vec3>& tangents = surface->getTangents();
-    std::vector<glm::vec3>& bitangents = surface->getBitangents();
+    std::vector<glm::vec3>& vertices = surface->vertices;
+    std::vector<glm::vec3>& normals = surface->normals;
+    std::vector<glm::vec3>& tangents = surface->tangents;
+    std::vector<glm::vec3>& bitangents = surface->bitangents;
 
     std::vector<glm::vec3> verticesToRender;
     std::vector<glm::vec3> normalLineVertices;
@@ -173,7 +173,7 @@ void BlankShader::renderVertices(int numVertices, int verticesSize, glm::vec3* v
 
 void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMatrix)
 {
-    std::vector<Bone>& bones = surface->getBones();
+    std::vector<Bone>& bones = surface->bones;
 
     std::vector<glm::vec3> vertices;
     std::vector<unsigned int> lineIndices;
@@ -226,8 +226,7 @@ void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMat
 
 void BlankShader::renderTextureCoordinateVertices(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour)
 {
-    std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
-
+    std::vector<glm::vec2>& textureCoordinates = surface->textureCoordinates;
     glm::vec2 minus1(-1.0f, -1.0f);
 
     std::vector<glm::vec3> vertices;
@@ -242,7 +241,7 @@ void BlankShader::renderTextureCoordinateVertices(Surface* surface, std::vector<
 
 void BlankShader::renderTextureCoordinateLines(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour)
 {
-    std::vector<glm::vec2>& textureCoordinates = surface->getTextureCoordinates();
+    std::vector<glm::vec2>& textureCoordinates = surface->textureCoordinates;
 
     std::vector<glm::vec3> vertices;
     std::vector<unsigned int> newLineIndices;

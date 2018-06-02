@@ -17,12 +17,41 @@ struct Bone
         this->relative = relative;
         this->parent = parent;
     }
+
+    void calculateAbsolute(std::vector<Bone>& bones)
+    {
+        absolute = parent == -1 ? relative : bones[parent].absolute * relative;
+    }
 };
 
 class Surface
 {
 public:
+    
+    //Main members that make up the actual surface
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> textureCoordinates;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec3> tangents;
+    std::vector<glm::vec3> bitangents;
+    std::vector<glm::vec4> boneIndicesAndWeights;
+    std::vector<unsigned int> indices;
+
     std::vector<Bone> bones;
+
+    glm::vec4 ambientColour;
+    glm::vec4 diffuseColour;
+
+    std::string diffuseTextureName;
+    std::string specularTextureName;
+    std::string normalTextureName;    
+
+    //Calculated members that improve performance
+    std::vector<glm::mat4> boneMatrices;
+
+    GLuint diffuseMap;
+    GLuint normalMap;
+    GLuint specularMap;
 
     int verticesSize = 0;
     int textureCoordinatesSize = 0;
@@ -50,10 +79,6 @@ public:
 
     int length = 0;
 
-    GLuint diffuseMap;
-    GLuint normalMap;
-    GLuint specularMap;
-
     Surface();
 
     //Load from file
@@ -71,49 +96,10 @@ public:
     void setDiffuseColour(glm::vec4 diffuseColour);
 
     //Calculate things before the texture can be used
-    void setUpColourPointers();
     void loadTextures();
     void calculateSizesAndLength();
-    void recalculateModelBoneMatrices();
     void prepareBones();
-
-    //The actual parts of the surface
-    std::vector<glm::vec3>& getVertices();
-    std::vector<glm::vec2>& getTextureCoordinates();
-    std::vector<glm::vec3>& getNormals();
-    std::vector<glm::vec3>& getTangents();
-    std::vector<glm::vec3>& getBitangents();
-    std::vector<unsigned int>& getIndices();
-    std::vector<glm::vec4>& getBoneIndicesAndWeights();
-    std::vector<Bone>& getBones();
-
-    std::string& getDiffuseTextureName();
-    std::string& getSpecularTextureName();
-    std::string& getNormalTextureName();
-
-    void setDiffuseTextureName(std::string diffuseTextureName);
-    void setSpecularTextureName(std::string specularTextureName);
-    void setNormalTextureName(std::string normalTextureName);
-
-private:
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec2> textureCoordinates;
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec3> tangents;
-    std::vector<glm::vec3> bitangents;
-    std::vector<glm::vec4> boneIndicesAndWeights;
-    std::vector<unsigned int> indices;
-
-    std::string diffuseTextureName;
-    std::string specularTextureName;
-    std::string normalTextureName;
-
-    std::vector<glm::mat4> boneMatrices;
-
-    glm::vec4 ambientColour;
-    glm::vec4 diffuseColour;
-
-    bool loadObj(const char* path, std::vector<glm::mat4> &bones, std::vector<int> &parents);
+    void recalculateModelBoneMatrices();
 };
 
 #endif

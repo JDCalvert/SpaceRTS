@@ -13,10 +13,10 @@ UIVertexPanel::UIVertexPanel(UIVertexInformation* parent, Surface* infoSurface, 
     this->parent = parent;
     this->index = index;
 
-    vertexPosition = infoSurface->getVertices()[index];
-    vertexTextureCoordinate = infoSurface->getTextureCoordinates()[index];
-    vertexNormal = infoSurface->getNormals()[index];
-    vertexBoneIndices = infoSurface->getBoneIndicesAndWeights()[index];
+    vertexPosition = infoSurface->vertices[index];
+    vertexTextureCoordinate = infoSurface->textureCoordinates[index];
+    vertexNormal = infoSurface->normals[index];
+    vertexBoneIndices = infoSurface->boneIndicesAndWeights[index];
 
     onMap = Texture::getTexture("Blank");
     offMap = Texture::getTexture("BlankNothing");

@@ -34,9 +34,9 @@ void UITextureInformation::build()
     addToggleButton(showSpecularButton, showSpecular, "S");
     addToggleButton(showNormalButton, showNormal, "N");
 
-    addTexturePanel(diffusePanel, infoSurface->diffuseMap, infoSurface->getDiffuseTextureName(), textureCoordinateId, "Diffuse");
-    addTexturePanel(specularPanel, infoSurface->specularMap, infoSurface->getSpecularTextureName(), textureCoordinateId, "Specular");
-    addTexturePanel(normalPanel, infoSurface->normalMap, infoSurface->getNormalTextureName(), textureCoordinateId, "Normal");
+    addTexturePanel(diffusePanel, infoSurface->diffuseMap, infoSurface->diffuseTextureName, textureCoordinateId, "Diffuse");
+    addTexturePanel(specularPanel, infoSurface->specularMap, infoSurface->specularTextureName, textureCoordinateId, "Specular");
+    addTexturePanel(normalPanel, infoSurface->normalMap, infoSurface->normalTextureName, textureCoordinateId, "Normal");
 
     setSize(xpos, height);
 

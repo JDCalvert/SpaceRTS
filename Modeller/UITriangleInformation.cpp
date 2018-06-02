@@ -70,17 +70,16 @@ std::vector<UITrianglePanel*>& UITriangleInformation::getTrianglePanels()
 
 int UITriangleInformation::getNumItemsTotal()
 {
-    return infoSurface->getIndices().size() / 3;
+    return infoSurface->indices.size() / 3;
 }
 
 void UITriangleInformation::actionPerformed(UIComponent* component)
 {
     if (component == newButton)
     {
-        std::vector<unsigned int>& indices = infoSurface->getIndices();
-        indices.push_back(0);
-        indices.push_back(0);
-        indices.push_back(0);
+        infoSurface->indices.push_back(0);
+        infoSurface->indices.push_back(0);
+        infoSurface->indices.push_back(0);
 
         infoSurface->calculateSizesAndLength();
         currentItem = std::max(0, numItemsTotal - numItemsDisplay + 1);

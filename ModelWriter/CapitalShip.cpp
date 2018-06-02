@@ -38,5 +38,5 @@ void CapitalShip::build()
     addQuad(backRightTop, backRightBottom, frontMiddleTop, frontMiddleBottom, backLeftTexCoord, backRightTexCoord, frontLeftTexCoord, frontRightTexCoord, rightNormal, mainBoneDependency);
     addQuad(backLeftTop, backLeftBottom, backRightTop, backRightBottom, glm::vec2(0.0, 0.0), glm::vec2(0.0, 1.0), glm::vec2(176, 0.0), glm::vec2(176, 1.0), backNormal, mainBoneDependency);
 
-    setDiffuseTextureName("../Resources/Graphics/metal.dds");
+    diffuseTextureName = "../Resources/Graphics/metal.dds";
 }

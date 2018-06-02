@@ -163,7 +163,7 @@ std::vector<UIVertexPanel*>& UIVertexInformation::getVertexPanels()
 
 int UIVertexInformation::getNumItemsTotal()
 {
-    return infoSurface->getVertices().size();
+    return infoSurface->vertices.size();
 }
 
 void UIVertexInformation::actionPerformed(UIComponent* component)
