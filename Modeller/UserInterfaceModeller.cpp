@@ -184,6 +184,20 @@ std::vector<unsigned int> UserInterfaceModeller::getHighlightTriangleIndices()
     return highlights;
 }
 
+std::vector<unsigned int> UserInterfaceModeller::getHighlightBoneIndices()
+{
+    std::vector<unsigned int> highlights;
+    for (UIBonePanel* bonePanel : boneInformation->getBonePanels())
+    {
+        if (bonePanel->isHighlighted())
+        {
+            unsigned int index = bonePanel->getIndex();
+            highlights.push_back(index);
+        }
+    }
+    return highlights;
+}
+
 void UserInterfaceModeller::recalculateVertexPositions()
 {
     //Update the absolute positions of all the bones
@@ -408,6 +422,21 @@ void UserInterfaceModeller::removeBone(unsigned int index)
 
         if (boneIndex[0] > index) boneIndex[0]--;
         if (boneIndex[2] > index) boneIndex[2]--;
+    }
+
+    for (unsigned int i=0; i<infoSurface->bones.size(); i++)
+    {
+        Bone& bone = infoSurface->bones[i];
+        if (bone.parent == index)
+        {
+            //Remove the bone if it's dependent on the one being removed
+            removeBone(i);
+        }
+        else if (bone.parent > index)
+        {
+            //If the bone's parent is above the one being removed, then reduce it
+            bone.parent--;
+        }
     }
 
     infoSurface->bones.erase(infoSurface->bones.begin() + index);

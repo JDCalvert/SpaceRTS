@@ -36,6 +36,7 @@ public:
 
     std::vector<unsigned int> getHighlightVertexIndices();
     std::vector<unsigned int> getHighlightTriangleIndices();
+    std::vector<unsigned int> getHighlightBoneIndices();
 
     void recalculateVertexPositions();
 

@@ -17,6 +17,8 @@ public:
 
     bool isHighlighted();
 
+    unsigned int getIndex();
+
     void actionPerformed(UIComponent* component) override;
 
 protected:
