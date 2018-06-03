@@ -24,6 +24,11 @@ UIBonePanel::UIBonePanel(UIBoneInformation* parent, Surface* infoSurface, unsign
     offMap = Texture::getTexture("BlankNothing");
 }
 
+unsigned int UIBonePanel::getIndex()
+{
+    return index;
+}
+
 bool UIBonePanel::isHighlighted()
 {
     return highlighted;

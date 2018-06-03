@@ -88,13 +88,16 @@ int main()
         if (ui->renderOptions->renderSurface) simpleShader->renderSurface(surface, viewProjectionMatrix);
         if (ui->renderOptions->renderLines) blankShader->renderLines(surface, viewProjectionMatrix, colour);
         if (ui->renderOptions->renderPoints) blankShader->renderVertices(surface, viewProjectionMatrix, colour);
-        if (ui->renderOptions->renderBones) blankShader->renderBones(surface, viewProjectionMatrix);
+        if (ui->renderOptions->renderBones) blankShader->renderBones(surface, viewProjectionMatrix, glm::vec4(1.0f));
 
         std::vector<unsigned int> highlightVertices = ui->getHighlightVertexIndices();
-        blankShader->renderVertices(surface, highlightVertices, viewProjectionMatrix, glm::vec4(1.0f));
+        blankShader->renderVerticesWithAxes(surface, highlightVertices, viewProjectionMatrix, glm::vec4(1.0f));
 
         std::vector<unsigned int> highlightIndices = ui->getHighlightTriangleIndices();
         blankShader->renderTriangles(surface, viewProjectionMatrix, highlightIndices, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
+
+        std::vector<unsigned int> highlightBones = ui->getHighlightBoneIndices();
+        blankShader->renderBonesWithAxes(surface, highlightBones, viewProjectionMatrix, glm::vec4(1.0f));
 
         ui->renderTextureCoordinates();
 

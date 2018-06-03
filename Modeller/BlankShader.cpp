@@ -109,47 +109,6 @@ void BlankShader::renderVertices(Surface* surface, glm::mat4 modelViewProjection
     renderVertices(numVertices, verticesSize, verticesPointer, 5, modelViewProjectionMatrix, colour);
 }
 
-void BlankShader::renderVertices(Surface* surface, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
-{
-    unsigned int numIndices = indices.size();
-
-    std::vector<glm::vec3>& vertices = surface->vertices;
-    std::vector<glm::vec3>& normals = surface->normals;
-    std::vector<glm::vec3>& tangents = surface->tangents;
-    std::vector<glm::vec3>& bitangents = surface->bitangents;
-
-    std::vector<glm::vec3> verticesToRender;
-    std::vector<glm::vec3> normalLineVertices;
-    std::vector<glm::vec3> tangentLineVertices;
-    std::vector<glm::vec3> bitangentLineVertices;
-    std::vector<unsigned int> normalLineIndices;
-
-    for (unsigned int i=0; i<indices.size(); i++)
-    {
-        unsigned int index = indices[i];
-
-        glm::vec3 vertexPosition = vertices[index];
-        verticesToRender.push_back(vertexPosition);
-
-        normalLineVertices.push_back(vertexPosition);
-        normalLineVertices.push_back(vertexPosition + normals[index]);
-
-        tangentLineVertices.push_back(vertexPosition);
-        tangentLineVertices.push_back(vertexPosition + tangents[index]);
-
-        bitangentLineVertices.push_back(vertexPosition);
-        bitangentLineVertices.push_back(vertexPosition + bitangents[index]);
-
-        normalLineIndices.push_back(i * 2);
-        normalLineIndices.push_back(i * 2 + 1);
-    }
-
-    renderVertices(verticesToRender, modelViewProjectionMatrix, colour);
-    renderLines(tangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(colour.r, 0.0f, 0.0f, colour.a), 2);
-    renderLines(bitangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, colour.g, 0.0f, colour.a), 2);
-    renderLines(normalLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, colour.b, colour.a), 2);
-}
-
 void BlankShader::renderVertices(std::vector<glm::vec3>& vertices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
 {
     if (vertices.size() == 0) return;
@@ -169,59 +128,6 @@ void BlankShader::renderVertices(int numVertices, int verticesSize, glm::vec3* v
 
     OpenGLContext::currentContext()->setPointSize(pointSize);
     glDrawArrays(GL_POINTS, 0, numVertices);
-}
-
-void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMatrix)
-{
-    std::vector<Bone>& bones = surface->bones;
-
-    std::vector<glm::vec3> vertices;
-    std::vector<unsigned int> lineIndices;
-    for (unsigned int i=0; i<bones.size(); i++)
-    {
-        Bone& bone = bones[i];
-        vertices.push_back(bone.absolute[3]);
-
-        if (bone.parent != -1)
-        {
-            lineIndices.push_back(bone.parent);
-            lineIndices.push_back(i);
-        }
-    }
-
-    std::vector<glm::vec3> xLineVertices;
-    std::vector<glm::vec3> yLineVertices;
-    std::vector<glm::vec3> zLineVertices;
-    std::vector<unsigned int> newLineIndices;
-    for (unsigned int i=0; i<bones.size(); i++)
-    {
-        Bone& bone = bones[i];
-
-        glm::vec4 oPosition = bone.absolute * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-        glm::vec4 xPosition = bone.absolute * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-        glm::vec4 yPosition = bone.absolute * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-        glm::vec4 zPosition = bone.absolute * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-
-        xLineVertices.push_back(oPosition);
-        xLineVertices.push_back(xPosition);
-
-        yLineVertices.push_back(oPosition);
-        yLineVertices.push_back(yPosition);
-
-        zLineVertices.push_back(oPosition);
-        zLineVertices.push_back(zPosition);
-
-        unsigned int size = newLineIndices.size();
-        newLineIndices.push_back(size);
-        newLineIndices.push_back(size + 1);
-    }
-
-    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 2);
-    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 2);
-    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 2);
-
-    renderVertices(vertices, modelViewProjectionMatrix, glm::vec4(1.0f));
-    renderLines(vertices, lineIndices, modelViewProjectionMatrix, glm::vec4(1.0f), 2);
 }
 
 void BlankShader::renderTextureCoordinateVertices(Surface* surface, std::vector<unsigned int>& indices, glm::vec4 colour)
@@ -267,4 +173,95 @@ void BlankShader::renderTextureCoordinateLines(Surface* surface, std::vector<uns
     }
 
     renderLines(vertices, newLineIndices, glm::mat4(), colour, 2);
+}
+
+void BlankShader::renderVerticesWithAxes(Surface* surface, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
+{
+    std::vector<glm::vec3> verticesToRender;
+    std::vector<glm::vec3> normalLineVertices;
+    std::vector<glm::vec3> tangentLineVertices;
+    std::vector<glm::vec3> bitangentLineVertices;
+    std::vector<unsigned int> normalLineIndices;
+
+    for (unsigned int i = 0; i<indices.size(); i++)
+    {
+        unsigned int index = indices[i];
+
+        glm::vec3 vertexPosition = surface->vertices[index];
+        verticesToRender.push_back(vertexPosition);
+
+        normalLineVertices.push_back(vertexPosition);
+        normalLineVertices.push_back(vertexPosition + surface->normals[index]);
+
+        tangentLineVertices.push_back(vertexPosition);
+        tangentLineVertices.push_back(vertexPosition + surface->tangents[index]);
+
+        bitangentLineVertices.push_back(vertexPosition);
+        bitangentLineVertices.push_back(vertexPosition + surface->bitangents[index]);
+
+        normalLineIndices.push_back(i * 2);
+        normalLineIndices.push_back(i * 2 + 1);
+    }
+
+    renderVertices(verticesToRender, modelViewProjectionMatrix, colour);
+    renderLines(tangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(colour.r, 0.0f, 0.0f, colour.a), 2);
+    renderLines(bitangentLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, colour.g, 0.0f, colour.a), 2);
+    renderLines(normalLineVertices, normalLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, colour.b, colour.a), 2);
+}
+
+void BlankShader::renderBones(Surface* surface, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
+{
+    std::vector<glm::vec3> vertices;
+    std::vector<unsigned int> lineIndices;
+
+    for (unsigned int i = 0; i<surface->bones.size(); i++)
+    {
+        Bone& bone = surface->bones[i];
+
+        vertices.push_back(bone.absolute[3]);
+        if (bone.parent != -1)
+        {
+            lineIndices.push_back(bone.parent);
+            lineIndices.push_back(i);
+        }
+    }
+
+    renderVertices(vertices, modelViewProjectionMatrix, colour);
+    renderLines(vertices, lineIndices, modelViewProjectionMatrix, colour, 2);
+}
+
+void BlankShader::renderBonesWithAxes(Surface* surface, std::vector<unsigned int>& indices, glm::mat4 modelViewProjectionMatrix, glm::vec4 colour)
+{
+    std::vector<Bone>& bones = surface->bones;
+
+    std::vector<glm::vec3> xLineVertices;
+    std::vector<glm::vec3> yLineVertices;
+    std::vector<glm::vec3> zLineVertices;
+    std::vector<unsigned int> newLineIndices;
+    for (unsigned int index : indices)
+    {
+        Bone& bone = bones[index];
+
+        glm::vec4 oPosition = bone.absolute * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec4 xPosition = bone.absolute * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec4 yPosition = bone.absolute * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+        glm::vec4 zPosition = bone.absolute * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+        xLineVertices.push_back(oPosition);
+        xLineVertices.push_back(xPosition);
+
+        yLineVertices.push_back(oPosition);
+        yLineVertices.push_back(yPosition);
+
+        zLineVertices.push_back(oPosition);
+        zLineVertices.push_back(zPosition);
+
+        unsigned int baseIndex = newLineIndices.size();
+        newLineIndices.push_back(baseIndex);
+        newLineIndices.push_back(baseIndex + 1);
+    }
+
+    renderLines(xLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 2);
+    renderLines(yLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 2);
+    renderLines(zLineVertices, newLineIndices, modelViewProjectionMatrix, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 2);
 }
