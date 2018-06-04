@@ -44,5 +44,5 @@ void UILayoutHorizontal::layoutComponents()
 
 void UILayoutHorizontal::stretchComponents()
 {
-    
+    //We want to increase their size proportionally, so work out their widths now
 }

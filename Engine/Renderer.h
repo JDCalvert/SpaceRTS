@@ -23,6 +23,8 @@ public:
     Renderer(float superSampleFactor);
 
     void initialise();
+
+    void bindRenderer();
     void initialiseFrame();
     void renderFrame();
 

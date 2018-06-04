@@ -96,6 +96,8 @@ int main()
         uiRenderer->initialiseFrame();
         ui->render();
 
+        renderer->bindRenderer();
+
         std::vector<unsigned int> highlightVertices = ui->getHighlightVertexIndices();
         blankShader->renderVerticesWithAxes(surface, highlightVertices, viewProjectionMatrix, glm::vec4(1.0f));
 
@@ -106,7 +108,7 @@ int main()
         blankShader->renderBonesWithAxes(surface, highlightBones, viewProjectionMatrix, glm::vec4(1.0f));
 
         std::vector<unsigned int> highlightBoneTriangles = ui->getTriangleIndicesForHoverBones();
-        blankShader->renderTriangles(surface, viewProjectionMatrix, highlightBoneTriangles, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
+        blankShader->renderTriangles(surface, viewProjectionMatrix, highlightBoneTriangles, glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
 
         //Now we've drawn everything to the renderer, draw to the window
         glContext->bindDefaultFrameBuffer();

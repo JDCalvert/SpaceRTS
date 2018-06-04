@@ -2,6 +2,9 @@
 
 #include <OpenGLContext.h>
 #include <UIToggleButton.h>
+#include <UILayoutVertical.h>
+#include <UILayoutHorizontal.h>
+#include <Texture.h>
 
 #include "UserInterfaceModeller.h"
 #include "UIBonePanel.h"
@@ -22,16 +25,38 @@ void UIBoneInformation::build()
     bonePanels.clear();
     clearComponents();
 
-    UIToggleButton* button = new UIToggleButton(updateVertices);
-    button->setPosition(border, border);
-    button->setText("Update Attached Vertices", buttonSize, *font, CENTRE);
-    button->setSize(0.18f, buttonSize);
-    button->surface.diffuseMap = texture;
-    addComponent(button);
+    UILayoutVertical* verticalLayout = new UILayoutVertical(this);
+    layout = verticalLayout;
 
-    ypos = buttonSize + border * 2;
-
+    addButtons();
     addPanels();
+
+    recalculateLayout();
+}
+
+void UIBoneInformation::addButtons()
+{
+    UIPanel* buttonPanel = new UIPanel();
+    buttonPanel->setSize(0.1f, textSize);
+    buttonPanel->surface.diffuseMap = Texture::getTexture("BlankNothing");
+    addComponent(buttonPanel);
+
+    UILayoutHorizontal* buttonLayout = new UILayoutHorizontal(buttonPanel);
+    buttonLayout->externalHorizontalBorder = 0.0f;
+    buttonLayout->externalVerticalBorder = 0.0f;
+    buttonPanel->layout = buttonLayout;
+
+    UIToggleButton* updateVerticesButton = new UIToggleButton(updateVertices);
+    updateVerticesButton->setText("Update Vertices", buttonSize, *font, CENTRE);
+    updateVerticesButton->setSize(0.1f, buttonSize);
+    updateVerticesButton->surface.diffuseMap = texture;
+    buttonPanel->addComponent(updateVerticesButton);
+
+    UIToggleButton* updateTextureCoordinatesButton = new UIToggleButton(updateTextureCoordinates);
+    updateTextureCoordinatesButton->setText("Update Texture Coordinates", buttonSize, *font, CENTRE);
+    updateTextureCoordinatesButton->setSize(0.1f, buttonSize);
+    updateTextureCoordinatesButton->surface.diffuseMap = texture;
+    buttonPanel->addComponent(updateTextureCoordinatesButton);
 }
 
 void UIBoneInformation::preRender()

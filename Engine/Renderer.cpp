@@ -69,10 +69,15 @@ void Renderer::recreateFramebuffer()
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbufferId);
 }
 
-void Renderer::initialiseFrame()
+void Renderer::bindRenderer()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
     glViewport(0, 0, width, height);
+}
+
+void Renderer::initialiseFrame()
+{
+    bindRenderer();
 
     glClearColor(clearColour.r, clearColour.g, clearColour.b, clearColour.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

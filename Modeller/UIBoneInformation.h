@@ -12,7 +12,8 @@ public:
     float columnWidth;
     float buttonSize;
     
-    bool updateVertices = false;
+    bool updateVertices = true;
+    bool updateTextureCoordinates = true;
 
     int activeBone = 0;
 
@@ -31,6 +32,8 @@ protected:
 
 private:
     std::vector<UIBonePanel*> bonePanels;
+
+    void addButtons();
 };
 
 #endif
