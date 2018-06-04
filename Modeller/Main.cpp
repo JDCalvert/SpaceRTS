@@ -99,6 +99,9 @@ int main()
         std::vector<unsigned int> highlightBones = ui->getHighlightBoneIndices();
         blankShader->renderBonesWithAxes(surface, highlightBones, viewProjectionMatrix, glm::vec4(1.0f));
 
+        std::vector<unsigned int> highlightBoneTriangles = ui->getTriangleIndicesForHoverBones();
+        blankShader->renderTriangles(surface, viewProjectionMatrix, highlightBoneTriangles, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f));
+
         ui->renderTextureCoordinates();
 
         //Draw the UI

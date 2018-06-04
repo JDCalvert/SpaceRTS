@@ -59,7 +59,7 @@ void UILabel::removeLastChar()
 
 void UILabel::constructSurface()
 {
-    int numChars = text.length();
+    unsigned int numChars = text.length();
 
     //First, work out how wide the string will be and find where it should start, based on the alignment
     float textWidth = 0.0f;
