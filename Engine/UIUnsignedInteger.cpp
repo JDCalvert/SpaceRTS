@@ -48,7 +48,7 @@ void UIUnsignedInteger::processNotActive()
 
     try
     {
-        value = std::stof(str);
+        value = std::stoi(str);
     }
     catch (std::invalid_argument e) {}
     catch (std::out_of_range e) {}

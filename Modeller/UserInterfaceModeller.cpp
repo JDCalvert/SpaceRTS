@@ -198,6 +198,57 @@ std::vector<unsigned int> UserInterfaceModeller::getHighlightBoneIndices()
     return highlights;
 }
 
+std::vector<unsigned int> UserInterfaceModeller::getTriangleIndicesForHoverBones()
+{
+    std::vector<unsigned int> hoverBoneIndices;
+    for (UIBonePanel* bonePanel : boneInformation->getBonePanels())
+    {
+        if (bonePanel->hover)
+        {
+            unsigned int index = bonePanel->getIndex();
+            hoverBoneIndices.push_back(index);
+        }
+    }
+
+    auto boneIndicesBegin = hoverBoneIndices.begin();
+    auto boneIndicesEnd = hoverBoneIndices.end();
+
+    std::vector<unsigned int> hoverBoneVertexIndices;
+    for (unsigned int i=0; i<infoSurface->boneIndicesAndWeights.size(); i++)
+    {
+        glm::vec4 boneIndices = infoSurface->boneIndicesAndWeights[i];
+        int boneIndex0 = boneIndices[0];
+        int boneIndex1 = boneIndices[2];
+
+        if (std::find(boneIndicesBegin, boneIndicesEnd, boneIndex0) != boneIndicesEnd
+         || std::find(boneIndicesBegin, boneIndicesEnd, boneIndex1) != boneIndicesEnd)
+        {
+            hoverBoneVertexIndices.push_back(i);
+        }
+    }
+
+    auto vertexIndicesBegin = hoverBoneVertexIndices.begin();
+    auto vertexIndicesEnd = hoverBoneVertexIndices.end();
+
+    std::vector<unsigned int> hoverBoneTriangleIndices;
+    for (auto i=infoSurface->indices.begin(); i!=infoSurface->indices.end(); i+=3)
+    {
+        unsigned int index0 = *i;
+        unsigned int index1 = *(i+1);
+        unsigned int index2 = *(i+2);
+
+        if (std::find(vertexIndicesBegin, vertexIndicesEnd, index0) != vertexIndicesEnd
+         || std::find(vertexIndicesBegin, vertexIndicesEnd, index1) != vertexIndicesEnd
+         || std::find(vertexIndicesBegin, vertexIndicesEnd, index2) != vertexIndicesEnd)
+        {
+            hoverBoneTriangleIndices.push_back(index0);
+            hoverBoneTriangleIndices.push_back(index1);
+            hoverBoneTriangleIndices.push_back(index2);
+        }
+    }
+    return hoverBoneTriangleIndices;
+}
+
 void UserInterfaceModeller::recalculateVertexPositions()
 {
     //Update the absolute positions of all the bones
