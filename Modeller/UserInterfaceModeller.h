@@ -49,7 +49,7 @@ public:
     void removeVertices(int index);
     void removeVertex(unsigned int index);
     void removeTriangle(unsigned int triangleIndex);
-    void removeBone(unsigned int index);
+    void removeBone(int index);
 
     void renderTextureCoordinates();
 

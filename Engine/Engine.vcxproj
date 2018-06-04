@@ -34,6 +34,7 @@
     <ClInclude Include="UIActionListener.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIInteger.h" />
+    <ClInclude Include="UILayoutForm.h" />
     <ClInclude Include="UILayoutHorizontal.h" />
     <ClInclude Include="UILayoutVertical.h" />
     <ClInclude Include="UIUnsignedInteger.h" />

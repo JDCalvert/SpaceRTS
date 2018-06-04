@@ -208,9 +208,9 @@ void UIComponent::constructSurface()
 
 void UIComponent::clearComponents()
 {
-    for (unsigned int i = 0; i<components.size(); i++)
+    for (UIComponent* component : components)
     {
-        delete components[i];
+        delete component;
     }
     components.clear();
 }

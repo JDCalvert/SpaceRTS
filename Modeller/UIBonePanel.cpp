@@ -59,6 +59,8 @@ void UIBonePanel::buildPanel()
     addParentNumber();
     addRemoveButton();
 
+    xpos += parent->indexWidth + parent->border;
+
     for (unsigned int i=0; i<4; i++)
     {
         ypos = 0.0f;
@@ -101,14 +103,15 @@ void UIBonePanel::addParentNumber()
 
 void UIBonePanel::addRemoveButton()
 {
+    //Don't add the remove button for the base index, we always need it
+    if (index == 0) return;
+
     removeButton = new UIButton(this);
     removeButton->setPosition(xpos, ypos);
     removeButton->setSize(parent->indexWidth, parent->indexWidth);
     removeButton->setText("R", parent->indexWidth, *parent->font, CENTRE);
     removeButton->surface.diffuseMap = parent->texture;
     addComponent(removeButton);
-
-    xpos += parent->indexWidth + parent->border;
 }
 
 void UIBonePanel::addNumber(float& value)

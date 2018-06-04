@@ -316,6 +316,8 @@ void UserInterfaceModeller::recalculateVertexPositions()
             bitangent = glm::normalize(newBitangent);
         }
     }
+
+    rebuildInformation();
 }
 
 void UserInterfaceModeller::newVertex()
@@ -441,8 +443,25 @@ void UserInterfaceModeller::removeTriangle(unsigned int triangleIndex)
     rebuildInformation();
 }
 
-void UserInterfaceModeller::removeBone(unsigned int index)
+void UserInterfaceModeller::removeBone(int index)
 {
+    //Remove any bones that depend on this one
+    for (unsigned int i=0; i<infoSurface->bones.size(); i++)
+    {
+        Bone& bone = infoSurface->bones[i];
+        if (bone.parent == index)
+        {
+            //Remove the bone if it's dependent on the one being removed
+            removeBone(i);
+        }
+        else if (bone.parent > index)
+        {
+            //If the bone's parent is above the one being removed, then reduce it
+            bone.parent--;
+        }
+    }
+
+    //Next, remove any vertex dependencies on this bone. If a vertex depends only on this bone, then remove it.
     for (unsigned int i=0; i<infoSurface->boneIndicesAndWeights.size(); i++)
     {
         glm::vec4& boneIndex = infoSurface->boneIndicesAndWeights[i];
@@ -475,23 +494,20 @@ void UserInterfaceModeller::removeBone(unsigned int index)
         if (boneIndex[2] > index) boneIndex[2]--;
     }
 
-    for (unsigned int i=0; i<infoSurface->bones.size(); i++)
+    //If this is the currently selected bone, we need to change it
+    int& activeBone = boneInformation->activeBone;
+    if (activeBone == index)
     {
-        Bone& bone = infoSurface->bones[i];
-        if (bone.parent == index)
-        {
-            //Remove the bone if it's dependent on the one being removed
-            removeBone(i);
-        }
-        else if (bone.parent > index)
-        {
-            //If the bone's parent is above the one being removed, then reduce it
-            bone.parent--;
-        }
+        Bone& boneToRemove = infoSurface->bones[index];
+        activeBone = boneToRemove.parent;
+    }
+    else if (activeBone > index)
+    {
+        activeBone--;
     }
 
+    //Now we can actually remove this bone and rebuild
     infoSurface->bones.erase(infoSurface->bones.begin() + index);
-
     infoSurface->calculateSizesAndLength();
     rebuildInformation();
 }
