@@ -7,6 +7,7 @@
 #include <UIInteger.h>
 #include <UINumber.h>
 #include <Texture.h>
+#include <UILayoutForm.h>
 
 #include "UIBoneInformation.h"
 #include "UserInterfaceModeller.h"
@@ -55,6 +56,8 @@ void UIBonePanel::actionPerformed(UIComponent* component)
 
 void UIBonePanel::buildPanel()
 {
+    layout = new UILayoutForm(this);
+
     addIndexLabel();
     addParentNumber();
     addRemoveButton();

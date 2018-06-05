@@ -19,11 +19,8 @@ void UILayoutHorizontal::layoutComponents()
 
     float tallestComponent = 0.0f;
 
-    std::vector<UIComponent*> components = component->components;
-    for (auto i=components.begin(); i!=components.end(); i++)
+    for (UIComponent* childComponent : component->components)
     {
-        UIComponent* childComponent = *i;
-
         UILayout* componentLayout = childComponent->layout;
         if (componentLayout) componentLayout->layoutComponents();
 
@@ -44,5 +41,30 @@ void UILayoutHorizontal::layoutComponents()
 
 void UILayoutHorizontal::stretchComponents()
 {
-    //We want to increase their size proportionally, so work out their widths now
+    std::vector<UIComponent*>& components = component->components;
+
+    float idealWidth = component->getSize().x;
+    idealWidth -= (components.size() - 1) * internalHorizontalBorder;
+    idealWidth -= externalHorizontalBorder * 2;
+
+    //We want to increase their size proportionally, so work out their widths now.
+    float totalWidth = 0.0f;
+    for (UIComponent* component : components)
+    {
+        totalWidth += component->getSize().x;
+    }
+
+    float xpos = externalHorizontalBorder;
+
+    float ratio = idealWidth / totalWidth;
+    for (UIComponent* component : components)
+    {
+        glm::vec2 size = component->getSize();
+        size.x *= ratio;
+
+        component->setPosition(xpos, externalVerticalBorder);
+        component->setSize(size);
+
+        xpos += size.x + internalHorizontalBorder;
+    }
 }

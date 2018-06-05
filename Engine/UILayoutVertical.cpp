@@ -6,10 +6,6 @@
 
 UILayoutVertical::UILayoutVertical(UIComponent* component) : UILayout(component)
 {
-    externalHorizontalBorder = 0.01f;
-    externalVerticalBorder = 0.01f;
-
-    internalVerticalBorder = 0.002f;
 }
 
 void UILayoutVertical::layoutComponents()

@@ -6,10 +6,6 @@
 class UILayoutVertical: public UILayout
 {
 public:
-    float externalHorizontalBorder;
-    float externalVerticalBorder;
-    float internalVerticalBorder;
-
     bool horizontalStretch;
 
     float widestComponent;

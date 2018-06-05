@@ -6,10 +6,6 @@
 class UILayoutHorizontal : public UILayout
 {
 public:
-    float externalHorizontalBorder;
-    float externalVerticalBorder;
-    float internalHorizontalBorder;
-
     UILayoutHorizontal(UIComponent* component);
 
     void layoutComponents();

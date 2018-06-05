@@ -6,6 +6,11 @@ class UIComponent;
 class UILayout
 {
 public:
+    float externalHorizontalBorder;
+    float externalVerticalBorder;
+    float internalHorizontalBorder;
+    float internalVerticalBorder;
+
     UILayout(UIComponent* component);
 
     virtual void layoutComponents() = 0;

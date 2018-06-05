@@ -59,6 +59,7 @@
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIInteger.cpp" />
     <ClCompile Include="UILayout.cpp" />
+    <ClCompile Include="UILayoutForm.cpp" />
     <ClCompile Include="UILayoutHorizontal.cpp" />
     <ClCompile Include="UILayoutVertical.cpp" />
     <ClCompile Include="UIUnsignedInteger.cpp" />
