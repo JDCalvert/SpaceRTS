@@ -42,8 +42,7 @@ void UIBoneInformation::addButtons()
     addComponent(buttonPanel);
 
     UILayoutHorizontal* buttonLayout = new UILayoutHorizontal(buttonPanel);
-    buttonLayout->externalHorizontalBorder = 0.0f;
-    buttonLayout->externalVerticalBorder = 0.0f;
+    buttonLayout->externalBorder = glm::vec2(0.0f);
     buttonPanel->layout = buttonLayout;
 
     UIToggleButton* updateVerticesButton = new UIToggleButton(updateVertices);

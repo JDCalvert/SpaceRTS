@@ -35,6 +35,8 @@
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIInteger.h" />
     <ClInclude Include="UILayoutForm.h" />
+    <ClInclude Include="UILayoutFormHorizontal.h" />
+    <ClInclude Include="UILayoutFormVertical.h" />
     <ClInclude Include="UILayoutHorizontal.h" />
     <ClInclude Include="UILayoutVertical.h" />
     <ClInclude Include="UIUnsignedInteger.h" />
@@ -60,6 +62,8 @@
     <ClCompile Include="UIInteger.cpp" />
     <ClCompile Include="UILayout.cpp" />
     <ClCompile Include="UILayoutForm.cpp" />
+    <ClCompile Include="UILayoutFormHorizontal.cpp" />
+    <ClCompile Include="UILayoutFormVertical.cpp" />
     <ClCompile Include="UILayoutHorizontal.cpp" />
     <ClCompile Include="UILayoutVertical.cpp" />
     <ClCompile Include="UIUnsignedInteger.cpp" />

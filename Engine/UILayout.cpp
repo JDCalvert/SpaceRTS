@@ -3,9 +3,6 @@
 UILayout::UILayout(UIComponent* component) :
     component(component)
 {
-    externalHorizontalBorder = 0.01f;
-    externalVerticalBorder = 0.01f;
-
-    internalHorizontalBorder = 0.002f;
-    internalVerticalBorder = 0.002f;
+    externalBorder = glm::vec2(0.01f);
+    internalBorder = glm::vec2(0.002f);
 }

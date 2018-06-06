@@ -1,6 +1,7 @@
 #include "UIComponent.h"
 
 #include "Geometry.h"
+#include "UILayout.h"
 #include "UserInterface.h"
 
 UIComponent::~UIComponent()

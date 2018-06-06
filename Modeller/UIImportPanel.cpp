@@ -47,8 +47,7 @@ void UIImportPanel::build()
     addComponent(textureCoordinatesPanel);
 
     UILayoutHorizontal* textureCoordinatesLayout = new UILayoutHorizontal(textureCoordinatesPanel);
-    textureCoordinatesLayout->externalHorizontalBorder = 0.0f;
-    textureCoordinatesLayout->externalVerticalBorder = 0.0f;
+    textureCoordinatesLayout->externalBorder = glm::vec2(0.0f);
     textureCoordinatesPanel->layout = textureCoordinatesLayout;
 
     addNumber(textureCoordinatesPanel, textureCoordinatesTopLeft.x);

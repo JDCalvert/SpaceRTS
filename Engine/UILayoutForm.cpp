@@ -1,71 +1,71 @@
 #include "UILayoutForm.h"
 
 #include <algorithm>
-#include <cmath>
-#include <vector>
 
 #include "UIComponent.h"
 
-UILayoutForm::UILayoutForm(UIComponent* component) : UILayout(component)
+UILayoutForm::UILayoutForm(UIComponent* component, unsigned int groupSize) :
+    groupSize(groupSize),
+    UILayout(component)
 {
 }
 
 void UILayoutForm::layoutComponents()
 {
-    std::vector<UIComponent*>& components = component->components;
-    int numComponents = components.size();
-    int numRows = std::ceil(numComponents / rowWidth);
+    int groupComponent = getComponentForGroup();
+    int indexComponent = getComponentForIndex();
 
-    //First, figure out how wide each of the columns, and how tall each of the rows need to be
-    std::vector<float> widestComponents(rowWidth, 0.0f);
-    std::vector<float> tallestComponents(numRows, 0.0f);
+    std::vector<UIComponent*>& components = component->components;
+    unsigned int numComponents = components.size();
+    unsigned int numGroups = std::ceil((float)numComponents / groupSize);
+
+    //The form will end up being a grid, we just need to know how large each of the cells are
+    std::vector<float> largestInGroup(numGroups, 0.0f);
+    std::vector<float> largestInIndex(groupSize, 0.0f);
 
     for (unsigned int i=0; i<numComponents; i++)
     {
         UIComponent* childComponent = components[i];
 
-        int row = i / rowWidth;
-        int column = i % rowWidth;
+        int group = i / groupSize;
+        int index = i % groupSize;
 
         glm::vec2 size = childComponent->getSize();
 
-        widestComponents[row] = std::max(size.x, widestComponents[row]);
-        tallestComponents[column] = std::max(size.y, tallestComponents[column]);
-    }
-
-    for (unsigned int j=0; j<numRows; j++)
-    {
-        for (unsigned int i=0; i<rowWidth; i++)
-        {
-            int index = j*rowWidth + i;
-            if (index < numComponents)
-            {
-                UIComponent* childComponent = components[index];
-                glm::vec2 size = childComponent->getSize();
-
-                widestComponents[i] = std::max(size.x, widestComponents[i]);
-                tallestComponents[j] = std::max(size.y, tallestComponents[j]);
-            }
-        }
+        largestInGroup[group] = std::max(size[indexComponent], largestInGroup[group]);
+        largestInIndex[index] = std::max(size[groupComponent], largestInIndex[index]);
     }
 
     //Now we know the sizes of the cells, we can start positioning things
-    float ypos = externalVerticalBorder;
-    for (unsigned int j=0; j<numRows; j++)
+    float groupPos;
+    float indexPos = externalBorder[indexComponent];
+    for (unsigned int j = 0; j<numGroups; j++)
     {
-        float xpos = externalHorizontalBorder;
-        for (unsigned int i=0; i<rowWidth; i++)
+        groupPos = externalBorder[groupComponent];
+        for (unsigned int i = 0; i<groupSize; i++)
         {
-            int index = j*rowWidth + i;
+            int index = j * groupSize + i;
             if (index < numComponents)
             {
                 UIComponent* childComponent = components[index];
-                childComponent->setPosition(xpos, ypos);
-                xpos += widestComponents[i] + internalHorizontalBorder;
+
+                glm::vec2 position;
+                position[groupComponent] = groupPos;
+                position[indexComponent] = indexPos;
+
+                childComponent->setPosition(position);
+                groupPos += largestInIndex[i] + internalBorder[groupComponent];
             }
-            ypos += tallestComponents[j] + internalVerticalBorder;
         }
+        indexPos += largestInGroup[j] + internalBorder[indexComponent];
     }
 
-    setSize(xpos + externalHorizontalBorder - internalHorizontalBorder, ypos + externalVerticalBorder - internalVerticalBorder);
+    glm::vec2 size;
+    size[groupComponent] = groupPos + externalBorder[groupComponent] - internalBorder[groupComponent];
+    size[indexComponent] = indexPos + externalBorder[indexComponent] - internalBorder[indexComponent];
+    component->setSize(size);
+}
+
+void UILayoutForm::stretchComponents()
+{
 }

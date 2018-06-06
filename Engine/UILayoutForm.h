@@ -6,9 +6,12 @@
 class UILayoutForm : public UILayout
 {
 public:
-    int rowWidth;
+    UILayoutForm(UIComponent* component, unsigned int groupSize);
 
-    UILayoutForm(UIComponent* component);
+    unsigned int groupSize;
+
+    virtual int getComponentForGroup() = 0;
+    virtual int getComponentForIndex() = 0;
 
     void layoutComponents() override;
     void stretchComponents() override;

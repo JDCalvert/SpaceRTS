@@ -1,15 +1,13 @@
 #ifndef UI_LAYOUT_H
 #define UI_LAYOUT_H
 
-class UIComponent;
+#include "UIComponent.h"
 
 class UILayout
 {
 public:
-    float externalHorizontalBorder;
-    float externalVerticalBorder;
-    float internalHorizontalBorder;
-    float internalVerticalBorder;
+    glm::vec2 externalBorder;
+    glm::vec2 internalBorder;
 
     UILayout(UIComponent* component);
 

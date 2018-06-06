@@ -117,6 +117,12 @@
     <ClInclude Include="UILayoutVertical.h">
       <Filter>Header Files\UserInterface\Layouts</Filter>
     </ClInclude>
+    <ClInclude Include="UILayoutFormVertical.h">
+      <Filter>Header Files\UserInterface\Layouts</Filter>
+    </ClInclude>
+    <ClInclude Include="UILayoutFormHorizontal.h">
+      <Filter>Header Files\UserInterface\Layouts</Filter>
+    </ClInclude>
     <ClInclude Include="UILayoutForm.h">
       <Filter>Header Files\UserInterface\Layouts</Filter>
     </ClInclude>
@@ -187,6 +193,12 @@
     </ClCompile>
     <ClCompile Include="UILayout.cpp">
       <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UILayoutFormHorizontal.cpp">
+      <Filter>Source Files\UserInterface\Layouts</Filter>
+    </ClCompile>
+    <ClCompile Include="UILayoutFormVertical.cpp">
+      <Filter>Source Files\UserInterface\Layouts</Filter>
     </ClCompile>
     <ClCompile Include="UILayoutForm.cpp">
       <Filter>Source Files\UserInterface\Layouts</Filter>

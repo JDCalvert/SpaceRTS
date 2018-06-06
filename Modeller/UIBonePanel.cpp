@@ -7,7 +7,7 @@
 #include <UIInteger.h>
 #include <UINumber.h>
 #include <Texture.h>
-#include <UILayoutForm.h>
+#include <UILayoutFormVertical.h>
 
 #include "UIBoneInformation.h"
 #include "UserInterfaceModeller.h"
@@ -56,27 +56,23 @@ void UIBonePanel::actionPerformed(UIComponent* component)
 
 void UIBonePanel::buildPanel()
 {
-    layout = new UILayoutForm(this);
+    layout = new UILayoutFormVertical(this, 4);
+    layout->externalBorder = glm::vec2(0.0f);
 
     addIndexLabel();
     addParentNumber();
     addRemoveButton();
-
-    xpos += parent->indexWidth + parent->border;
+    addComponent(new UIPanel());
 
     for (unsigned int i=0; i<4; i++)
     {
-        ypos = 0.0f;
         for (unsigned int j=0; j<4; j++)
         {
             addNumber(bone.relative[i][j]);
-            ypos += parent->textSize + 0.002f;
         }
-        xpos += parent->columnWidth + parent->border;
     }
 
-    setSize(xpos - parent->border, ypos - 0.002f);
-    constructSurface();
+    layout->layoutComponents();
 }
 
 void UIBonePanel::addIndexLabel()
@@ -89,8 +85,6 @@ void UIBonePanel::addIndexLabel()
     label->setPositionAndSize(glm::vec2(0.0f, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
     label->setText(str, parent->textSize, *parent->font, RIGHT);
     addComponent(label);
-
-    xpos += parent->indexWidth + parent->border;
 }
 
 void UIBonePanel::addParentNumber()
@@ -100,21 +94,24 @@ void UIBonePanel::addParentNumber()
     uiInteger->setText(parent->textSize, *parent->font, RIGHT);
     uiInteger->surface.diffuseMap = parent->texture;
     addComponent(uiInteger);
-
-    ypos += parent->textSize + 0.002f;
 }
 
 void UIBonePanel::addRemoveButton()
 {
     //Don't add the remove button for the base index, we always need it
-    if (index == 0) return;
-
-    removeButton = new UIButton(this);
-    removeButton->setPosition(xpos, ypos);
-    removeButton->setSize(parent->indexWidth, parent->indexWidth);
-    removeButton->setText("R", parent->indexWidth, *parent->font, CENTRE);
-    removeButton->surface.diffuseMap = parent->texture;
-    addComponent(removeButton);
+    if (index == 0)
+    {
+        addComponent(new UIPanel());
+    }
+    else
+    {
+        removeButton = new UIButton(this);
+        removeButton->setPosition(xpos, ypos);
+        removeButton->setSize(parent->indexWidth, parent->indexWidth);
+        removeButton->setText("R", parent->indexWidth, *parent->font, CENTRE);
+        removeButton->surface.diffuseMap = parent->texture;
+        addComponent(removeButton);
+    }
 }
 
 void UIBonePanel::addNumber(float& value)

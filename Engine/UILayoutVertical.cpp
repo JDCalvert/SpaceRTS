@@ -10,8 +10,7 @@ UILayoutVertical::UILayoutVertical(UIComponent* component) : UILayout(component)
 
 void UILayoutVertical::layoutComponents()
 {
-    float xpos = externalHorizontalBorder;
-    float ypos = externalVerticalBorder;
+    glm::vec2 pos = externalBorder;
 
     widestComponent = 0.0f;
 
@@ -24,17 +23,15 @@ void UILayoutVertical::layoutComponents()
         UILayout* componentLayout = childComponent->layout;
         if (componentLayout) componentLayout->layoutComponents();
 
-        childComponent->setPosition(xpos, ypos);
+        childComponent->setPosition(pos);
 
         glm::vec2 componentSize = childComponent->getSize();
-        ypos += componentSize.y + internalVerticalBorder;
+        pos.y += componentSize.y + internalBorder.y;
         widestComponent = std::max(widestComponent, componentSize.x);
     }
+    pos.x += widestComponent + internalBorder.x;
 
-    component->setSize(
-        widestComponent + 2 * externalHorizontalBorder,
-        ypos + externalVerticalBorder - internalVerticalBorder
-    );
+    component->setSize(pos + externalBorder - internalBorder);
 }
 
 void UILayoutVertical::stretchComponents()

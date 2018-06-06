@@ -6,17 +6,12 @@
 
 UILayoutHorizontal::UILayoutHorizontal(UIComponent* component) : UILayout(component)
 {
-    externalHorizontalBorder = 0.01f;
-    externalVerticalBorder = 0.01f;
-
-    internalHorizontalBorder = 0.002f;
 }
 
 void UILayoutHorizontal::layoutComponents()
 {
-    float xpos = externalHorizontalBorder;
-    float ypos = externalVerticalBorder;
-
+    glm::vec2 pos = externalBorder;
+    
     float tallestComponent = 0.0f;
 
     for (UIComponent* childComponent : component->components)
@@ -24,19 +19,16 @@ void UILayoutHorizontal::layoutComponents()
         UILayout* componentLayout = childComponent->layout;
         if (componentLayout) componentLayout->layoutComponents();
 
-        childComponent->setPosition(xpos, ypos);
+        childComponent->setPosition(pos);
         
         glm::vec2 componentSize = childComponent->getSize();
-
-        xpos += componentSize.x + internalHorizontalBorder;
+        pos.x += componentSize.x + internalBorder.x;
 
         tallestComponent = std::max(tallestComponent, componentSize.y);
     }
+    pos.y += tallestComponent + internalBorder.y;
 
-    component->setSize(
-        xpos + externalHorizontalBorder - internalHorizontalBorder,
-        tallestComponent + 2 * externalVerticalBorder
-    );
+    component->setSize(pos + externalBorder - internalBorder);
 }
 
 void UILayoutHorizontal::stretchComponents()
@@ -44,8 +36,8 @@ void UILayoutHorizontal::stretchComponents()
     std::vector<UIComponent*>& components = component->components;
 
     float idealWidth = component->getSize().x;
-    idealWidth -= (components.size() - 1) * internalHorizontalBorder;
-    idealWidth -= externalHorizontalBorder * 2;
+    idealWidth -= (components.size() - 1) * internalBorder.x;
+    idealWidth -= externalBorder.x * 2;
 
     //We want to increase their size proportionally, so work out their widths now.
     float totalWidth = 0.0f;
@@ -54,7 +46,7 @@ void UILayoutHorizontal::stretchComponents()
         totalWidth += component->getSize().x;
     }
 
-    float xpos = externalHorizontalBorder;
+    glm::vec2 pos = externalBorder;
 
     float ratio = idealWidth / totalWidth;
     for (UIComponent* component : components)
@@ -62,9 +54,9 @@ void UILayoutHorizontal::stretchComponents()
         glm::vec2 size = component->getSize();
         size.x *= ratio;
 
-        component->setPosition(xpos, externalVerticalBorder);
+        component->setPosition(pos);
         component->setSize(size);
 
-        xpos += size.x + internalHorizontalBorder;
+        pos.x += size.x + internalBorder.x;
     }
 }
