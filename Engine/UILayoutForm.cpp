@@ -30,6 +30,8 @@ void UILayoutForm::layoutComponents()
         int group = i / groupSize;
         int index = i % groupSize;
 
+        if (childComponent->layout) childComponent->layout->layoutComponents();
+
         glm::vec2 size = childComponent->getSize();
 
         largestInGroup[group] = std::max(size[indexComponent], largestInGroup[group]);

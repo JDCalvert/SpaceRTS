@@ -36,8 +36,8 @@ private:
     bool highlighted;
     GLuint onMap, offMap;
 
-    void addIndexLabel();
-    void addParentNumber();
+    void addIndexLabel(UIPanel* panel);
+    void addParentNumber(UIPanel* panel);
     void addNumber(float& value);
     void addRemoveButton();
 };

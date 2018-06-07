@@ -8,6 +8,7 @@
 #include <UINumber.h>
 #include <Texture.h>
 #include <UILayoutFormVertical.h>
+#include <UILayoutHorizontal.h>
 
 #include "UIBoneInformation.h"
 #include "UserInterfaceModeller.h"
@@ -59,9 +60,19 @@ void UIBonePanel::buildPanel()
     layout = new UILayoutFormVertical(this, 4);
     layout->externalBorder = glm::vec2(0.0f);
 
-    addIndexLabel();
-    addParentNumber();
+    UIPanel* topPanel = new UIPanel();
+    topPanel->surface.diffuseMap = Texture::getTexture("BlankNothing");
+    addComponent(topPanel);
+
+    UILayoutHorizontal* topPanelLayout = new UILayoutHorizontal(topPanel);
+    topPanelLayout->externalBorder = glm::vec2(0.0f, 0.0f);
+    topPanel->layout = topPanelLayout;
+
+    addIndexLabel(topPanel);
+    addParentNumber(topPanel);
+
     addRemoveButton();
+    addComponent(new UIPanel());
     addComponent(new UIPanel());
 
     for (unsigned int i=0; i<4; i++)
@@ -72,28 +83,28 @@ void UIBonePanel::buildPanel()
         }
     }
 
-    layout->layoutComponents();
+    recalculateLayout();
 }
 
-void UIBonePanel::addIndexLabel()
+void UIBonePanel::addIndexLabel(UIPanel* panel)
 {
     std::stringstream ss;
     ss << index;
     std::string str = ss.str();
 
     UILabel* label = new UILabel();
-    label->setPositionAndSize(glm::vec2(0.0f, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
+    label->setSize(parent->indexWidth, parent->textSize);
     label->setText(str, parent->textSize, *parent->font, RIGHT);
-    addComponent(label);
+    panel->addComponent(label);
 }
 
-void UIBonePanel::addParentNumber()
+void UIBonePanel::addParentNumber(UIPanel* panel)
 {
     UIInteger* uiInteger = new UIInteger(bone.parent);
-    uiInteger->setPositionAndSize(glm::vec2(xpos, 0.0f), glm::vec2(parent->indexWidth, parent->textSize));
+    uiInteger->setSize(parent->indexWidth, parent->textSize);
     uiInteger->setText(parent->textSize, *parent->font, RIGHT);
     uiInteger->surface.diffuseMap = parent->texture;
-    addComponent(uiInteger);
+    panel->addComponent(uiInteger);
 }
 
 void UIBonePanel::addRemoveButton()
