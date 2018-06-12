@@ -16,6 +16,8 @@ public:
     void setHeight(float height);
     void setFont(Font font);
     void setAlignment(Alignment alignment);
+
+    void setSizeFromText();
     
     void constructSurface();
     GLenum getRenderMode() override;

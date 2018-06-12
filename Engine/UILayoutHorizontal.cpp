@@ -16,9 +16,7 @@ void UILayoutHorizontal::layoutComponents()
 
     for (UIComponent* childComponent : component->components)
     {
-        UILayout* componentLayout = childComponent->layout;
-        if (componentLayout) componentLayout->layoutComponents();
-
+        childComponent->layoutComponents();
         childComponent->setPosition(pos);
         
         glm::vec2 componentSize = childComponent->getSize();
@@ -58,5 +56,7 @@ void UILayoutHorizontal::stretchComponents()
         component->setSize(size);
 
         pos.x += size.x + internalBorder.x;
+
+        component->stretchComponents();
     }
 }

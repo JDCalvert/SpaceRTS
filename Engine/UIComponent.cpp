@@ -3,10 +3,18 @@
 #include "Geometry.h"
 #include "UILayout.h"
 #include "UserInterface.h"
+#include "Texture.h"
+
+UIComponent::UIComponent()
+{
+    surface.diffuseMap = Texture::getTexture("../Resources/Graphics/BlankNothing.dds");
+}
 
 UIComponent::~UIComponent()
 {
     clearComponents();
+
+    if (layout) delete layout;
 }
 
 UIComponent* UIComponent::checkAndProcessMouseClickEvent(MouseClickEvent mouseEvent)
@@ -247,4 +255,14 @@ void UIComponent::recalculateLayout()
         layout->layoutComponents();
         layout->stretchComponents();
     }
+}
+
+void UIComponent::layoutComponents()
+{
+    if (layout) layout->layoutComponents();
+}
+
+void UIComponent::stretchComponents()
+{
+    if (layout) layout->stretchComponents();
 }

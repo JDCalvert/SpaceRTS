@@ -122,6 +122,26 @@ void UILabel::constructSurface()
     surface.calculateSizesAndLength();
 }
 
+void UILabel::setSizeFromText()
+{
+    unsigned int numVertices = surface.vertices.size();
+    if (numVertices == 0)
+    {
+        setSize(0.0f, 0.0f);
+    }
+    else
+    {
+        glm::vec3 topLeft = surface.vertices[0];
+        glm::vec3 bottomRight = surface.vertices[numVertices - 1];
+
+        setSize(bottomRight - topLeft);
+        for (glm::vec3& vertex : surface.vertices)
+        {
+            vertex -= topLeft;
+        }
+    }
+}
+
 GLenum UILabel::getRenderMode()
 {
     return GL_TRIANGLES;

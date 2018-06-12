@@ -127,7 +127,7 @@ void UserInterfaceModeller::importSurface(const char* fileName)
         {
             if (newBoneIndices[j] == 0)
             {
-                newBoneIndices[j] = activeBone;
+                newBoneIndices[j] = (float)activeBone;
             }
             else if (newBoneIndices[j] > 0)
             {

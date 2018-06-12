@@ -31,6 +31,7 @@ void UIImportPanel::build()
     blankTexture = Texture::getTexture("Blank");
 
     layout = new UILayoutVertical(this);
+    layout->externalBorder = glm::vec2(0.01f, 0.01f);
 
     UILabel::addLabel(this, 0.2f, textSize, "File", *font, LEFT);
 
@@ -43,7 +44,6 @@ void UIImportPanel::build()
     UILabel::addLabel(this, 0.2f, textSize, "Texture Coordinates", *font, LEFT);
 
     UIPanel* textureCoordinatesPanel = new UIPanel();
-    textureCoordinatesPanel->surface.diffuseMap = Texture::getTexture("BlankNothing");
     addComponent(textureCoordinatesPanel);
 
     UILayoutHorizontal* textureCoordinatesLayout = new UILayoutHorizontal(textureCoordinatesPanel);

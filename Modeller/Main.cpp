@@ -52,7 +52,7 @@ int main()
 
     Texture::loadDDS("../Resources/Graphics/blank.dds", "Blank");
     Texture::loadDDS("../Resources/Graphics/blankDark.dds", "BlankDark");
-    Texture::loadDDS("../Resources/Graphics/blankNothing.dds", "BlankNothing");
+    Texture::loadDDS("../Resources/Graphics/BlankNothing.dds", "BlankNothing");
 
     Font::loadFont("../Resources/Graphics/font.bff", "Default");
     Font::loadFont("../Resources/Graphics/calibri.bff", "Calibri");

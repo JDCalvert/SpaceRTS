@@ -21,8 +21,6 @@ UITexturePanel::UITexturePanel(UITextureInformation* parent, GLuint& textureId, 
     font = &Font::getFont("Calibri");
     texture = Texture::getTexture("Blank");
 
-    surface.diffuseMap = Texture::getTexture("BlankNothing");
-
     shouldRebuild = false;
 }
 

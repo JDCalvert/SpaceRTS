@@ -15,36 +15,28 @@ void UILayoutVertical::layoutComponents()
     widestComponent = 0.0f;
 
     //Layout all of the internal components according to their layouts
-    std::vector<UIComponent*>& components = component->components;
-    for (auto i = components.begin(); i != components.end(); i++)
+    for (UIComponent* childComponent : component->components)
     {
-        UIComponent* childComponent = *i;
-
-        UILayout* componentLayout = childComponent->layout;
-        if (componentLayout) componentLayout->layoutComponents();
-
+        childComponent->layoutComponents();
         childComponent->setPosition(pos);
 
         glm::vec2 componentSize = childComponent->getSize();
         pos.y += componentSize.y + internalBorder.y;
         widestComponent = std::max(widestComponent, componentSize.x);
     }
-    pos.x += widestComponent + internalBorder.x;
 
-    component->setSize(pos + externalBorder - internalBorder);
+    component->setSize(widestComponent + externalBorder.x * 2, pos.y + externalBorder.y - internalBorder.y);
 }
 
 void UILayoutVertical::stretchComponents()
 {
-    std::vector<UIComponent*>& components = component->components;
-    for (auto i = components.begin(); i != components.end(); i++)
+    //Stretch all the subcomponents to be as wide as this
+    glm::vec2 idealComponentsSize = component->getSize() - (externalBorder * 2.0f);
+
+    for (UIComponent* childComponent : component->components)
     {
-        UIComponent* component = *i;
-
-        glm::vec2 componentSize = component->getSize();
-        component->setSize(widestComponent, componentSize.y);
-
-        UILayout* componentLayout = component->layout;
-        if (componentLayout) componentLayout->stretchComponents();
+        glm::vec2 componentSize = childComponent->getSize();
+        childComponent->setSize(idealComponentsSize.x, componentSize.y);
+        childComponent->stretchComponents();
     }
 }

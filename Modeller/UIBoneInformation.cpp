@@ -4,6 +4,7 @@
 #include <UIToggleButton.h>
 #include <UILayoutVertical.h>
 #include <UILayoutHorizontal.h>
+#include <UILayoutFormHorizontal.h>
 #include <Texture.h>
 
 #include "UserInterfaceModeller.h"
@@ -25,37 +26,57 @@ void UIBoneInformation::build()
     bonePanels.clear();
     clearComponents();
 
-    UILayoutVertical* verticalLayout = new UILayoutVertical(this);
-    layout = verticalLayout;
+    layout = new UILayoutVertical(this);
+    layout->externalBorder = glm::vec2(0.01f, 0.01f);
 
-    addButtons();
+    addTopPanel();
     addPanels();
 
     recalculateLayout();
 }
 
-void UIBoneInformation::addButtons()
+void UIBoneInformation::addTopPanel()
 {
     UIPanel* buttonPanel = new UIPanel();
     buttonPanel->setSize(0.1f, textSize);
-    buttonPanel->surface.diffuseMap = Texture::getTexture("BlankNothing");
+    buttonPanel->layout = new UILayoutFormHorizontal(buttonPanel, 2);
     addComponent(buttonPanel);
 
-    UILayoutHorizontal* buttonLayout = new UILayoutHorizontal(buttonPanel);
-    buttonLayout->externalBorder = glm::vec2(0.0f);
-    buttonPanel->layout = buttonLayout;
+    UILabel* verticesLabel = new UILabel();
+    verticesLabel->setText("Vertices", buttonSize, *font, LEFT);
+    verticesLabel->setSize(0.1f, buttonSize);
+    buttonPanel->addComponent(verticesLabel);
+
+    UIPanel* verticesButtons = new UIPanel();
+    verticesButtons->layout = new UILayoutHorizontal(verticesButtons);
+    buttonPanel->addComponent(verticesButtons);
 
     UIToggleButton* updateVerticesButton = new UIToggleButton(updateVertices);
-    updateVerticesButton->setText("Update Vertices", buttonSize, *font, CENTRE);
+    updateVerticesButton->setText("Update", buttonSize, *font, CENTRE);
     updateVerticesButton->setSize(0.1f, buttonSize);
     updateVerticesButton->surface.diffuseMap = texture;
-    buttonPanel->addComponent(updateVerticesButton);
+    verticesButtons->addComponent(updateVerticesButton);
+
+    UILabel* textureCoordinatesLabel = new UILabel();
+    textureCoordinatesLabel->setText("Texture Coordinates", buttonSize, *font, LEFT);
+    textureCoordinatesLabel->setSizeFromText();
+    buttonPanel->addComponent(textureCoordinatesLabel);
+
+    UIPanel* textureCoordinateButtons = new UIPanel();
+    textureCoordinateButtons->layout = new UILayoutHorizontal(textureCoordinateButtons);
+    buttonPanel->addComponent(textureCoordinateButtons);
+
+    UIToggleButton* showTextureCoordinatesButton = new UIToggleButton(showTextureCoordinates);
+    showTextureCoordinatesButton->setText("Show", buttonSize, *font, CENTRE);
+    showTextureCoordinatesButton->setSize(0.1f, buttonSize);
+    showTextureCoordinatesButton->surface.diffuseMap = texture;
+    textureCoordinateButtons->addComponent(showTextureCoordinatesButton);
 
     UIToggleButton* updateTextureCoordinatesButton = new UIToggleButton(updateTextureCoordinates);
-    updateTextureCoordinatesButton->setText("Update Texture Coordinates", buttonSize, *font, CENTRE);
+    updateTextureCoordinatesButton->setText("Update", buttonSize, *font, CENTRE);
     updateTextureCoordinatesButton->setSize(0.1f, buttonSize);
     updateTextureCoordinatesButton->surface.diffuseMap = texture;
-    buttonPanel->addComponent(updateTextureCoordinatesButton);
+    textureCoordinateButtons->addComponent(updateTextureCoordinatesButton);
 }
 
 void UIBoneInformation::preRender()

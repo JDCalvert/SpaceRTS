@@ -14,6 +14,7 @@ class UILayout;
 class UIComponent
 {
 public:
+    UIComponent();
     ~UIComponent();
 
     std::vector<UIComponent*> components;
@@ -22,12 +23,14 @@ public:
     UILayout* layout = nullptr;
     
     bool hover = false;
+
     void checkHover(glm::vec2 mousePosition);
     void setNoHover();
 
     void addComponent(UIComponent* component);
     void setActionListener(UIActionListener* actionListener);
 
+    //Layout Setup
     glm::vec2 getPosition();
     glm::vec2 getSize();
     
@@ -39,6 +42,12 @@ public:
 
     virtual void setPositionAndSize(glm::vec2 position, glm::vec2 size) final;
 
+    //Layout Processing
+    virtual void recalculateLayout() final;
+    virtual void layoutComponents() final;
+    virtual void stretchComponents() final;
+
+    //Event Processing
     virtual UIComponent* checkAndProcessMouseClickEvent(MouseClickEvent mouseEvent) final;
     virtual EventStatus checkAndProcessMouseScrollEvent(MouseScrollEvent mouseEvent) final;
 
@@ -58,8 +67,6 @@ protected:
     virtual void constructSurface();
     void clearComponents();
     void invokeActionListener();
-
-    virtual void recalculateLayout() final;
 
     bool isChild(UIComponent* component);
 

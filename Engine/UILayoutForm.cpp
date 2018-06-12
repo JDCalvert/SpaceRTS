@@ -20,8 +20,8 @@ void UILayoutForm::layoutComponents()
     unsigned int numGroups = std::ceil((float)numComponents / groupSize);
 
     //The form will end up being a grid, we just need to know how large each of the cells are
-    std::vector<float> largestInGroup(numGroups, 0.0f);
-    std::vector<float> largestInIndex(groupSize, 0.0f);
+    largestInGroup.resize(numGroups, 0.0f);
+    largestInIndex.resize(groupSize, 0.0f);
 
     for (unsigned int i=0; i<numComponents; i++)
     {
@@ -30,10 +30,9 @@ void UILayoutForm::layoutComponents()
         int group = i / groupSize;
         int index = i % groupSize;
 
-        if (childComponent->layout) childComponent->layout->layoutComponents();
+        childComponent->layoutComponents();
 
         glm::vec2 size = childComponent->getSize();
-
         largestInGroup[group] = std::max(size[indexComponent], largestInGroup[group]);
         largestInIndex[index] = std::max(size[groupComponent], largestInIndex[index]);
     }
@@ -62,12 +61,69 @@ void UILayoutForm::layoutComponents()
         indexPos += largestInGroup[j] + internalBorder[indexComponent];
     }
 
-    glm::vec2 size;
-    size[groupComponent] = groupPos + externalBorder[groupComponent] - internalBorder[groupComponent];
-    size[indexComponent] = indexPos + externalBorder[indexComponent] - internalBorder[indexComponent];
+    glm::vec2 size = calculateComponentsSize() + externalBorder * 2.0f;
     component->setSize(size);
 }
 
 void UILayoutForm::stretchComponents()
 {
+    unsigned int numComponents = component->components.size();
+    int numGroups = calculateNumGroups();
+    int groupComponent = getComponentForGroup();
+    int indexComponent = getComponentForIndex();
+
+    glm::vec2 idealComponentsSize = component->getSize() - externalBorder * 2.0f;
+    glm::vec2 actualComponentsSize = calculateComponentsSize();
+
+    glm::vec2 sizeChange = idealComponentsSize - actualComponentsSize;
+
+    //Now increase the size of the last group and index to match
+    largestInGroup[numGroups-1] += sizeChange[indexComponent];
+    largestInIndex[groupSize-1] += sizeChange[groupComponent];
+    
+    //Now, we can go through the components and stretch them to fill their cell
+    for (unsigned int i=0; i<numComponents; i++)
+    {
+        UIComponent* childComponent = component->components[i];
+
+        int group = i / groupSize;
+        int index = i % groupSize;
+
+        glm::vec2 size;
+        size[groupComponent] = largestInIndex[index];
+        size[indexComponent] = largestInGroup[group];
+
+        childComponent->setSize(size);
+        childComponent->stretchComponents();
+    }
+}
+
+int UILayoutForm::calculateNumGroups()
+{
+    unsigned int numComponents = component->components.size();
+    return std::ceil((float)numComponents / groupSize);
+}
+
+glm::vec2 UILayoutForm::calculateComponentsSize()
+{
+    int numGroups = calculateNumGroups();
+    int groupComponent = getComponentForGroup();
+    int indexComponent = getComponentForIndex();
+
+    glm::vec2 actualComponentsSize(0.0f);
+
+    for (unsigned int i = 0; i<groupSize; i++)
+    {
+        actualComponentsSize[groupComponent] += largestInIndex[i];
+    }
+
+    for (unsigned int i = 0; i<numGroups; i++)
+    {
+        actualComponentsSize[indexComponent] += largestInGroup[i];
+    }
+
+    actualComponentsSize[groupComponent] += internalBorder[groupComponent] * (groupSize - 1);
+    actualComponentsSize[indexComponent] += internalBorder[indexComponent] * (numGroups - 1);
+
+    return actualComponentsSize;
 }

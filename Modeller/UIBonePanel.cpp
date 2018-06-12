@@ -61,7 +61,6 @@ void UIBonePanel::buildPanel()
     layout->externalBorder = glm::vec2(0.0f);
 
     UIPanel* topPanel = new UIPanel();
-    topPanel->surface.diffuseMap = Texture::getTexture("BlankNothing");
     addComponent(topPanel);
 
     UILayoutHorizontal* topPanelLayout = new UILayoutHorizontal(topPanel);
@@ -81,6 +80,14 @@ void UIBonePanel::buildPanel()
         {
             addNumber(bone.relative[i][j]);
         }
+    }
+
+    if (parent->showTextureCoordinates)
+    {
+        UILabel* textureCoordinatesLabel = new UILabel();
+        textureCoordinatesLabel->setText("Texture Coordinates", parent->textSize, *parent->font, CENTRE);
+        textureCoordinatesLabel->setSizeFromText();
+        addComponent(textureCoordinatesLabel);
     }
 
     recalculateLayout();
