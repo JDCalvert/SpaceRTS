@@ -12,6 +12,9 @@ class UIBonePanel : public UIPanel, UIActionListener
 public:
     UIBonePanel(UIBoneInformation* parent, Surface* infoSurface, unsigned int index);
 
+    glm::vec2 textureCoordinateTopLeft;
+    glm::vec2 textureCoordinateBottomRight;
+
     void buildPanel();
     void preRender() override;
 
@@ -32,14 +35,14 @@ private:
     Bone& bone;
     unsigned int index;
 
-    float xpos, ypos;
     bool highlighted;
     GLuint onMap, offMap;
 
-    void addIndexLabel(UIPanel* panel);
-    void addParentNumber(UIPanel* panel);
+    void addIndexPanel();
     void addNumber(float& value);
     void addRemoveButton();
+
+    void addTextureCoordinatePanel(glm::vec2& textureCoordinate);
 };
 
 #endif

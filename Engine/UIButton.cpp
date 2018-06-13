@@ -31,3 +31,12 @@ void UIButton::setSize(glm::vec2 size)
     UIComponent::setSize(size);
     if (label) label->setSize(size);
 }
+
+void UIButton::setSizeFromText()
+{
+    if (label)
+    {
+        label->setSizeFromText();
+        UIComponent::setSize(label->getSize());
+    }
+}

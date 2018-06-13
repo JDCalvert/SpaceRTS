@@ -19,9 +19,6 @@ UIBonePanel::UIBonePanel(UIBoneInformation* parent, Surface* infoSurface, unsign
     this->parent = parent;
     this->index = index;
 
-    xpos = 0.0f;
-    ypos = 0.0f;
-
     onMap = Texture::getTexture("Blank");
     offMap = Texture::getTexture("BlankNothing");
 }
@@ -60,16 +57,7 @@ void UIBonePanel::buildPanel()
     layout = new UILayoutFormVertical(this, 4);
     layout->externalBorder = glm::vec2(0.0f);
 
-    UIPanel* topPanel = new UIPanel();
-    addComponent(topPanel);
-
-    UILayoutHorizontal* topPanelLayout = new UILayoutHorizontal(topPanel);
-    topPanelLayout->externalBorder = glm::vec2(0.0f, 0.0f);
-    topPanel->layout = topPanelLayout;
-
-    addIndexLabel(topPanel);
-    addParentNumber(topPanel);
-
+    addIndexPanel();
     addRemoveButton();
     addComponent(new UIPanel());
     addComponent(new UIPanel());
@@ -88,13 +76,27 @@ void UIBonePanel::buildPanel()
         textureCoordinatesLabel->setText("Texture Coordinates", parent->textSize, *parent->font, CENTRE);
         textureCoordinatesLabel->setSizeFromText();
         addComponent(textureCoordinatesLabel);
+
+        addTextureCoordinatePanel(textureCoordinateTopLeft);
+
+        UILabel* textureCoordinatesToLabel = new UILabel();
+        textureCoordinatesToLabel->setText("to", parent->textSize, *parent->font, CENTRE);
+        textureCoordinatesToLabel->setSizeFromText();
+        addComponent(textureCoordinatesToLabel);
+
+        addTextureCoordinatePanel(textureCoordinateBottomRight);
     }
 
     recalculateLayout();
 }
 
-void UIBonePanel::addIndexLabel(UIPanel* panel)
+void UIBonePanel::addIndexPanel()
 {
+    UIPanel* topPanel = new UIPanel();
+    topPanel->layout = new UILayoutHorizontal(topPanel);
+    topPanel->layout->externalBorder = glm::vec2(0.0f, 0.0f);
+    addComponent(topPanel);
+
     std::stringstream ss;
     ss << index;
     std::string str = ss.str();
@@ -102,16 +104,13 @@ void UIBonePanel::addIndexLabel(UIPanel* panel)
     UILabel* label = new UILabel();
     label->setSize(parent->indexWidth, parent->textSize);
     label->setText(str, parent->textSize, *parent->font, RIGHT);
-    panel->addComponent(label);
-}
+    topPanel->addComponent(label);
 
-void UIBonePanel::addParentNumber(UIPanel* panel)
-{
     UIInteger* uiInteger = new UIInteger(bone.parent);
     uiInteger->setSize(parent->indexWidth, parent->textSize);
     uiInteger->setText(parent->textSize, *parent->font, RIGHT);
     uiInteger->surface.diffuseMap = parent->texture;
-    panel->addComponent(uiInteger);
+    topPanel->addComponent(uiInteger);
 }
 
 void UIBonePanel::addRemoveButton()
@@ -124,9 +123,8 @@ void UIBonePanel::addRemoveButton()
     else
     {
         removeButton = new UIButton(this);
-        removeButton->setPosition(xpos, ypos);
-        removeButton->setSize(parent->indexWidth, parent->indexWidth);
-        removeButton->setText("R", parent->indexWidth, *parent->font, CENTRE);
+        removeButton->setText("Remove", parent->textSize, *parent->font, CENTRE);
+        removeButton->setSizeFromText();
         removeButton->surface.diffuseMap = parent->texture;
         addComponent(removeButton);
     }
@@ -135,11 +133,35 @@ void UIBonePanel::addRemoveButton()
 void UIBonePanel::addNumber(float& value)
 {
     UINumber* uiNumber = new UINumber(value);
-    uiNumber->setPositionAndSize(glm::vec2(xpos, ypos), glm::vec2(parent->columnWidth, parent->textSize));
+    uiNumber->setSize(parent->columnWidth, parent->textSize);
     uiNumber->setText(parent->textSize, *parent->font, RIGHT);
     uiNumber->surface.diffuseMap = parent->texture;
     uiNumber->setActionListener(this);
     addComponent(uiNumber);
+}
+
+void UIBonePanel::addTextureCoordinatePanel(glm::vec2& textureCoordinate)
+{
+    UIPanel* textureCoordinatePanel = new UIPanel();
+    textureCoordinatePanel->layout = new UILayoutHorizontal(textureCoordinatePanel);
+    addComponent(textureCoordinatePanel);
+
+    UINumber* textureCoordinateX = new UINumber(textureCoordinate[0]);
+    textureCoordinateX->setText(parent->textSize, *parent->font, RIGHT);
+    textureCoordinateX->setSize(0.035f, parent->textSize);
+    textureCoordinateX->surface.diffuseMap = parent->texture;
+    textureCoordinatePanel->addComponent(textureCoordinateX);
+
+    UILabel* textureCoordinateDash = new UILabel();
+    textureCoordinateDash->setText("-", parent->textSize, *parent->font, CENTRE);
+    textureCoordinateDash->setSizeFromText();
+    textureCoordinatePanel->addComponent(textureCoordinateDash);
+
+    UINumber* textureCoordinateY = new UINumber(textureCoordinate[1]);
+    textureCoordinateY->setText(parent->textSize, *parent->font, RIGHT);
+    textureCoordinateY->setSize(0.035f, parent->textSize);
+    textureCoordinateY->surface.diffuseMap = parent->texture;
+    textureCoordinatePanel->addComponent(textureCoordinateY);
 }
 
 void UIBonePanel::processMouseClick(MouseClickEvent mouseEvent)

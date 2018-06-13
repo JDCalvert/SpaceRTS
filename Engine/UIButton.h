@@ -15,6 +15,8 @@ public:
     using UIComponent::setSize;
     void setSize(glm::vec2 size) override;
 
+    void setSizeFromText();
+
 protected:
     void processMouseClick(MouseClickEvent mouseEvent) override;
     bool shouldCheckMouseClickEventForChildren() override;
